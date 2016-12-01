@@ -1,0 +1,2 @@
+﻿  SkeletonCapture.cpp
+SkeletonCapture.cpp(192): error C3861: 'bodyFrameToString': identifier not found
