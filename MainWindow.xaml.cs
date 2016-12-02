@@ -18,6 +18,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using Microsoft.Kinect;
     using System.Collections;
     using System.Xml;
+    using System.Text;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -38,6 +39,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// Thickness of clip edge rectangles
         /// </summary>
         private const double ClipBoundsThickness = 10;
+
+        /// <summary>
+        /// Final joint type for simplifying outputing to file
+        /// </summary>
+        private const JointType Final_Joint = JointType.WristRight;
 
         /// <summary>
         /// Constant for clamping Z values of camera space points from being negative
@@ -169,7 +175,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             this.collect = false;
 
-            this.fileName = "default.xml";
+            this.fileName = "default";
 
             // a bone defined as a line between two joints
             this.bones = new List<Tuple<JointType, JointType>>();
@@ -559,7 +565,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         private void writeOutput()
         {
-            XmlWriter writer = XmlWriter.Create(fileName);
+            //Setup Xml Output File:
+            XmlWriter writer = XmlWriter.Create(fileName + "_xml.xml");
             writer.WriteStartDocument();
             writer.WriteStartElement("frames");
 
@@ -567,6 +574,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             writer.WriteString(bodyFrames.Count.ToString());
             writer.WriteEndElement();
 
+            //Setup CSV output file:
+            var csv = new StringBuilder();
+
+            // Write header
+            var new_line = string.Format("\tFrameNum, \tRelativeTime, \tAnkleLeft.x, \tAnkleLeft.y, \tAnkleLeft.z, \tAnkleRight.x, \tAnkleRight.y, \tAnkleRight.z, " +
+                "\tElbowLeft.x, \tElbowLeft.y, \tElbowLeft.z, \tElbowRight.x, \tElbowRight.y, \tElbowRight.z, \tFootLeft.x, \tFootLeft.y, \tFootLeft.z, " +
+                "\tFootRight.x, \tFootRight.y, \tFootRight.z , \tHandLeft.x, \tHandLeft.y, \tHandLeft.z, \tHandRight.x, \tHandRight.y, \tHandRight.z, " +
+                "\tHandTipLeft.x, \tHandTipLeft.y, \tHandTipLeft.z, \tHandTipRight.x, \tHandTipRight.y, \tHandTipRight.z, \tHead.x, \tHead.y, \tHead.z, " +
+                "\tHipLeft.x, \tHipLeft.y, \tHipLeft.z, HipRight.x, \tHipRight.y, \tHipRight.z, \tKneeLeft.x, \tKneeLeft.y, \tKneeLeft.z, " +
+                "\tKneeRight.x, \tKneeRight.y, \tKneeRight.z, \tNeck.x, \tNeck.y, \tNeck.z, \tShoulderLeft.x, \tShoulderLeft.y, \tShoulderLeft.z, " +
+                "\tShoulderRight.x, \tShoulderRight.y, \tShoulderRight.z, \tSpineBase.x, SpineBase.y, \tSpineBase.z, \tSpineMid.x, \tSpineMid.y, \tSpineMid.z, " +
+                "\tSpineShoulder.x, \tSpineShoulder.y, \tSpineShoulder.z, \tThumbLeft.x, ThumbLeft.y, \tThumbLeft.z, \tThumbRight.x, \tThumbRight.y, \tThumbRight.z, " +
+                "\tWristLeft.x, \tWristLeft.y, \tWristLeft.z, \tWristRight.x, \tWristRight.y, \tWristRight.z");
+            csv.AppendLine(new_line);
+
+            //Let the bodies hit the frames
             BodyFrame curFrame;
             Body curBody;
             List<Body> curBodies = new List<Body>();
@@ -576,33 +599,74 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 curFrame.GetAndRefreshBodyData(curBodies);
                 curBody = curBodies[0];
 
-                //Write the frame time
-                writer.WriteStartElement("time");
+                //Write the frame number and time
+                writer.WriteStartElement("FrameNum");
+                writer.WriteString(i.ToString());
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("RelativeTime");
                 writer.WriteString(curFrame.RelativeTime.ToString());
                 writer.WriteEndElement();
 
-                //Ankle Left
-                writer.WriteStartElement("AnkleLeft");
+                csv.AppendFormat("{0},{1},", i.ToString(), curFrame.RelativeTime.ToString());
 
-                writer.WriteStartElement("x");
-                writer.WriteString(curBody.Joints[Microsoft.Kinect.JointType.AnkleLeft].Position.X.ToString());
-                writer.WriteEndElement();
+                //All joints
+                writeJoint(writer, csv, curBody, "AnkleLeft", Microsoft.Kinect.JointType.AnkleLeft);
+                writeJoint(writer, csv, curBody, "AnkleRight", Microsoft.Kinect.JointType.AnkleRight);
+                writeJoint(writer, csv, curBody, "ElbowLeft", Microsoft.Kinect.JointType.ElbowLeft);
+                writeJoint(writer, csv, curBody, "ElbowRight", Microsoft.Kinect.JointType.ElbowRight);
+                writeJoint(writer, csv, curBody, "FootLeft", Microsoft.Kinect.JointType.FootLeft);
 
-                writer.WriteStartElement("y");
-                writer.WriteString(curBody.Joints[Microsoft.Kinect.JointType.AnkleLeft].Position.Y.ToString());
-                writer.WriteEndElement();
+                writeJoint(writer, csv, curBody, "FootRight", Microsoft.Kinect.JointType.FootRight);
+                writeJoint(writer, csv, curBody, "HandLeft", Microsoft.Kinect.JointType.HandLeft);
+                writeJoint(writer, csv, curBody, "HandRight", Microsoft.Kinect.JointType.HandRight);
+                writeJoint(writer, csv, curBody, "HandTipLeft", Microsoft.Kinect.JointType.HandTipLeft);
+                writeJoint(writer, csv, curBody, "HandTipRight", Microsoft.Kinect.JointType.HandTipRight);
 
-                writer.WriteStartElement("z");
-                writer.WriteString(curBody.Joints[Microsoft.Kinect.JointType.AnkleLeft].Position.Z.ToString());
-                writer.WriteEndElement();
+                writeJoint(writer, csv, curBody, "Head", Microsoft.Kinect.JointType.Head);
+                writeJoint(writer, csv, curBody, "HipLeft", Microsoft.Kinect.JointType.HipLeft);
+                writeJoint(writer, csv, curBody, "HipRight", Microsoft.Kinect.JointType.HipRight);
+                writeJoint(writer, csv, curBody, "KneeLeft", Microsoft.Kinect.JointType.KneeLeft);
+                writeJoint(writer, csv, curBody, "KneeRight", Microsoft.Kinect.JointType.KneeRight);
 
-                writer.WriteEndElement();
+                writeJoint(writer, csv, curBody, "Neck", Microsoft.Kinect.JointType.Neck);
+                writeJoint(writer, csv, curBody, "ShoulderLeft", Microsoft.Kinect.JointType.ShoulderLeft);
+                writeJoint(writer, csv, curBody, "ShoulderRight", Microsoft.Kinect.JointType.ShoulderRight);
+                writeJoint(writer, csv, curBody, "SpineBase", Microsoft.Kinect.JointType.SpineBase);
+                writeJoint(writer, csv, curBody, "SpineMid", Microsoft.Kinect.JointType.SpineMid);
 
-                //All other body parts 
+                writeJoint(writer, csv, curBody, "SpineShoulder", Microsoft.Kinect.JointType.SpineShoulder);
+                writeJoint(writer, csv, curBody, "ThumbLeft", Microsoft.Kinect.JointType.ThumbLeft);
+                writeJoint(writer, csv, curBody, "ThumbRight", Microsoft.Kinect.JointType.ThumbRight);
+                writeJoint(writer, csv, curBody, "WristLeft", Microsoft.Kinect.JointType.WristLeft);
+                writeJoint(writer, csv, curBody, "WristRight", Microsoft.Kinect.JointType.WristRight);
             }
 
             writer.WriteEndDocument();
             writer.Close();
+
+            File.WriteAllText(fileName + "_csv.csv", csv.ToString());
+        }
+        private void writeJoint(XmlWriter writerXML, StringBuilder csv, Body curBody, string name, Microsoft.Kinect.JointType jt)
+        {
+            writerXML.WriteStartElement(name);
+
+            writerXML.WriteStartElement("x");
+            writerXML.WriteString(curBody.Joints[jt].Position.X.ToString());
+            writerXML.WriteEndElement();
+
+            writerXML.WriteStartElement("y");
+            writerXML.WriteString(curBody.Joints[jt].Position.Y.ToString());
+            writerXML.WriteEndElement();
+
+            writerXML.WriteStartElement("z");
+            writerXML.WriteString(curBody.Joints[jt].Position.Z.ToString());
+            writerXML.WriteEndElement();
+
+            writerXML.WriteEndElement();
+
+            csv.AppendFormat("\t{0},\t{1},\t{2}", curBody.Joints[jt].Position.X.ToString(), curBody.Joints[jt].Position.Y.ToString(), curBody.Joints[jt].Position.Z.ToString());
+            csv.Append((jt != Final_Joint) ? ',' : '\n', 1);
         }
     }
 }

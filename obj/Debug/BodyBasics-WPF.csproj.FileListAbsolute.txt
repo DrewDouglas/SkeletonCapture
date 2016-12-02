@@ -1,1 +1,2 @@
 C:\Users\Drew\Documents\School\Fall Risk\BodyBasics-WPF\bin\AnyCPU\Debug\BodyBasics-WPF.exe.config
+C:\Users\ratnam\Source\Repos\SkeletonCapture\bin\AnyCPU\Debug\BodyBasics-WPF.exe.config
