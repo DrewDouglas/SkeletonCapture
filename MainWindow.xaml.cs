@@ -3,7 +3,6 @@
 //     Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
-
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
     using System;
@@ -19,12 +18,28 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Collections;
     using System.Xml;
     using System.Text;
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// contains body and timing info of a single frame
+    /// </summary>
+    struct bodyMoment
+    {
+        public Body[] bodies;
+        public TimeSpan relativeTime;
+        public DateTime cpuTime;
+    };
 
     /// <summary>
     /// Interaction logic for MainWindow
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        /*public static T Clone<T>(T source)
+        {
+            var serialized = JsonConvert.SerializeObject(source);
+            return JsonConvert.DeserializeObject<T>(serialized);
+        }**/
         /// <summary>
         /// Radius of drawn hand circles
         /// </summary>
@@ -138,7 +153,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Holds all of the body frames to be written to the file after completion
         /// </summary>
-        private List<BodyFrame> bodyFrames;
+        private static List<bodyMoment> bodyMoments;
 
         /// <summary>
         /// Flag to indicate button state 
@@ -171,7 +186,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // open the reader for the body frames
             this.bodyFrameReader = this.kinectSensor.BodyFrameSource.OpenReader();
 
-            this.bodyFrames = new List<BodyFrame>();
+            bodyMoments = new List<bodyMoment>();
 
             this.collect = false;
 
@@ -321,6 +336,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.kinectSensor = null;
             }
         }
+        
+        /*public Body[] copyBodies(Body[] bods)
+        {
+            Body[] r = new Body[bods.Length];
+            Array.Copy(bods, r, bods.Length);
+            for (int i = 0; i < bods.Length; i++)
+            {
+                Body c = r[i];
+                c.Joints = new Joint[c.Join];
+                IReadOnlyDictionary<JointType, Joint> 
+            }
+            return r;
+        }
+        **/
+
 
         /// <summary>
         /// Handles the body frame data arriving from the sensor
@@ -335,8 +365,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 if (bodyFrame != null)
                 {
-                    if (collect)
-                        bodyFrames.Add(bodyFrame);
 
                     if (this.bodies == null)
                     {
@@ -347,11 +375,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     // As long as those body objects are not disposed and not set to null in the array,
                     // those body objects will be re-used.
                     bodyFrame.GetAndRefreshBodyData(this.bodies);
+
                     dataReceived = true;
+                    if (collect == true)
+                    {
+                        bodyMoment bm;
+                        bm.bodies = new Body[this.bodies.Length];
+                        bodyFrame.GetAndRefreshBodyData(bm.bodies);
+                        bm.relativeTime = bodyFrame.RelativeTime;
+                        bm.cpuTime = DateTime.Now;
+                        bodyMoments.Add(bm);
+                    }
                 }
             }
 
-            if (dataReceived)
+            if (dataReceived == true)
             {
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
@@ -554,13 +592,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void endButton_Click(object sender, RoutedEventArgs e)
         {
             collect = false;
+            Console.Write("~~~~~~ END BUTTON CLICKED ~~~~~~~");
             writeOutput();
-            bodyFrames.Clear();
+            //bodyFrames.Clear();
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
             collect = true;
+            Console.Write("~~~~~~ START BUTTON CLICKED ~~~~~~~");
         }
 
         private void writeOutput()
@@ -571,7 +611,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             writer.WriteStartElement("frames");
 
             writer.WriteStartElement("total_frames");
-            writer.WriteString(bodyFrames.Count.ToString());
+            writer.WriteString(bodyMoments.Count.ToString());
             writer.WriteEndElement();
 
             //Setup CSV output file:
@@ -590,56 +630,63 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             csv.AppendLine(new_line);
 
             //Let the bodies hit the frames
-            BodyFrame curFrame;
+            bodyMoment curMoment;
             Body curBody;
-            List<Body> curBodies = new List<Body>();
-            for (int i = 0; i < bodyFrames.Count; i++)
+            for (int i = 0; i < bodyMoments.Count; i++)
             {
-                curFrame = bodyFrames[i];
-                curFrame.GetAndRefreshBodyData(curBodies);
-                curBody = curBodies[0];
+                curMoment = bodyMoments[i];
+                Body[] curBodies = curMoment.bodies;
+                if (curBodies.Length != 0)
+                {
 
-                //Write the frame number and time
-                writer.WriteStartElement("FrameNum");
-                writer.WriteString(i.ToString());
-                writer.WriteEndElement();
+                    curBody = curBodies[0];
+                    
+                    //Write the frame number and time
+                    writer.WriteStartElement("FrameNum");
+                    writer.WriteString(i.ToString());
+                    writer.WriteEndElement();
 
-                writer.WriteStartElement("RelativeTime");
-                writer.WriteString(curFrame.RelativeTime.ToString());
-                writer.WriteEndElement();
+                    writer.WriteStartElement("RelativeTime");
+                    writer.WriteString(curMoment.relativeTime.ToString());
+                    writer.WriteEndElement();
 
-                csv.AppendFormat("{0},{1},", i.ToString(), curFrame.RelativeTime.ToString());
+                    csv.AppendFormat("{0},{1},", i.ToString(), curMoment.relativeTime.ToString());
 
-                //All joints
-                writeJoint(writer, csv, curBody, "AnkleLeft", Microsoft.Kinect.JointType.AnkleLeft);
-                writeJoint(writer, csv, curBody, "AnkleRight", Microsoft.Kinect.JointType.AnkleRight);
-                writeJoint(writer, csv, curBody, "ElbowLeft", Microsoft.Kinect.JointType.ElbowLeft);
-                writeJoint(writer, csv, curBody, "ElbowRight", Microsoft.Kinect.JointType.ElbowRight);
-                writeJoint(writer, csv, curBody, "FootLeft", Microsoft.Kinect.JointType.FootLeft);
+                    //All joints
+                    writeJoint(writer, csv, curBody, "AnkleLeft", Microsoft.Kinect.JointType.AnkleLeft);
+                    writeJoint(writer, csv, curBody, "AnkleRight", Microsoft.Kinect.JointType.AnkleRight);
+                    writeJoint(writer, csv, curBody, "ElbowLeft", Microsoft.Kinect.JointType.ElbowLeft);
+                    writeJoint(writer, csv, curBody, "ElbowRight", Microsoft.Kinect.JointType.ElbowRight);
+                    writeJoint(writer, csv, curBody, "FootLeft", Microsoft.Kinect.JointType.FootLeft);
 
-                writeJoint(writer, csv, curBody, "FootRight", Microsoft.Kinect.JointType.FootRight);
-                writeJoint(writer, csv, curBody, "HandLeft", Microsoft.Kinect.JointType.HandLeft);
-                writeJoint(writer, csv, curBody, "HandRight", Microsoft.Kinect.JointType.HandRight);
-                writeJoint(writer, csv, curBody, "HandTipLeft", Microsoft.Kinect.JointType.HandTipLeft);
-                writeJoint(writer, csv, curBody, "HandTipRight", Microsoft.Kinect.JointType.HandTipRight);
+                    writeJoint(writer, csv, curBody, "FootRight", Microsoft.Kinect.JointType.FootRight);
+                    writeJoint(writer, csv, curBody, "HandLeft", Microsoft.Kinect.JointType.HandLeft);
+                    writeJoint(writer, csv, curBody, "HandRight", Microsoft.Kinect.JointType.HandRight);
+                    writeJoint(writer, csv, curBody, "HandTipLeft", Microsoft.Kinect.JointType.HandTipLeft);
+                    writeJoint(writer, csv, curBody, "HandTipRight", Microsoft.Kinect.JointType.HandTipRight);
 
-                writeJoint(writer, csv, curBody, "Head", Microsoft.Kinect.JointType.Head);
-                writeJoint(writer, csv, curBody, "HipLeft", Microsoft.Kinect.JointType.HipLeft);
-                writeJoint(writer, csv, curBody, "HipRight", Microsoft.Kinect.JointType.HipRight);
-                writeJoint(writer, csv, curBody, "KneeLeft", Microsoft.Kinect.JointType.KneeLeft);
-                writeJoint(writer, csv, curBody, "KneeRight", Microsoft.Kinect.JointType.KneeRight);
+                    writeJoint(writer, csv, curBody, "Head", Microsoft.Kinect.JointType.Head);
+                    writeJoint(writer, csv, curBody, "HipLeft", Microsoft.Kinect.JointType.HipLeft);
+                    writeJoint(writer, csv, curBody, "HipRight", Microsoft.Kinect.JointType.HipRight);
+                    writeJoint(writer, csv, curBody, "KneeLeft", Microsoft.Kinect.JointType.KneeLeft);
+                    writeJoint(writer, csv, curBody, "KneeRight", Microsoft.Kinect.JointType.KneeRight);
 
-                writeJoint(writer, csv, curBody, "Neck", Microsoft.Kinect.JointType.Neck);
-                writeJoint(writer, csv, curBody, "ShoulderLeft", Microsoft.Kinect.JointType.ShoulderLeft);
-                writeJoint(writer, csv, curBody, "ShoulderRight", Microsoft.Kinect.JointType.ShoulderRight);
-                writeJoint(writer, csv, curBody, "SpineBase", Microsoft.Kinect.JointType.SpineBase);
-                writeJoint(writer, csv, curBody, "SpineMid", Microsoft.Kinect.JointType.SpineMid);
+                    writeJoint(writer, csv, curBody, "Neck", Microsoft.Kinect.JointType.Neck);
+                    writeJoint(writer, csv, curBody, "ShoulderLeft", Microsoft.Kinect.JointType.ShoulderLeft);
+                    writeJoint(writer, csv, curBody, "ShoulderRight", Microsoft.Kinect.JointType.ShoulderRight);
+                    writeJoint(writer, csv, curBody, "SpineBase", Microsoft.Kinect.JointType.SpineBase);
+                    writeJoint(writer, csv, curBody, "SpineMid", Microsoft.Kinect.JointType.SpineMid);
 
-                writeJoint(writer, csv, curBody, "SpineShoulder", Microsoft.Kinect.JointType.SpineShoulder);
-                writeJoint(writer, csv, curBody, "ThumbLeft", Microsoft.Kinect.JointType.ThumbLeft);
-                writeJoint(writer, csv, curBody, "ThumbRight", Microsoft.Kinect.JointType.ThumbRight);
-                writeJoint(writer, csv, curBody, "WristLeft", Microsoft.Kinect.JointType.WristLeft);
-                writeJoint(writer, csv, curBody, "WristRight", Microsoft.Kinect.JointType.WristRight);
+                    writeJoint(writer, csv, curBody, "SpineShoulder", Microsoft.Kinect.JointType.SpineShoulder);
+                    writeJoint(writer, csv, curBody, "ThumbLeft", Microsoft.Kinect.JointType.ThumbLeft);
+                    writeJoint(writer, csv, curBody, "ThumbRight", Microsoft.Kinect.JointType.ThumbRight);
+                    writeJoint(writer, csv, curBody, "WristLeft", Microsoft.Kinect.JointType.WristLeft);
+                    writeJoint(writer, csv, curBody, "WristRight", Microsoft.Kinect.JointType.WristRight);
+                } else
+                {
+
+                }
+
             }
 
             writer.WriteEndDocument();
