@@ -18,7 +18,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Collections;
     using System.Xml;
     using System.Text;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// contains body and timing info of a single frame
