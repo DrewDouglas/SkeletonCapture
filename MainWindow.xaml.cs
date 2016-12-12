@@ -24,9 +24,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     /// </summary>
     struct bodyMoment
     {
-        public Body[] bodies;
+        public myBody[] bodies;
         public TimeSpan relativeTime;
         public DateTime cpuTime;
+    };
+
+    struct myBody
+    {
+        public Dictionary<JointType, Joint> joints;
     };
 
     /// <summary>
@@ -378,9 +383,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     dataReceived = true;
                     if (collect == true)
                     {
+                        // NEED TO IMPLEMENT DEEP COPY HERE
                         bodyMoment bm;
-                        bm.bodies = new Body[this.bodies.Length];
-                        bodyFrame.GetAndRefreshBodyData(bm.bodies);
+                        bm.bodies = new myBody[this.bodies.Length];
+                        deepCopyBodies(this.bodies, bm.bodies);
+                        //bodyFrame.GetAndRefreshBodyData(bm.bodies);
                         bm.relativeTime = bodyFrame.RelativeTime;
                         bm.cpuTime = DateTime.Now;
                         bodyMoments.Add(bm);
@@ -432,6 +439,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                }
+            }
+        }
+
+        private void deepCopyBodies(Body[] src, myBody[] dst)
+        {
+            for (int i = 0; i < src.Length; i++)
+            {
+                dst[i].joints = new Dictionary<JointType, Joint>();
+                foreach(KeyValuePair<JointType, Joint> entry in src[i].Joints)
+                {
+                    dst[i].joints.Add(entry.Key, entry.Value);
                 }
             }
         }
@@ -630,11 +649,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             //Let the bodies hit the frames
             bodyMoment curMoment;
-            Body curBody;
+            myBody curBody;
             for (int i = 0; i < bodyMoments.Count; i++)
             {
                 curMoment = bodyMoments[i];
-                Body[] curBodies = curMoment.bodies;
+                myBody[] curBodies = curMoment.bodies;
                 if (curBodies.Length != 0)
                 {
 
@@ -693,25 +712,25 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             File.WriteAllText(fileName + "_csv.csv", csv.ToString());
         }
-        private void writeJoint(XmlWriter writerXML, StringBuilder csv, Body curBody, string name, Microsoft.Kinect.JointType jt)
+        private void writeJoint(XmlWriter writerXML, StringBuilder csv, myBody curBody, string name, Microsoft.Kinect.JointType jt)
         {
             writerXML.WriteStartElement(name);
 
             writerXML.WriteStartElement("x");
-            writerXML.WriteString(curBody.Joints[jt].Position.X.ToString());
+            writerXML.WriteString(curBody.joints[jt].Position.X.ToString());
             writerXML.WriteEndElement();
 
             writerXML.WriteStartElement("y");
-            writerXML.WriteString(curBody.Joints[jt].Position.Y.ToString());
+            writerXML.WriteString(curBody.joints[jt].Position.Y.ToString());
             writerXML.WriteEndElement();
 
             writerXML.WriteStartElement("z");
-            writerXML.WriteString(curBody.Joints[jt].Position.Z.ToString());
+            writerXML.WriteString(curBody.joints[jt].Position.Z.ToString());
             writerXML.WriteEndElement();
 
             writerXML.WriteEndElement();
 
-            csv.AppendFormat("\t{0},\t{1},\t{2}", curBody.Joints[jt].Position.X.ToString(), curBody.Joints[jt].Position.Y.ToString(), curBody.Joints[jt].Position.Z.ToString());
+            csv.AppendFormat("\t{0},\t{1},\t{2}", curBody.joints[jt].Position.X.ToString(), curBody.joints[jt].Position.Y.ToString(), curBody.joints[jt].Position.Z.ToString());
             csv.Append((jt != Final_Joint) ? ',' : '\n', 1);
         }
     }
