@@ -383,7 +383,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     dataReceived = true;
                     if (collect == true)
                     {
-                        // NEED TO IMPLEMENT DEEP COPY HERE
                         bodyMoment bm;
                         bm.bodies = new myBody[this.bodies.Length];
                         deepCopyBodies(this.bodies, bm.bodies);
@@ -656,10 +655,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 curMoment = bodyMoments[i];
                 myBody[] curBodies = curMoment.bodies;
-                if (curBodies.Length != 0)
-                {
 
-                    curBody = curBodies[0];
+                // Find the real body out of the 6 possible ghost bodies
+                int realbody = -1;
+                for (int j = 0; j < curMoment.bodies.Length; j++)
+                {
+                    if(curBodies[j].joints[JointType.Head].TrackingState != TrackingState.NotTracked)
+                    {
+                        realbody = j;
+                    }
+                }
+
+                //only record frame if it contains a body
+                if (realbody != -1)
+                {
+                    curBody = curBodies[realbody];
                     
                     //Write the frame number and time
                     writer.WriteStartElement("FrameNum");
