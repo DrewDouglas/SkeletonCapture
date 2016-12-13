@@ -647,7 +647,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             var csv = new StringBuilder();
 
             // Write header
-            var new_line = string.Format("\tFrameNum, \tRelativeTime, \tAnkleLeft.x, \tAnkleLeft.y, \tAnkleLeft.z, \tAnkleLeft.trackedstate, \tAnkleRight.x, \tAnkleRight.y, \tAnkleRight.z, \tAnkleRight.trackedstate, " +
+            var new_line = string.Format("\tFrameNum, \tRelativeTime, \tcpuTime, \tAnkleLeft.x, \tAnkleLeft.y, \tAnkleLeft.z, \tAnkleLeft.trackedstate, \tAnkleRight.x, \tAnkleRight.y, \tAnkleRight.z, \tAnkleRight.trackedstate, " +
                 "\tElbowLeft.x, \tElbowLeft.y, \tElbowLeft.z, \tElbowLeft.trackedstate, \tElbowRight.x, \tElbowRight.y, \tElbowRight.z, \tElbowRight.trackedstate, \tFootLeft.x, \tFootLeft.y, \tFootLeft.z, \tFootLeft.trackedstate, " +
                 "\tFootRight.x, \tFootRight.y, \tFootRight.z , \tFootRight.trackedstate, \tHandLeft.x, \tHandLeft.y, \tHandLeft.z, \tHandLeft.trackedstate, \tHandRight.x, \tHandRight.y, \tHandRight.z, \tHandRight.trackedstate, " +
                 "\tHandTipLeft.x, \tHandTipLeft.y, \tHandTipLeft.z, \tHandTipLeft.trackedstate, \tHandTipRight.x, \tHandTipRight.y, \tHandTipRight.z, \tHandTipRight.trackedstate, \tHead.x, \tHead.y, \tHead.z, \tHead.trackedstate, " +
@@ -690,7 +690,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     writer.WriteString(curMoment.relativeTime.ToString());
                     writer.WriteEndElement();
 
-                    csv.AppendFormat("{0},{1},", i.ToString(), curMoment.relativeTime.ToString());
+                    writer.WriteStartElement("cpuTime");
+                    writer.WriteString(curMoment.cpuTime.ToString());
+                    writer.WriteEndElement();
+
+                    csv.AppendFormat("{0},{1},{2}", i.ToString(), curMoment.relativeTime.ToString(), curMoment.cpuTime.ToString());
 
                     //All joints
                     writeJoint(writer, csv, curBody, "AnkleLeft", Microsoft.Kinect.JointType.AnkleLeft);
