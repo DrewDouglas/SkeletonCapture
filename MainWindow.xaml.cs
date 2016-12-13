@@ -617,6 +617,23 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         private void endButton_Click(object sender, RoutedEventArgs e)
         {
+            endRecording();
+        }
+
+        private void startButton_Click(object sender, RoutedEventArgs e)
+        {
+            startRecording();
+        }
+
+        private void startRecording()
+        {
+            collect = true;
+            this.StatusText = "STARTED RECORDING";
+            Console.Write("~~~~~~ START BUTTON CLICKED ~~~~~~~");
+        }
+
+        private void endRecording()
+        {
             collect = false;
             this.StatusText = "STOPPED RECORDING";
             Console.Write("~~~~~~ END BUTTON CLICKED ~~~~~~~");
@@ -625,11 +642,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             bodyMoments = new List<bodyMoment>();
         }
 
-        private void startButton_Click(object sender, RoutedEventArgs e)
+        private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
         {
-            collect = true;
-            this.StatusText = "STARTED RECORDING";
-            Console.Write("~~~~~~ START BUTTON CLICKED ~~~~~~~");
+            if(e.KeyChar == ' ')
+            {
+                if (collect)
+                {
+                    endRecording();
+                } else
+                {
+                    startRecording();
+                }
+            }
         }
 
         private void writeOutput()
