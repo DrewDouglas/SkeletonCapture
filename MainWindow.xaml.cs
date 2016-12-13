@@ -18,6 +18,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Collections;
     using System.Xml;
     using System.Text;
+    using System.Windows.Forms;
+    
 
     /// <summary>
     /// contains body and timing info of a single frame
@@ -170,6 +172,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private String fileName;
 
         /// <summary>
+        /// Path to the folder where output files should be written 
+        /// </summary>
+        private String outputFolderPath;
+
+        /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
         public MainWindow()
@@ -195,6 +202,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.collect = false;
 
             this.fileName = "default";
+
+            this.outputFolderPath = "";
 
             // a bone defined as a line between two joints
             this.bones = new List<Tuple<JointType, JointType>>();
@@ -626,7 +635,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void writeOutput()
         {
             //Setup Xml Output File:
-            XmlWriter writer = XmlWriter.Create(fileName + "_xml.xml");
+            XmlWriter writer = XmlWriter.Create(outputFolderPath + "\\" + fileName + "_xml.xml");
             writer.WriteStartDocument();
             writer.WriteStartElement("frames");
 
@@ -723,7 +732,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             writer.WriteEndDocument();
             writer.Close();
 
-            File.WriteAllText(fileName + "_csv.csv", csv.ToString());
+            File.WriteAllText(outputFolderPath + "\\" + fileName + "_csv.csv", csv.ToString());
         }
         private void writeJoint(XmlWriter writerXML, StringBuilder csv, myBody curBody, string name, Microsoft.Kinect.JointType jt)
         {
@@ -749,6 +758,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             csv.AppendFormat("\t{0},\t{1},\t{2},\t{3}", curBody.joints[jt].Position.X.ToString(), curBody.joints[jt].Position.Y.ToString(), curBody.joints[jt].Position.Z.ToString(), curBody.joints[jt].TrackingState.ToString());
             csv.Append((jt != Final_Joint) ? ',' : '\n', 1);
+        }
+
+        private void folderPath_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
+            if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                outputFolderPath = folderBrowserDialog1.SelectedPath;
+            }
         }
     }
 }
