@@ -610,6 +610,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void endButton_Click(object sender, RoutedEventArgs e)
         {
             collect = false;
+            this.StatusText = "STOPPED RECORDING";
             Console.Write("~~~~~~ END BUTTON CLICKED ~~~~~~~");
             writeOutput();
             //bodyFrames.Clear();
@@ -618,6 +619,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
             collect = true;
+            this.StatusText = "STARTED RECORDING";
             Console.Write("~~~~~~ START BUTTON CLICKED ~~~~~~~");
         }
 
@@ -636,15 +638,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             var csv = new StringBuilder();
 
             // Write header
-            var new_line = string.Format("\tFrameNum, \tRelativeTime, \tAnkleLeft.x, \tAnkleLeft.y, \tAnkleLeft.z, \tAnkleRight.x, \tAnkleRight.y, \tAnkleRight.z, " +
-                "\tElbowLeft.x, \tElbowLeft.y, \tElbowLeft.z, \tElbowRight.x, \tElbowRight.y, \tElbowRight.z, \tFootLeft.x, \tFootLeft.y, \tFootLeft.z, " +
-                "\tFootRight.x, \tFootRight.y, \tFootRight.z , \tHandLeft.x, \tHandLeft.y, \tHandLeft.z, \tHandRight.x, \tHandRight.y, \tHandRight.z, " +
-                "\tHandTipLeft.x, \tHandTipLeft.y, \tHandTipLeft.z, \tHandTipRight.x, \tHandTipRight.y, \tHandTipRight.z, \tHead.x, \tHead.y, \tHead.z, " +
-                "\tHipLeft.x, \tHipLeft.y, \tHipLeft.z, HipRight.x, \tHipRight.y, \tHipRight.z, \tKneeLeft.x, \tKneeLeft.y, \tKneeLeft.z, " +
-                "\tKneeRight.x, \tKneeRight.y, \tKneeRight.z, \tNeck.x, \tNeck.y, \tNeck.z, \tShoulderLeft.x, \tShoulderLeft.y, \tShoulderLeft.z, " +
-                "\tShoulderRight.x, \tShoulderRight.y, \tShoulderRight.z, \tSpineBase.x, SpineBase.y, \tSpineBase.z, \tSpineMid.x, \tSpineMid.y, \tSpineMid.z, " +
-                "\tSpineShoulder.x, \tSpineShoulder.y, \tSpineShoulder.z, \tThumbLeft.x, ThumbLeft.y, \tThumbLeft.z, \tThumbRight.x, \tThumbRight.y, \tThumbRight.z, " +
-                "\tWristLeft.x, \tWristLeft.y, \tWristLeft.z, \tWristRight.x, \tWristRight.y, \tWristRight.z");
+            var new_line = string.Format("\tFrameNum, \tRelativeTime, \tAnkleLeft.x, \tAnkleLeft.y, \tAnkleLeft.z, \tAnkleLeft.trackedstate, \tAnkleRight.x, \tAnkleRight.y, \tAnkleRight.z, \tAnkleRight.trackedstate, " +
+                "\tElbowLeft.x, \tElbowLeft.y, \tElbowLeft.z, \tElbowLeft.trackedstate, \tElbowRight.x, \tElbowRight.y, \tElbowRight.z, \tElbowRight.trackedstate, \tFootLeft.x, \tFootLeft.y, \tFootLeft.z, \tFootLeft.trackedstate, " +
+                "\tFootRight.x, \tFootRight.y, \tFootRight.z , \tFootRight.trackedstate, \tHandLeft.x, \tHandLeft.y, \tHandLeft.z, \tHandLeft.trackedstate, \tHandRight.x, \tHandRight.y, \tHandRight.z, \tHandRight.trackedstate, " +
+                "\tHandTipLeft.x, \tHandTipLeft.y, \tHandTipLeft.z, \tHandTipLeft.trackedstate, \tHandTipRight.x, \tHandTipRight.y, \tHandTipRight.z, \tHandTipRight.trackedstate, \tHead.x, \tHead.y, \tHead.z, \tHead.trackedstate, " +
+                "\tHipLeft.x, \tHipLeft.y, \tHipLeft.z, \tHipLeft.trackedstate, \tHipRight.x, \tHipRight.y, \tHipRight.z, \tHipRight.trackedstate, \tKneeLeft.x, \tKneeLeft.y, \tKneeLeft.z, \tKneeLeft.trackedstate, " +
+                "\tKneeRight.x, \tKneeRight.y, \tKneeRight.z, \tKneeRight.trackedstate, \tNeck.x, \tNeck.y, \tNeck.z, \tNeck.trackedstate, \tShoulderLeft.x, \tShoulderLeft.y, \tShoulderLeft.z, \tShoulderLeft.trackedstate, " +
+                "\tShoulderRight.x, \tShoulderRight.y, \tShoulderRight.z, \tShoulderRight.trackedstate, \tSpineBase.x, SpineBase.y, \tSpineBase.z, \tSpineBase.trackedstate, \tSpineMid.x, \tSpineMid.y, \tSpineMid.z, \tSpineMid.trackedstate, " +
+                "\tSpineShoulder.x, \tSpineShoulder.y, \tSpineShoulder.z, \tSpineShoulder.trackedstate, \tThumbLeft.x, ThumbLeft.y, \tThumbLeft.z, \tThumbLeft.trackedstate, \tThumbRight.x, \tThumbRight.y, \tThumbRight.z, \tThumbRight.trackedstate, " +
+                "\tWristLeft.x, \tWristLeft.y, \tWristLeft.z, \tWristLeft.trackedstate, \tWristRight.x, \tWristRight.y, \tWristRight.z, \tWristRight.trackedstate");
             csv.AppendLine(new_line);
 
             //Let the bodies hit the frames
@@ -728,9 +730,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             writerXML.WriteString(curBody.joints[jt].Position.Z.ToString());
             writerXML.WriteEndElement();
 
+            writerXML.WriteStartElement("trackedState");
+            writerXML.WriteString(curBody.joints[jt].TrackingState.ToString());
             writerXML.WriteEndElement();
 
-            csv.AppendFormat("\t{0},\t{1},\t{2}", curBody.joints[jt].Position.X.ToString(), curBody.joints[jt].Position.Y.ToString(), curBody.joints[jt].Position.Z.ToString());
+            writerXML.WriteEndElement();
+
+            csv.AppendFormat("\t{0},\t{1},\t{2},\t{3}", curBody.joints[jt].Position.X.ToString(), curBody.joints[jt].Position.Y.ToString(), curBody.joints[jt].Position.Z.ToString(), curBody.joints[jt].TrackingState.ToString());
             csv.Append((jt != Final_Joint) ? ',' : '\n', 1);
         }
     }
