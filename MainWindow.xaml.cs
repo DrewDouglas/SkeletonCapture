@@ -612,7 +612,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.StatusText = "STOPPED RECORDING";
             Console.Write("~~~~~~ END BUTTON CLICKED ~~~~~~~");
             writeOutput();
-            //bodyFrames.Clear();
+            this.bodies = null;
+            bodyMoments = new List<bodyMoment>();
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)
