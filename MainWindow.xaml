@@ -18,7 +18,7 @@
     </Grid.RowDefinitions>
 
     <Image Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
-    <TextBlock Grid.Row="0" Margin="0,0,-5.4,0.2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Body Basics</TextBlock>
+        <TextBlock Grid.Row="0" Margin="0,0,-5.4,0.2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">ARCHES</TextBlock>
     <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />
 
     <Viewbox Grid.Row="1" HorizontalAlignment="Center">
@@ -28,10 +28,10 @@
     <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
       <StatusBarItem Content="{Binding StatusText}" />
     </StatusBar>
-        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" Margin="665,73.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Background="#FF259426" Click="startButton_Click"/>
-        <Button x:Name="endButton" Content="End" HorizontalAlignment="Left" Margin="665,133.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Background="#FFD02929" Click="endButton_Click"/>
-        <TextBox x:Name="filenameTextBox" HorizontalAlignment="Left" Height="23" Margin="648,192.8,0,0" Grid.Row="1" TextWrapping="Wrap" Text="file name" VerticalAlignment="Top" Width="120" TextChanged="textBox_TextChanged" BorderThickness="2" Cursor="IBeam"/>
-        <Label x:Name="label" Content="Output Folder" HorizontalAlignment="Left" Margin="665,295.8,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-        <Button x:Name="folderPath" Content="Browse" HorizontalAlignment="Left" Margin="665,326.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="folderPath_Click"/>
+        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" Margin="703,65.8,-0.4,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Background="#FF259426" Click="startButton_Click"/>
+        <Button x:Name="endButton" Content="End" HorizontalAlignment="Left" Margin="703,131.8,-0.4,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Background="#FFD02929" Click="endButton_Click"/>
+        <TextBox x:Name="filenameTextBox" HorizontalAlignment="Left" Height="23" Margin="648,192.8,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Output File" VerticalAlignment="Top" Width="120" TextChanged="textBox_TextChanged" BorderThickness="2" Cursor="IBeam"/>
+        <Label x:Name="label" Content="Output Folder" HorizontalAlignment="Left" Margin="683,295.8,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+        <Button x:Name="folderPath" Content="Browse" HorizontalAlignment="Left" Margin="683,326.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="folderPath_Click"/>
     </Grid>
 </Window>

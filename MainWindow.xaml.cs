@@ -647,15 +647,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             var csv = new StringBuilder();
 
             // Write header
-            var new_line = string.Format("\tFrameNum, \tRelativeTime, \tcpuTime, \tAnkleLeft.x, \tAnkleLeft.y, \tAnkleLeft.z, \tAnkleLeft.trackedstate, \tAnkleRight.x, \tAnkleRight.y, \tAnkleRight.z, \tAnkleRight.trackedstate, " +
-                "\tElbowLeft.x, \tElbowLeft.y, \tElbowLeft.z, \tElbowLeft.trackedstate, \tElbowRight.x, \tElbowRight.y, \tElbowRight.z, \tElbowRight.trackedstate, \tFootLeft.x, \tFootLeft.y, \tFootLeft.z, \tFootLeft.trackedstate, " +
-                "\tFootRight.x, \tFootRight.y, \tFootRight.z , \tFootRight.trackedstate, \tHandLeft.x, \tHandLeft.y, \tHandLeft.z, \tHandLeft.trackedstate, \tHandRight.x, \tHandRight.y, \tHandRight.z, \tHandRight.trackedstate, " +
-                "\tHandTipLeft.x, \tHandTipLeft.y, \tHandTipLeft.z, \tHandTipLeft.trackedstate, \tHandTipRight.x, \tHandTipRight.y, \tHandTipRight.z, \tHandTipRight.trackedstate, \tHead.x, \tHead.y, \tHead.z, \tHead.trackedstate, " +
-                "\tHipLeft.x, \tHipLeft.y, \tHipLeft.z, \tHipLeft.trackedstate, \tHipRight.x, \tHipRight.y, \tHipRight.z, \tHipRight.trackedstate, \tKneeLeft.x, \tKneeLeft.y, \tKneeLeft.z, \tKneeLeft.trackedstate, " +
-                "\tKneeRight.x, \tKneeRight.y, \tKneeRight.z, \tKneeRight.trackedstate, \tNeck.x, \tNeck.y, \tNeck.z, \tNeck.trackedstate, \tShoulderLeft.x, \tShoulderLeft.y, \tShoulderLeft.z, \tShoulderLeft.trackedstate, " +
-                "\tShoulderRight.x, \tShoulderRight.y, \tShoulderRight.z, \tShoulderRight.trackedstate, \tSpineBase.x, SpineBase.y, \tSpineBase.z, \tSpineBase.trackedstate, \tSpineMid.x, \tSpineMid.y, \tSpineMid.z, \tSpineMid.trackedstate, " +
-                "\tSpineShoulder.x, \tSpineShoulder.y, \tSpineShoulder.z, \tSpineShoulder.trackedstate, \tThumbLeft.x, ThumbLeft.y, \tThumbLeft.z, \tThumbLeft.trackedstate, \tThumbRight.x, \tThumbRight.y, \tThumbRight.z, \tThumbRight.trackedstate, " +
-                "\tWristLeft.x, \tWristLeft.y, \tWristLeft.z, \tWristLeft.trackedstate, \tWristRight.x, \tWristRight.y, \tWristRight.z, \tWristRight.trackedstate");
+            var new_line = string.Format("FrameNum,RelativeTime,AnkleLeft.x,AnkleLeft.y,AnkleLeft.z,AnkleLeft.trackedstate,AnkleRight.x,AnkleRight.y,AnkleRight.z,AnkleRight.trackedstate, " +
+                "\tElbowLeft.x,ElbowLeft.y,ElbowLeft.z,ElbowLeft.trackedstate,ElbowRight.x,ElbowRight.y,ElbowRight.z,ElbowRight.trackedstate,FootLeft.x,FootLeft.y,FootLeft.z,FootLeft.trackedstate, " +
+                "\tFootRight.x,FootRight.y,FootRight.z ,FootRight.trackedstate,HandLeft.x,HandLeft.y,HandLeft.z,HandLeft.trackedstate,HandRight.x,HandRight.y,HandRight.z,HandRight.trackedstate, " +
+                "\tHandTipLeft.x,HandTipLeft.y,HandTipLeft.z,HandTipLeft.trackedstate,HandTipRight.x,HandTipRight.y,HandTipRight.z,HandTipRight.trackedstate,Head.x,Head.y,Head.z,Head.trackedstate, " +
+                "\tHipLeft.x,HipLeft.y,HipLeft.z,HipLeft.trackedstate,HipRight.x,HipRight.y,HipRight.z,HipRight.trackedstate,KneeLeft.x,KneeLeft.y,KneeLeft.z,KneeLeft.trackedstate, " +
+                "\tKneeRight.x,KneeRight.y,KneeRight.z,KneeRight.trackedstate,Neck.x,Neck.y,Neck.z,Neck.trackedstate,ShoulderLeft.x,ShoulderLeft.y,ShoulderLeft.z,ShoulderLeft.trackedstate, " +
+                "\tShoulderRight.x,ShoulderRight.y,ShoulderRight.z,ShoulderRight.trackedstate,SpineBase.x, SpineBase.y,SpineBase.z,SpineBase.trackedstate,SpineMid.x,SpineMid.y,SpineMid.z,SpineMid.trackedstate, " +
+                "\tSpineShoulder.x,SpineShoulder.y,SpineShoulder.z,SpineShoulder.trackedstate,ThumbLeft.x, ThumbLeft.y,ThumbLeft.z,ThumbLeft.trackedstate,ThumbRight.x,ThumbRight.y,ThumbRight.z,ThumbRight.trackedstate, " +
+                "\tWristLeft.x,WristLeft.y,WristLeft.z,WristLeft.trackedstate,WristRight.x,WristRight.y,WristRight.z,WristRight.trackedstate");
             csv.AppendLine(new_line);
 
             //Let the bodies hit the frames
@@ -690,11 +690,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     writer.WriteString(curMoment.relativeTime.ToString());
                     writer.WriteEndElement();
 
+                    /*
                     writer.WriteStartElement("cpuTime");
                     writer.WriteString(curMoment.cpuTime.ToString());
                     writer.WriteEndElement();
-
-                    csv.AppendFormat("{0},{1},{2}", i.ToString(), curMoment.relativeTime.ToString(), curMoment.cpuTime.ToString());
+                    */
+                    csv.AppendFormat("{0},{1},", i.ToString(), curMoment.relativeTime.ToString());
 
                     //All joints
                     writeJoint(writer, csv, curBody, "AnkleLeft", Microsoft.Kinect.JointType.AnkleLeft);
@@ -760,7 +761,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             writerXML.WriteEndElement();
 
-            csv.AppendFormat("\t{0},\t{1},\t{2},\t{3}", curBody.joints[jt].Position.X.ToString(), curBody.joints[jt].Position.Y.ToString(), curBody.joints[jt].Position.Z.ToString(), curBody.joints[jt].TrackingState.ToString());
+            csv.AppendFormat("{0},{1},{2},{3}", curBody.joints[jt].Position.X.ToString(), curBody.joints[jt].Position.Y.ToString(), curBody.joints[jt].Position.Z.ToString(), curBody.joints[jt].TrackingState.ToString());
             csv.Append((jt != Final_Joint) ? ',' : '\n', 1);
         }
 
