@@ -18,16 +18,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Collections;
     using System.Xml;
     using System.Text;
-    using Newtonsoft.Json;
+    using System.Windows.Forms;
+    
 
     /// <summary>
     /// contains body and timing info of a single frame
     /// </summary>
     struct bodyMoment
     {
-        public Body[] bodies;
+        public myBody[] bodies;
         public TimeSpan relativeTime;
         public DateTime cpuTime;
+    };
+
+    struct myBody
+    {
+        public Dictionary<JointType, Joint> joints;
     };
 
     /// <summary>
@@ -166,6 +172,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private String fileName;
 
         /// <summary>
+        /// Path to the folder where output files should be written 
+        /// </summary>
+        private String outputFolderPath;
+
+        /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
         public MainWindow()
@@ -191,6 +202,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.collect = false;
 
             this.fileName = "default";
+
+            this.outputFolderPath = "";
 
             // a bone defined as a line between two joints
             this.bones = new List<Tuple<JointType, JointType>>();
@@ -380,8 +393,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     if (collect == true)
                     {
                         bodyMoment bm;
-                        bm.bodies = new Body[this.bodies.Length];
-                        bodyFrame.GetAndRefreshBodyData(bm.bodies);
+                        bm.bodies = new myBody[this.bodies.Length];
+                        deepCopyBodies(this.bodies, bm.bodies);
+                        //bodyFrame.GetAndRefreshBodyData(bm.bodies);
                         bm.relativeTime = bodyFrame.RelativeTime;
                         bm.cpuTime = DateTime.Now;
                         bodyMoments.Add(bm);
@@ -433,6 +447,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                }
+            }
+        }
+
+        private void deepCopyBodies(Body[] src, myBody[] dst)
+        {
+            for (int i = 0; i < src.Length; i++)
+            {
+                dst[i].joints = new Dictionary<JointType, Joint>();
+                foreach(KeyValuePair<JointType, Joint> entry in src[i].Joints)
+                {
+                    dst[i].joints.Add(entry.Key, entry.Value);
                 }
             }
         }
@@ -592,21 +618,24 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void endButton_Click(object sender, RoutedEventArgs e)
         {
             collect = false;
+            this.StatusText = "STOPPED RECORDING";
             Console.Write("~~~~~~ END BUTTON CLICKED ~~~~~~~");
             writeOutput();
-            //bodyFrames.Clear();
+            this.bodies = null;
+            bodyMoments = new List<bodyMoment>();
         }
 
         private void startButton_Click(object sender, RoutedEventArgs e)
         {
             collect = true;
+            this.StatusText = "STARTED RECORDING";
             Console.Write("~~~~~~ START BUTTON CLICKED ~~~~~~~");
         }
 
         private void writeOutput()
         {
             //Setup Xml Output File:
-            XmlWriter writer = XmlWriter.Create(fileName + "_xml.xml");
+            XmlWriter writer = XmlWriter.Create(outputFolderPath + "\\" + fileName + "_xml.xml");
             writer.WriteStartDocument();
             writer.WriteStartElement("frames");
 
@@ -618,28 +647,39 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             var csv = new StringBuilder();
 
             // Write header
-            var new_line = string.Format("\tFrameNum, \tRelativeTime, \tAnkleLeft.x, \tAnkleLeft.y, \tAnkleLeft.z, \tAnkleRight.x, \tAnkleRight.y, \tAnkleRight.z, " +
-                "\tElbowLeft.x, \tElbowLeft.y, \tElbowLeft.z, \tElbowRight.x, \tElbowRight.y, \tElbowRight.z, \tFootLeft.x, \tFootLeft.y, \tFootLeft.z, " +
-                "\tFootRight.x, \tFootRight.y, \tFootRight.z , \tHandLeft.x, \tHandLeft.y, \tHandLeft.z, \tHandRight.x, \tHandRight.y, \tHandRight.z, " +
-                "\tHandTipLeft.x, \tHandTipLeft.y, \tHandTipLeft.z, \tHandTipRight.x, \tHandTipRight.y, \tHandTipRight.z, \tHead.x, \tHead.y, \tHead.z, " +
-                "\tHipLeft.x, \tHipLeft.y, \tHipLeft.z, HipRight.x, \tHipRight.y, \tHipRight.z, \tKneeLeft.x, \tKneeLeft.y, \tKneeLeft.z, " +
-                "\tKneeRight.x, \tKneeRight.y, \tKneeRight.z, \tNeck.x, \tNeck.y, \tNeck.z, \tShoulderLeft.x, \tShoulderLeft.y, \tShoulderLeft.z, " +
-                "\tShoulderRight.x, \tShoulderRight.y, \tShoulderRight.z, \tSpineBase.x, SpineBase.y, \tSpineBase.z, \tSpineMid.x, \tSpineMid.y, \tSpineMid.z, " +
-                "\tSpineShoulder.x, \tSpineShoulder.y, \tSpineShoulder.z, \tThumbLeft.x, ThumbLeft.y, \tThumbLeft.z, \tThumbRight.x, \tThumbRight.y, \tThumbRight.z, " +
-                "\tWristLeft.x, \tWristLeft.y, \tWristLeft.z, \tWristRight.x, \tWristRight.y, \tWristRight.z");
+            var new_line = string.Format("FrameNum,RelativeTime,AnkleLeft.x,AnkleLeft.y,AnkleLeft.z,AnkleLeft.trackedstate,AnkleRight.x,AnkleRight.y,AnkleRight.z,AnkleRight.trackedstate, " +
+                "\tElbowLeft.x,ElbowLeft.y,ElbowLeft.z,ElbowLeft.trackedstate,ElbowRight.x,ElbowRight.y,ElbowRight.z,ElbowRight.trackedstate,FootLeft.x,FootLeft.y,FootLeft.z,FootLeft.trackedstate, " +
+                "\tFootRight.x,FootRight.y,FootRight.z ,FootRight.trackedstate,HandLeft.x,HandLeft.y,HandLeft.z,HandLeft.trackedstate,HandRight.x,HandRight.y,HandRight.z,HandRight.trackedstate, " +
+                "\tHandTipLeft.x,HandTipLeft.y,HandTipLeft.z,HandTipLeft.trackedstate,HandTipRight.x,HandTipRight.y,HandTipRight.z,HandTipRight.trackedstate,Head.x,Head.y,Head.z,Head.trackedstate, " +
+                "\tHipLeft.x,HipLeft.y,HipLeft.z,HipLeft.trackedstate,HipRight.x,HipRight.y,HipRight.z,HipRight.trackedstate,KneeLeft.x,KneeLeft.y,KneeLeft.z,KneeLeft.trackedstate, " +
+                "\tKneeRight.x,KneeRight.y,KneeRight.z,KneeRight.trackedstate,Neck.x,Neck.y,Neck.z,Neck.trackedstate,ShoulderLeft.x,ShoulderLeft.y,ShoulderLeft.z,ShoulderLeft.trackedstate, " +
+                "\tShoulderRight.x,ShoulderRight.y,ShoulderRight.z,ShoulderRight.trackedstate,SpineBase.x, SpineBase.y,SpineBase.z,SpineBase.trackedstate,SpineMid.x,SpineMid.y,SpineMid.z,SpineMid.trackedstate, " +
+                "\tSpineShoulder.x,SpineShoulder.y,SpineShoulder.z,SpineShoulder.trackedstate,ThumbLeft.x, ThumbLeft.y,ThumbLeft.z,ThumbLeft.trackedstate,ThumbRight.x,ThumbRight.y,ThumbRight.z,ThumbRight.trackedstate, " +
+                "\tWristLeft.x,WristLeft.y,WristLeft.z,WristLeft.trackedstate,WristRight.x,WristRight.y,WristRight.z,WristRight.trackedstate");
             csv.AppendLine(new_line);
 
             //Let the bodies hit the frames
             bodyMoment curMoment;
-            Body curBody;
+            myBody curBody;
             for (int i = 0; i < bodyMoments.Count; i++)
             {
                 curMoment = bodyMoments[i];
-                Body[] curBodies = curMoment.bodies;
-                if (curBodies.Length != 0)
-                {
+                myBody[] curBodies = curMoment.bodies;
 
-                    curBody = curBodies[0];
+                // Find the real body out of the 6 possible ghost bodies
+                int realbody = -1;
+                for (int j = 0; j < curMoment.bodies.Length; j++)
+                {
+                    if(curBodies[j].joints[JointType.Head].TrackingState != TrackingState.NotTracked)
+                    {
+                        realbody = j;
+                    }
+                }
+
+                //only record frame if it contains a body
+                if (realbody != -1)
+                {
+                    curBody = curBodies[realbody];
                     
                     //Write the frame number and time
                     writer.WriteStartElement("FrameNum");
@@ -650,6 +690,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     writer.WriteString(curMoment.relativeTime.ToString());
                     writer.WriteEndElement();
 
+                    /*
+                    writer.WriteStartElement("cpuTime");
+                    writer.WriteString(curMoment.cpuTime.ToString());
+                    writer.WriteEndElement();
+                    */
                     csv.AppendFormat("{0},{1},", i.ToString(), curMoment.relativeTime.ToString());
 
                     //All joints
@@ -692,28 +737,41 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             writer.WriteEndDocument();
             writer.Close();
 
-            File.WriteAllText(fileName + "_csv.csv", csv.ToString());
+            File.WriteAllText(outputFolderPath + "\\" + fileName + "_csv.csv", csv.ToString());
         }
-        private void writeJoint(XmlWriter writerXML, StringBuilder csv, Body curBody, string name, Microsoft.Kinect.JointType jt)
+        private void writeJoint(XmlWriter writerXML, StringBuilder csv, myBody curBody, string name, Microsoft.Kinect.JointType jt)
         {
             writerXML.WriteStartElement(name);
 
             writerXML.WriteStartElement("x");
-            writerXML.WriteString(curBody.Joints[jt].Position.X.ToString());
+            writerXML.WriteString(curBody.joints[jt].Position.X.ToString());
             writerXML.WriteEndElement();
 
             writerXML.WriteStartElement("y");
-            writerXML.WriteString(curBody.Joints[jt].Position.Y.ToString());
+            writerXML.WriteString(curBody.joints[jt].Position.Y.ToString());
             writerXML.WriteEndElement();
 
             writerXML.WriteStartElement("z");
-            writerXML.WriteString(curBody.Joints[jt].Position.Z.ToString());
+            writerXML.WriteString(curBody.joints[jt].Position.Z.ToString());
+            writerXML.WriteEndElement();
+
+            writerXML.WriteStartElement("trackedState");
+            writerXML.WriteString(curBody.joints[jt].TrackingState.ToString());
             writerXML.WriteEndElement();
 
             writerXML.WriteEndElement();
 
-            csv.AppendFormat("\t{0},\t{1},\t{2}", curBody.Joints[jt].Position.X.ToString(), curBody.Joints[jt].Position.Y.ToString(), curBody.Joints[jt].Position.Z.ToString());
+            csv.AppendFormat("{0},{1},{2},{3}", curBody.joints[jt].Position.X.ToString(), curBody.joints[jt].Position.Y.ToString(), curBody.joints[jt].Position.Z.ToString(), curBody.joints[jt].TrackingState.ToString());
             csv.Append((jt != Final_Joint) ? ',' : '\n', 1);
+        }
+
+        private void folderPath_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
+            if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                outputFolderPath = folderBrowserDialog1.SelectedPath;
+            }
         }
     }
 }

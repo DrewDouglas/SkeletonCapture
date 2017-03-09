@@ -13,3 +13,17 @@ C:\Users\Drew\Documents\School\Fall Risk\BodyBasics-WPF\obj\Release\Microsoft.Sa
 C:\Users\Drew\Documents\School\Fall Risk\BodyBasics-WPF\obj\Release\BodyBasics-WPF.csproj.GenerateResource.Cache
 C:\Users\Drew\Documents\School\Fall Risk\BodyBasics-WPF\obj\Release\BodyBasics-WPF.exe
 C:\Users\Drew\Documents\School\Fall Risk\BodyBasics-WPF\obj\Release\BodyBasics-WPF.pdb
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\bin\AnyCPU\Release\BodyBasics-WPF.exe.config
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\BodyBasics-WPF.exe
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\BodyBasics-WPF.pdb
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\MainWindow.baml
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\MainWindow.g.cs
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\App.g.cs
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\BodyBasics-WPF_MarkupCompile.cache
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\BodyBasics-WPF.g.resources
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\Microsoft.Samples.Kinect.BodyBasics.Properties.Resources.resources
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\obj\Release\BodyBasics-WPF.csproj.GenerateResource.Cache
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\bin\AnyCPU\Release\BodyBasics-WPF.exe
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\bin\AnyCPU\Release\BodyBasics-WPF.pdb
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\bin\AnyCPU\Release\Microsoft.Kinect.dll
+C:\Users\Drew\Documents\School\Fall Risk\SkeletonCapture\bin\AnyCPU\Release\Microsoft.Kinect.xml
