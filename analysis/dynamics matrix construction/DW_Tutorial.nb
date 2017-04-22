@@ -1,0 +1,7456 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    180004,       7446]
+NotebookOptionsPosition[    161878,       6811]
+NotebookOutlinePosition[    162660,       6837]
+CellTagsIndexPosition[    162617,       6834]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ "The Dynamics Workbench\n",
+ StyleBox["Documentation Notebook\n   Copyright \[Copyright] 1994 Arthur D. \
+Kuo",
+  FontSize->14]
+}], "Title",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The Dynamics Workbench is a ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " package for doing dynamics. It enables the user to generate equations of \
+motion primarily for rigid body mechanical systems. These equations may then \
+be exported for use in other programs, or may be integrated directly in ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ ". The Workbench provides just a few basic commands which are sufficient for \
+generating equations of motion. Lower level commands give advanced users \
+access to a the actual steps involved, but are not necessary in the majority \
+of cases. This package uses Kane's method to generate equations, but can be \
+used to implement the method of Lagrange as well."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["How to Get Started", "Section",
+ Evaluatable->False,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell["\<\
+To begin learning to use the Dynamics Workbench, read the sections below up \
+to and including Basic Commands. Skip the sections on Intermediate and Lower \
+Level Commands, and proceed directly to the example. At this point you are \
+ready to try your own models. Refer back to the sections you skipped if you \
+require more information.\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Initialization", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell["\<\
+Load the Dynamics Workbench package using a command like the following:\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<DynamicsWorkbench`\>\"", "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "You must configure your system so that the package DynamicsWorkbench.m is \
+in ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ "'s path.\n\nAn alternative is to load the Dynamics Workbench directly from \
+a directory of your choice, for example c:/yourdirectory. Use the following:"
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", "\"\<c:/yourdirectory\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"<<", "DynamicsWorkbench.m"}]}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Configuration", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell[CellGroupData[{
+
+Cell["Bodies and Frames", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The Dynamics Workbench describes a mechanical system using ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s and reference ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s. One or more  ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s may be used to describe a rigid body to be modeled, and one or more \
+reference ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s may be attached to that ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ". Most often, there will be a single ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " and reference ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " associated with a rigid body.\n\n",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s are organized relative to each other in the description of a system. \
+Each ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is defined with respect to an ",
+ StyleBox["inboard",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " body which precedes it. These two ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s are connected by a joint, of which there are many types. The Dynamics \
+Workbench requires information regarding the location of that joint relative \
+to both ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s. On ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", the vector ",
+ StyleBox["BodyToJnt",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " describes the joint location with respect to body's center of mass. On the \
+",
+ StyleBox["inboard",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " body, the vector ",
+ StyleBox["InbToJnt",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " describes the joint location with respect to ",
+ StyleBox["inboard",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s center of mass. The figure below illustrates these vectors and the two \
+bodies with their joints separated."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[GraphicsData["PostScript", "\<\
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: 4 4 458 265
+%%HiResBoundingBox: 4 4 458 265
+%%Creator: (Mathematica Macintosh 3.0)
+%%Title: Clipboard
+%%CreationDate: (Tuesday, January 13, 1998) (1:09:50 PM)
+%%DocumentNeededResources: (atend)
+%%DocumentFonts: (atend)
+%%DocumentNeededFonts: (atend)
+%%EndComments
+0 269 translate 1 -1 scale
+0 setlinewidth
+0.5625 setgray
+801 50 moveto
+801 50 lineto
+stroke
+0 setgray
+801 50 moveto
+801 50 lineto
+stroke
+801 50 moveto
+801 50 lineto
+stroke
+801 50 moveto
+801 50 lineto
+stroke
+1 setlinewidth
+88.5 119.5 moveto
+100.5 129.5 lineto
+115.5 135.5 lineto
+131.5 137.5 lineto
+149.5 135.5 lineto
+166.5 130.5 lineto
+183.5 126.5 lineto
+190.5 123.5 lineto
+198.5 123.5 lineto
+206.5 123.5 lineto
+214.5 125.5 lineto
+220.5 126.5 lineto
+224.5 130.5 lineto
+228.5 135.5 lineto
+230.5 140.5 lineto
+231.5 152.5 lineto
+229.5 165.5 lineto
+225.5 171.5 lineto
+220.5 176.5 lineto
+213.5 180.5 lineto
+207.5 183.5 lineto
+199.5 185.5 lineto
+192.5 185.5 lineto
+184.5 185.5 lineto
+177.5 185.5 lineto
+168.5 182.5 lineto
+160.5 179.5 lineto
+138.5 175.5 lineto
+117.5 173.5 lineto
+96.5 171.5 lineto
+76.5 171.5 lineto
+70.5 169.5 lineto
+64.5 166.5 lineto
+60.5 163.5 lineto
+57.5 159.5 lineto
+54.5 151.5 lineto
+51.5 143.5 lineto
+50.5 136.5 lineto
+52.5 128.5 lineto
+59.5 119.5 lineto
+69.5 115.5 lineto
+74.5 114.5 lineto
+79.5 115.5 lineto
+84.5 116.5 lineto
+88.5 119.5 lineto
+stroke
+341.5 121.5 moveto
+359.5 118.5 lineto
+377.5 116.5 lineto
+396.5 116.5 lineto
+419.5 118.5 lineto
+428.5 121.5 lineto
+437.5 127.5 lineto
+445.5 134.5 lineto
+451.5 143.5 lineto
+454.5 153.5 lineto
+456.5 162.5 lineto
+455.5 171.5 lineto
+451.5 178.5 lineto
+442.5 183.5 lineto
+434.5 187.5 lineto
+425.5 189.5 lineto
+417.5 190.5 lineto
+398.5 189.5 lineto
+379.5 190.5 lineto
+367.5 191.5 lineto
+353.5 193.5 lineto
+340.5 194.5 lineto
+328.5 193.5 lineto
+318.5 194.5 lineto
+308.5 196.5 lineto
+299.5 197.5 lineto
+289.5 196.5 lineto
+280.5 191.5 lineto
+273.5 185.5 lineto
+268.5 177.5 lineto
+265.5 168.5 lineto
+264.5 158.5 lineto
+266.5 149.5 lineto
+275.5 136.5 lineto
+287.5 124.5 lineto
+292.5 119.5 lineto
+298.5 117.5 lineto
+307.5 116.5 lineto
+319.5 118.5 lineto
+331.5 120.5 lineto
+341.5 121.5 lineto
+stroke
+81.5 152.5 moveto
+85.5 150.5 lineto
+87.5 145.5 lineto
+85.5 140.5 lineto
+81.5 138.5 lineto
+76.5 140.5 lineto
+74.5 145.5 lineto
+76.5 150.5 lineto
+81.5 152.5 lineto
+stroke
+87.5 145.5 moveto
+85.5 150.5 lineto
+81.5 152.5 lineto
+81.5 145.5 lineto
+87.5 145.5 lineto
+fill
+74.5 145.5 moveto
+76.5 140.5 lineto
+81.5 138.5 lineto
+81.5 145.5 lineto
+74.5 145.5 lineto
+fill
+432.5 167.5 moveto
+437.5 165.5 lineto
+439.5 160.5 lineto
+437.5 155.5 lineto
+432.5 153.5 lineto
+427.5 155.5 lineto
+425.5 160.5 lineto
+427.5 165.5 lineto
+432.5 167.5 lineto
+stroke
+439.5 160.5 moveto
+437.5 165.5 lineto
+432.5 167.5 lineto
+432.5 160.5 lineto
+439.5 160.5 lineto
+fill
+425.5 160.5 moveto
+427.5 155.5 lineto
+432.5 153.5 lineto
+432.5 160.5 lineto
+425.5 160.5 lineto
+fill
+/Courier-Bold findfont 12 scalefont setfont
+101 110 moveto (inboard) show
+/Times-Roman findfont 12 scalefont setfont
+151 110 moveto ( body) show
+/Courier-Bold findfont 12 scalefont setfont
+331 107 moveto (body) show
+215.5 152.5 moveto
+216.5 152.5 lineto
+217.5 150.5 lineto
+216.5 149.5 lineto
+215.5 149.5 lineto
+214.5 149.5 lineto
+213.5 150.5 lineto
+214.5 152.5 lineto
+215.5 152.5 lineto
+fill
+281.5 163.5 moveto
+282.5 162.5 lineto
+283.5 161.5 lineto
+282.5 160.5 lineto
+281.5 159.5 lineto
+280.5 160.5 lineto
+279.5 161.5 lineto
+280.5 162.5 lineto
+281.5 163.5 lineto
+fill
+215.5 157.5 moveto
+216.5 164.5 lineto
+215.5 170.5 lineto
+216.5 176.5 lineto
+217.5 182.5 lineto
+219.5 184.5 lineto
+223.5 184.5 lineto
+224.5 183.5 lineto
+228.5 183.5 lineto
+229.5 186.5 lineto
+229.5 190.5 lineto
+229.5 194.5 lineto
+stroke
+97.5 153.5 moveto
+96.5 159.5 lineto
+95.5 165.5 lineto
+94.5 172.5 lineto
+92.5 178.5 lineto
+90.5 179.5 lineto
+86.5 179.5 lineto
+85.5 178.5 lineto
+85.5 177.5 lineto
+83.5 176.5 lineto
+81.5 177.5 lineto
+80.5 178.5 lineto
+79.5 181.5 lineto
+78.5 186.5 lineto
+77.5 190.5 lineto
+stroke
+275.5 165.5 moveto
+270.5 174.5 lineto
+264.5 181.5 lineto
+262.5 182.5 lineto
+260.5 181.5 lineto
+259.5 177.5 lineto
+259.5 173.5 lineto
+256.5 172.5 lineto
+253.5 173.5 lineto
+248.5 178.5 lineto
+243.5 184.5 lineto
+239.5 190.5 lineto
+235.5 195.5 lineto
+stroke
+/Times-Roman findfont 12 scalefont setfont
+220 206 moveto (joint) show
+/Times-Italic findfont 12 scalefont setfont
+280 156 moveto (P) show
+/Times-Italic findfont 12 scalefont setfont
+214 144 moveto (P') show
+80.5 144.5 moveto
+205.5 150.5 lineto
+stroke
+208.5 149.5 moveto
+206.5 148.5 lineto
+204.5 148.5 lineto
+203.5 153.5 lineto
+205.5 152.5 lineto
+208.5 151.5 lineto
+210.5 151.5 lineto
+212.5 151.5 lineto
+210.5 150.5 lineto
+208.5 149.5 lineto
+fill
+/Courier-Bold findfont 12 scalefont setfont
+43 199 moveto (InbToJnt) show
+/Times-Roman findfont 12 scalefont setfont
+57 209 moveto (vector) show
+/Courier-Bold findfont 12 scalefont setfont
+251 214 moveto (BodyToJnt) show
+/Times-Roman findfont 12 scalefont setfont
+268 224 moveto (vector) show
+/Times-Roman findfont 12 scalefont setfont
+5 180 moveto (center of mass) show
+73.5 153.5 moveto
+73.5 155.5 lineto
+72.5 156.5 lineto
+69.5 156.5 lineto
+66.5 157.5 lineto
+63.5 160.5 lineto
+61.5 165.5 lineto
+60.5 168.5 lineto
+57.5 170.5 lineto
+stroke
+431.5 160.5 moveto
+290.5 160.5 lineto
+stroke
+288.5 162.5 moveto
+290.5 162.5 lineto
+292.5 163.5 lineto
+292.5 158.5 lineto
+290.5 159.5 lineto
+288.5 160.5 lineto
+286.5 160.5 lineto
+284.5 161.5 lineto
+286.5 161.5 lineto
+288.5 162.5 lineto
+fill
+296.5 165.5 moveto
+294.5 168.5 lineto
+290.5 173.5 lineto
+287.5 179.5 lineto
+287.5 184.5 lineto
+288.5 185.5 lineto
+290.5 185.5 lineto
+293.5 184.5 lineto
+295.5 184.5 lineto
+296.5 187.5 lineto
+296.5 190.5 lineto
+293.5 197.5 lineto
+288.5 204.5 lineto
+stroke
+156.5 236.5 moveto
+134.5 236.5 lineto
+134.5 210.5 lineto
+stroke
+133.5 209.5 moveto
+133.5 210.5 lineto
+133.5 211.5 lineto
+135.5 211.5 lineto
+135.5 210.5 lineto
+135.5 209.5 lineto
+134.5 208.5 lineto
+134.5 207.5 lineto
+134.5 208.5 lineto
+133.5 209.5 lineto
+fill
+158.5 235.5 moveto
+157.5 235.5 lineto
+156.5 235.5 lineto
+156.5 237.5 lineto
+157.5 237.5 lineto
+158.5 237.5 lineto
+159.5 236.5 lineto
+160.5 236.5 lineto
+159.5 236.5 lineto
+158.5 235.5 lineto
+fill
+133.5 209.5 moveto
+133.5 210.5 lineto
+133.5 211.5 lineto
+135.5 211.5 lineto
+135.5 210.5 lineto
+135.5 209.5 lineto
+134.5 208.5 lineto
+134.5 207.5 lineto
+134.5 208.5 lineto
+133.5 209.5 lineto
+fill
+134.5 236.5 moveto
+120.5 250.5 lineto
+stroke
+120.5 252.5 moveto
+121.5 251.5 lineto
+120.5 249.5 lineto
+119.5 250.5 lineto
+119.5 251.5 lineto
+118.5 252.5 lineto
+118.5 253.5 lineto
+120.5 252.5 lineto
+fill
+120.5 252.5 moveto
+121.5 251.5 lineto
+120.5 249.5 lineto
+119.5 250.5 lineto
+119.5 251.5 lineto
+118.5 252.5 lineto
+118.5 253.5 lineto
+120.5 252.5 lineto
+fill
+/Courier-Bold findfont 10 scalefont setfont
+163 239 moveto (inboard[1]) show
+/Courier-Bold findfont 10 scalefont setfont
+139 211 moveto (inboard[2]) show
+/Courier-Bold findfont 10 scalefont setfont
+84 262 moveto (inboard[3]) show
+405.5 230.5 moveto
+383.5 230.5 lineto
+383.5 204.5 lineto
+stroke
+382.5 203.5 moveto
+382.5 204.5 lineto
+382.5 205.5 lineto
+384.5 205.5 lineto
+384.5 204.5 lineto
+384.5 203.5 lineto
+383.5 202.5 lineto
+383.5 201.5 lineto
+383.5 202.5 lineto
+382.5 203.5 lineto
+fill
+407.5 229.5 moveto
+406.5 229.5 lineto
+405.5 229.5 lineto
+405.5 231.5 lineto
+406.5 231.5 lineto
+407.5 231.5 lineto
+408.5 230.5 lineto
+409.5 230.5 lineto
+408.5 230.5 lineto
+407.5 229.5 lineto
+fill
+382.5 203.5 moveto
+382.5 204.5 lineto
+382.5 205.5 lineto
+384.5 205.5 lineto
+384.5 204.5 lineto
+384.5 203.5 lineto
+383.5 202.5 lineto
+383.5 201.5 lineto
+383.5 202.5 lineto
+382.5 203.5 lineto
+fill
+383.5 230.5 moveto
+369.5 244.5 lineto
+stroke
+369.5 246.5 moveto
+370.5 245.5 lineto
+369.5 243.5 lineto
+368.5 244.5 lineto
+368.5 245.5 lineto
+367.5 246.5 lineto
+367.5 247.5 lineto
+369.5 246.5 lineto
+fill
+369.5 246.5 moveto
+370.5 245.5 lineto
+369.5 243.5 lineto
+368.5 244.5 lineto
+368.5 245.5 lineto
+367.5 246.5 lineto
+367.5 247.5 lineto
+369.5 246.5 lineto
+fill
+/Courier-Bold findfont 10 scalefont setfont
+412 233 moveto (body[1]) show
+/Courier-Bold findfont 10 scalefont setfont
+388 205 moveto (body[2]) show
+/Courier-Bold findfont 10 scalefont setfont
+333 256 moveto (body[3]) show
+398.5 44.5 moveto
+375.5 44.5 lineto
+375.5 18.5 lineto
+stroke
+375.5 17.5 moveto
+374.5 18.5 lineto
+374.5 19.5 lineto
+377.5 19.5 lineto
+376.5 18.5 lineto
+376.5 17.5 lineto
+376.5 16.5 lineto
+375.5 15.5 lineto
+375.5 16.5 lineto
+375.5 17.5 lineto
+fill
+399.5 44.5 moveto
+398.5 44.5 lineto
+397.5 43.5 lineto
+397.5 46.5 lineto
+398.5 45.5 lineto
+399.5 45.5 lineto
+400.5 45.5 lineto
+401.5 44.5 lineto
+400.5 44.5 lineto
+399.5 44.5 lineto
+fill
+375.5 17.5 moveto
+374.5 18.5 lineto
+374.5 19.5 lineto
+377.5 19.5 lineto
+376.5 18.5 lineto
+376.5 17.5 lineto
+376.5 16.5 lineto
+375.5 15.5 lineto
+375.5 16.5 lineto
+375.5 17.5 lineto
+fill
+375.5 44.5 moveto
+361.5 59.5 lineto
+stroke
+361.5 60.5 moveto
+362.5 60.5 lineto
+363.5 59.5 lineto
+361.5 58.5 lineto
+360.5 60.5 lineto
+360.5 61.5 lineto
+359.5 62.5 lineto
+360.5 61.5 lineto
+361.5 60.5 lineto
+fill
+361.5 60.5 moveto
+362.5 60.5 lineto
+363.5 59.5 lineto
+361.5 58.5 lineto
+360.5 60.5 lineto
+360.5 61.5 lineto
+359.5 62.5 lineto
+360.5 61.5 lineto
+361.5 60.5 lineto
+fill
+/Courier-Bold findfont 10 scalefont setfont
+404 47 moveto (ground[1]) show
+/Courier-Bold findfont 10 scalefont setfont
+381 19 moveto (ground[2]) show
+/Courier-Bold findfont 10 scalefont setfont
+326 70 moveto (ground[3]) show
+/Times-Bold findfont 12 scalefont setfont
+22 14 moveto (Configuration of bodies and frames) show
+0 setlinewidth
+4 4 moveto
+4 4 lineto
+stroke
+458 265 moveto
+458 265 lineto
+stroke
+%%Trailer
+%%EOF
+\
+\>"], "Graphics",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True,
+ ImageSize->{454, 261},
+ ImageMargins->{{0, 0}, {0, 0}},
+ ImageRegion->{{0, 1}, {0, 
+  1}},ImageCache->GraphicsData["CompressedBitmap", "\<\
+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
+ZA==\
+\>"]],
+
+Cell[TextData[{
+ "The Dynamics Workbench uses reference ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s to describe vectors fixed to certain ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s. Each ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " generally has one or more ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s fixed to it. Any point fixed to a ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " can be described using any of these ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s. Associated with a ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a set of three mutually-orthogonal unit vectors, labeled with names of \
+the form frame[",
+ StyleBox["i",
+  FontSlant->"Italic"],
+ "] where ",
+ StyleBox["i",
+  FontSlant->"Italic"],
+ " takes on value 1, 2, or 3.\n\nThere is a single default ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " and associated ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " defined in the Dynamics Workbench, corresponding to the Newtonian \
+reference frame and called ",
+ StyleBox["ground",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ". All additional ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s and ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "'s are defined relative to ",
+ StyleBox["ground",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", using a variety of joint types to describe the kinematic relationship."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Notation", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell["\<\
+The Dynamics Workbench uses a very simple notation for refering to \
+generalized coordinates, vectors, and reference frames.\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell["Generalized coordinates and speeds", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "Generalized coordinates are referred to as ",
+ StyleBox["q[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", and generalized speeds as ",
+ StyleBox["u[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ". Both of these variables are implicitly functions of time."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell["Vectors in reference frames", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "A reference ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " named, for example, ",
+ StyleBox["a",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", will generally be fixed to a ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " also named ",
+ StyleBox["a",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", which will have axes ",
+ StyleBox["a[1]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", ",
+ StyleBox["a[2]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", ",
+ StyleBox["a[3]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ". These axes will be aligned respectively with the axes of the inboard \
+body, when the generalized coordinates for ",
+ StyleBox["a",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " are set to zero. Thus, a vector in reference frame ",
+ StyleBox["a",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " might be ",
+ StyleBox["0.5 a[1] + 0.3 a[2]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell["Dyadics", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell["\<\
+A dyadic is expressed using the ** symbol, which normally signifies \
+NonCommutativeMultiply. In this case, the dyadic is not commutative, and is \
+of the form I11 a[1]**a[1] + I12 a[1]**a[2] + I22 a[2]**a[2] + I33 a[3]**a[3].\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Basic Commands", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell[CellGroupData[{
+
+Cell["NewModel", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The command ",
+ StyleBox["NewModel[]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is used to clear the internal variables storing parameters of a model."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Example", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"NewModel", "[", "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["AddBody", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AddBody[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["new_body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["inboard_body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["joint_type",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox[" ",
+  FontWeight->"Bold"],
+ "adds a body, ",
+ StyleBox["new_body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ ", which is attached to the previously-defined ",
+ StyleBox["inboard_body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " with a joint specified by ",
+ StyleBox["joint_type",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ ". After a call to ",
+ StyleBox["NewModel[]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", the only existing body is ",
+ StyleBox["ground",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", the Newtonian reference frame. Currently supported joint types are ",
+ StyleBox["Hinge",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", ",
+ StyleBox["Slider, UJoint, Ball, and SixDOF",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " (see section on joints). The output of AddBody is a list of two lists \
+containing the generalized coordinates and generalized speeds for the new \
+body."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Options", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["BodyToJnt->0 | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["bodytojoint",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " is the vector, specified in any reference frame or frames, from the new \
+body\[CloseCurlyQuote]s center of mass to the joint connecting it to the \
+inboard body."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["InbToJnt->0 | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["inboardtojoint",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " is the vector, specified in any reference frame or frames, from the \
+inboard body's center of mass to the joint connecting it to the new body."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Mass-> 0 | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["mass",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " is the mass of the new body."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Inertia-> 0 | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["inertia",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " is the central inertia dyadic of the new body. There are three possible \
+forms for this dyadic: a full dyadic representation such as ",
+ StyleBox["I12 a[1]**a[2]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "; an inertia matrix for the body's reference frame; and a list of the \
+diagonal entries of that matrix, if the reference frame's axes are principal \
+axes."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Qdof->Automatic | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["qdof_#",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " is the number to be given to the generalized coordinate for the new degree \
+of freedom. If ",
+ StyleBox["Automatic",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", the Workbench automatically chooses a number. If the joint type has more \
+than one generalized coordinate, these are named ",
+ StyleBox["Qdof1, Qdof2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ",..."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Udof->Automatic | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["udof_#",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " is the number to be given to the generalized speed for the new degree of \
+freedom. If ",
+ StyleBox["Automatic",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", the Workbench automatically chooses a number. If the joint type has more \
+than one degree of freedom, these are named ",
+ StyleBox["Udof1, Udof2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ",..."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["RelativeTo->Automatic | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " specifies the reference frame which the new reference frame is relative \
+to. If ",
+ StyleBox["Automatic",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", the inboard body's reference frame is used. It is common to use ",
+ StyleBox["ground",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", so that the generalized coordinate for a hinge joint would be a segment \
+angle."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Axis->{0,0,1} | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["dir_cos",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " gives the axis of the joint using direction cosines in the new body's \
+reference frame. Alternative expressions for Axis are the coordinate number (\
+\[PlusMinus]1, \[PlusMinus]2, \[PlusMinus]3) with the sign signifying \
+counter-clockwise (+) or clockwise (-) rotation, or a vector in the inboard \
+body's reference frame. If the joint type has more than one axis, these are \
+named ",
+ StyleBox["Axis1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", ",
+ StyleBox["Axis2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ",\[Ellipsis]"
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["TAxis->{0,0,1} | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["dir_cos",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " gives the translational axis of the joint using direction cosines in the \
+new body's reference ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", as used for Slider or SixDOF joints. Alternative expressions for ",
+ StyleBox["TAxis",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " are the coordinate number (\[PlusMinus]1, \[PlusMinus]2, \[PlusMinus]3) \
+with the sign signifying movement measured in the positive or negative \
+direction of the axis, or a vector in the ",
+ StyleBox["inboard",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " body's reference ",
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ". If the joint type has more than one translational axis, these are named \
+",
+ StyleBox["TAxis1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", ",
+ StyleBox["TAxis2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ",\[Ellipsis]"
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Frme->Automatic | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["frme_name",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " sets the name of the reference frame which is fixed to the new body. By \
+default, the frame is given the same name as the body."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Basefrm->Automatic | ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["base_frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " sets the reference frame which the new reference frame is relative to, as \
+in ",
+ StyleBox["RelativeTo",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ". Options ",
+ StyleBox["Frme",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " and ",
+ StyleBox["Basefrm",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " are rarely necessary."
+}], "Text",
+ CellMargins->{{16, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Joint Types", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Fixed",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a zero degree-of-freedom joint, in which the inboard and reference \
+bodies do not move relative to each other. It is often used to perform a \
+change of coordinates or to accomodate an unusual geometric arrangement of \
+bodies. Its axes can be offset from those of the base reference frame using \
+the Offset option. Offset may be a matrix of direction cosines or a list of \
+vectors specifying the offset axes in terms of the base frame.  Examples: \
+Offset-> {{0,1,0},{1,0,0},{0,0,1}}, Offset->{body[2],body[1],body[3]}. A \
+Fixed joint has no generalized speeds or coordinates associated with it."
+}], "Text",
+ CellMargins->{{17, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Hinge",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a single degree-of-freedom rotatory joint. The axis about which the \
+joint rotates is specified by the option Axis, which may be the coordinate \
+number, a list of direction cosines, or a vector in the base reference frame \
+(the frame of the inboard body). Examples: Axis->3, Axis->{0,0,1}, \
+Axis->body[1]. The generalized speed, Udof, is defined to be the \
+time-derivative of generalized coordinate Qdof."
+}], "Text",
+ CellMargins->{{17, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Slider",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a single degree-of-freedom prismatic joint. Its location and home \
+position are specified by the BodyToJoint option. The slider joint is at a \
+home position when its generalized coordinate has a value of zero. In this \
+position, the joints for the inboard and outboard bodies are coincident. As \
+the generalized coordinate changes in value, these two joints separate along \
+a translational axis specified by TAxis, which may be a coordinate number, a \
+list of direction cosines, or a vector in the base reference frame. Examples: \
+TAxis->3, TAxis->{0,0,1}, TAxis->body[1]. The generalized speed, Udof, is \
+defined to be the time-derivative of generalized coordinate Qdof."
+}], "Text",
+ CellMargins->{{17, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["UJoint",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a two degree-of-freedom rotatory joint. Its home position is coincident \
+with the base reference frame (the frame of the inboard body). The \
+generalized coordinates describing the rotations are the successive rotation \
+angles about the two specified rotation axes, Axis1 and Axis2. The \
+generalized speeds, Udof1 and Udof2, are defined to be the time-derivatives \
+of the respective generalized coordinates, Qdof1 and Qdof2."
+}], "Text",
+ CellMargins->{{17, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Ball",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a three degree-of-freedom rotatory joint with orientation described by \
+euler parameters. Its home position is coincident with the base reference \
+frame (the frame of the inboard body). The generalized coordinates Qdof1 \
+through Qdof4 describing the rotations are in the form of euler parameters \
+{e1,e2,e3,e4}, where e4 is the cosine of the half-rotational angle. Use ",
+ StyleBox["Gimbal",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " if different generalized coordinates are desired. The generalized speeds \
+Udof1 through Udof3 are the angular velocities about the body's reference \
+frame axes."
+}], "Text",
+ CellMargins->{{17, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Gimbal",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a three degree-of-freedom rotatory joint with orientation described by \
+euler angles. Its home position is coincident with the base reference frame \
+(the frame of the inboard body). The generalized coordinates describing the \
+rotations are the successive rotation angles about the three specified \
+rotation axes, described by options Axis1, Axis2, and Axis3. Use ",
+ StyleBox["Ball",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " if euler parameters are preferred as generalized coordinates. Axes may be \
+specified by coordinate number, or a list of direction cosines. Examples: \
+Axis1->3, Axis2->1, Axis3->2; Axis1->{0,0,1}, Axis2->{0,.707,.707}, \
+Axis3->{.707,0,.707}."
+}], "Text",
+ CellMargins->{{17, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["SixDOF",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a six degree-of- freedom joint which allows for full translational and \
+rotational movement between bodies.  Its location ahd home position are \
+specified by the BodyToJoint option. The translational axes are specified by \
+TAxis1, TAxis2, and TAxis3. The translations along those axes are specified \
+by generalized coordinates Qdof1, Qdof2, and Qdof3, and by generalized speeds \
+Udof1, Udof2, and Udof3. The rotational orientation is described by four \
+euler parameters, specified by generalized coordinates Qdof4 through Qdof7. \
+The angular velocities about the base frame's axes are specified by \
+generalized speeds Udof1, Udof2, and Udof3."
+}], "Text",
+ CellMargins->{{17, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Example", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AddBody", "[", 
+  RowBox[{"a", ",", "ground", ",", "Hinge"}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", "1", "}"}], ",", 
+   RowBox[{"{", "1", "}"}]}], "}"}]], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["\<\
+In this example, Qdof1 and Udof1 are not specified by the user. The Dynamics \
+Workbench has automatically selected values of 1 for each.\
+\>", "Text",
+ CellMargins->{{18, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["AppFrc", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AppFrc[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["force",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["point",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " applies a force specified by vector ",
+ StyleBox["force",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " (in any reference frame or frames) at a point specified by vector",
+ StyleBox["force",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ "  (relative to the center of mass) of ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ "."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Example", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"a", ",", 
+   RowBox[{"-", 
+    RowBox[{"ground", "[", "1", "]"}]}], ",", 
+   RowBox[{"2", " ", 
+    RowBox[{"a", "[", "1", "]"}]}]}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData["1"], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["\<\
+A force of magnitude 1 directed in the negative direction of the ground[1] \
+axis, is applied to body a. The point of application is specified by the \
+vector 2 a[1] from body a's center of mass.\
+\>", "Text",
+ CellMargins->{{18, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["AppTrq", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AppTrq[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["torque",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " applies a torque (or moment) specified by vector ",
+ StyleBox["torque",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " (in any reference frame or frames) to ",
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ "."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Example", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AppTrq", "[", 
+  RowBox[{"a", ",", 
+   RowBox[{"10", " ", 
+    RowBox[{"a", "[", "3", "]"}]}]}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData["1"], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["\<\
+A torque of magnitude 10 directed in the  direction of the ground[3] axis, is \
+applied to body a.\
+\>", "Text",
+ CellMargins->{{18, Inherited}, {Inherited, Inherited}},
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["EOM", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The command ",
+ StyleBox["EOM[]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " assembles equations of motion for the system with previously entered \
+bodies, forces, and torques."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The command ",
+ StyleBox["AtT0[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["expr",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is used to set initial conditions by applying to an expression such as ",
+ StyleBox["q[1] == 0",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", and making that expression valid for time zero."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Kinematics", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Kinematics",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the set of kinematical differential equations. The Dynamics \
+Workbench usually uses equations ",
+ StyleBox["q[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]'[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["t",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["] == u[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["][",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["t",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", but the user may define arbitrary relationships, e.g., for complex \
+kinematical joints."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Intermediate Level Commands", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell["\<\
+The Dynamics Workbench provides several useful intermediate level commands, \
+which are not required for formulation of equations of motion, but aid \
+analysis or rearrangement of these equations. \
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["CollectE", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The command ",
+ StyleBox["CollectE[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["equations",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " collects together terms in eq",
+ StyleBox["equations",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ "uations which are linear in the time-derivative of the generalized speeds, \
+making the equations somewhat more readable."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The command ",
+ StyleBox["CollectE[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["equations",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["expr",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " collects together terms in ",
+ StyleBox["equations",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " which are linear in ",
+ StyleBox["expr",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ ", making the equations somewhat more readable."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["AddFrame", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The command ",
+ StyleBox["AddFrame[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["baseframe",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["jointtype",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["options",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " adds a new reference frame to the system, just as ",
+ StyleBox["AddBody",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", but without a body attached to the reference frame. This command is \
+useful for defining custom joints or body configurations, by decoupling body \
+specifications from reference frame specifications."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["AsmStateEqn", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AsmStateEqn[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["eom",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["kinematics",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " assembles the state equations, using input arguments corresponding to the \
+equations of motion and the kinematical differential equations. The resulting \
+equations are differential equations in the generalized coordinates and \
+speeds, and are suitable for use by ",
+ StyleBox["RungeKutta",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["RHS", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["RHS[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["eqns",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the right-hand-side of each equation in a list of equations."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["SolveEqn", "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["SolveEqn[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["eqn, vars",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " rearranges a list of equations in terms of the variables vars. The command \
+also sorts this list. "
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["MassMatrix", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "Given the equations of motion, ",
+ StyleBox["MassMatrix[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["eom",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " provides a list of two outputs: the mass matrix (terms linear in the \
+time-derivatives of generalized speeds u), and the right-hand side. These \
+outputs can be used in the linear system M.udot == rhs, as when integrating \
+the equations of motion."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["AtT0", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AtT0[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["expr",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns expr set at time zero. This command is useful for providing \
+initial conditions to ",
+ StyleBox["NDSolve",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ "."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["FindEquil", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["FindEquil[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["eqn",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", {",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["x",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["x0",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["} ]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " finds the equilibrium point in the given equation, for variable ",
+ StyleBox["x",
+  FontSlant->"Italic"],
+ ". The initial guess of ",
+ StyleBox["x0",
+  FontSlant->"Italic"],
+ " is used to start a Newton search. For a list of equations, use ",
+ StyleBox["FindEquil[ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["eqns",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[", {",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["x",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["x0",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["}, {",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["y",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["y0",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["},...]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " to find equilibrium points in several variables x, y, etc."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["PosCOM", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["PosCOM[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a vector describing the position of the center of mass of body \
+with respect to the ground reference frame."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["PosPnt", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["PosPnt[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["point",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the vector describing the position of point (entered as a vector \
+relative to the center of mass) fixed to body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Tmtx", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Tmtx[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is the transformation matrix which maps between frame and the inertial \
+(ground) reference frame. Tmtx returns a list of coordinates of the three \
+axes of frame, each in the form of a sublist comprising coefficients for axes \
+of reference frame."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Lower Level Commands", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell["\<\
+At the lowest level of simplification, the Dynamics Workbench provides \
+routines which enable one to assemble equations of motion \"by hand,\" save \
+for the most basic mathematical operations. The Workbench makes it easy to \
+manipulate vectors in various reference frames by providing a simple notation \
+and framework for these operations.\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Accelerations", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AccCOM[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a vector describing the acceleration of the center of mass of body \
+with respect to the ground reference frame."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AccJnt[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the velocity of the point on the inboard body which corresponds to \
+the location of the joint connecting the two."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AngAcc[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the angular acceleration of the body with respect to ground."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Velocities", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["AngVel[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the angular velocity of the body with respect to ground."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["VelCOM[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a vector describing the velocity of the center of mass of body \
+with respect to the ground reference frame."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["VelJnt[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the velocity of the point on the inboard body which corresponds to \
+the location of the joint connecting the two."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["VelJnt2[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the velocity of the point on body which instantaneously \
+corresponds to the location of the joint between body and the inboard body. \
+Used in slider joints."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Model Structure", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Bodies",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a list of the currently defined bodies."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Force[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a list of the forces acting on the body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Frames",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a list of the currently defined reference frames."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Inboard[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the name of the body inboard to the argument."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Inertia[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is the inertia dyadic of the body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Kids[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a list of reference frames below the argument's entry in the frame \
+tree."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Mass[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is the mass of the body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Parents[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a list of reference frames above the argument's entry in the frame \
+tree."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["Torque[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns a list of the torques acting on the body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell["Kane's Method", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["PrtVel[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["expr",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " or ",
+ StyleBox["PrtVel[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["expr",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",u[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the partial velocity of expression with respective to the nth \
+generalized speed."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["ResltF[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the resultant of the forces acting on the body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["ResltT[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the resultant of the torques or moments acting on the body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Rstar[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the inertia forces acting on body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Tstar[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the inertia torque acting on body."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["GActFrc[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the generalized active force of body with respect to the nth \
+generalized speed. ",
+ StyleBox["GActFrc[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the generalized active forces for body with respect to each of the \
+generalized speeds. ",
+ StyleBox["GActFrc[All]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the sum of the generalized active forces for all bodies, with \
+respect to each of the generalized speeds."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["GInerFrc[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["n",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the generalized inertia force of body with respect to the nth \
+generalized speed. ",
+ StyleBox["GInerFrc[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["body",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the generalized inertia forces for body with respect to each of \
+the generalized speeds. ",
+ StyleBox["GInerFrc[All]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the sum of the generalized inertia forces for all bodies, with \
+respect to each of the generalized speeds."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Transformation between reference frames", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["CastMtx[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["from",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["to",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the transformation\nmatrix needed to cast a vector from one \
+reference frame to\nanother."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["CastV[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " will cast any vector into a specified reference frame."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Tmtx[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["frame",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is the transformation matrix which maps between frame and the inertial \
+(ground) reference frame. Tmtx returns a list of coordinates of the three \
+axes of frame, each in the form of a sublist comprising coefficients for axes \
+of reference frame."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Vector Operations", "Subsection",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Cross[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " or ",
+ StyleBox["(",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ~X~ ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[")",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " performs the cross product of two vectors."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Dot[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " or ",
+ StyleBox["vector1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " ",
+ StyleBox[".",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " ",
+ StyleBox["vector2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ " performs the dot product of two vectors (or a vector and a dyadic)."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "A ",
+ StyleBox["dyadic",
+  FontWeight->"Bold"],
+ " may be performed by using ",
+ StyleBox["vector1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[" ** ",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["vector2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[".",
+  FontSlant->"Italic"],
+ " The symbol ** denotes a noncommutative multiply within ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ ", in accordance with the fact that dyadics are not commutative."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ StyleBox["Dist[",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["point1",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox[",",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ StyleBox["point2",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontSlant->"Italic"],
+ StyleBox["]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " returns the distance between two points, which need not be described in \
+the same reference frames."
+}], "Text",
+ Evaluatable->False,
+ InitializationCell->True,
+ AspectRatioFixed->True]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Example: Ballistic walker", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True,
+ FontFamily->"Times"],
+
+Cell["\<\
+This example is an analysis of ballistic walking, described by Mochon & \
+McMahon (1980). Given the correct initial conditions, it is possible for a \
+biped to walk one step with no external input. This ballistic motion \
+resembles actual human walking to a surprising degree. The model consists of \
+three segments, including a stance leg and the thigh and shank of the swing \
+leg. Segments are joined by Hinge joints. All motion is planar.
+Ref: Mochon & McMahon, J. Biomech. 13:49-57, 1980.\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[GraphicsData["PostScript", "\<\
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: 4 4 277 204
+%%HiResBoundingBox: 4 4 277 204
+%%Creator: (Mathematica Macintosh 3.0)
+%%Title: Clipboard
+%%CreationDate: (Tuesday, January 13, 1998) (1:15:21 PM)
+%%DocumentNeededResources: (atend)
+%%DocumentFonts: (atend)
+%%DocumentNeededFonts: (atend)
+%%EndComments
+0 208 translate 1 -1 scale
+0 setlinewidth
+0.5625 setgray
+540 363 moveto
+540 363 lineto
+stroke
+0 setgray
+540 363 moveto
+540 363 lineto
+stroke
+540 363 moveto
+540 363 lineto
+stroke
+540 363 moveto
+540 363 lineto
+stroke
+1 setlinewidth
+8.5 193.5 moveto
+267.5 193.5 lineto
+stroke
+19.5 192.5 moveto
+20.5 185.5 lineto
+stroke
+22.5 181.5 moveto
+24.5 174.5 lineto
+stroke
+25.5 170.5 moveto
+27.5 163.5 lineto
+stroke
+28.5 159.5 moveto
+30.5 152.5 lineto
+stroke
+31.5 148.5 moveto
+33.5 141.5 lineto
+stroke
+34.5 137.5 moveto
+36.5 130.5 lineto
+stroke
+38.5 126.5 moveto
+40.5 119.5 lineto
+stroke
+41.5 114.5 moveto
+43.5 108.5 lineto
+stroke
+44.5 103.5 moveto
+46.5 96.5 lineto
+stroke
+47.5 92.5 moveto
+49.5 85.5 lineto
+stroke
+50.5 81.5 moveto
+52.5 74.5 lineto
+stroke
+53.5 70.5 moveto
+55.5 63.5 lineto
+stroke
+57.5 59.5 moveto
+59.5 52.5 lineto
+stroke
+60.5 48.5 moveto
+62.5 41.5 lineto
+stroke
+63.5 37.5 moveto
+65.5 30.5 lineto
+stroke
+66.5 26.5 moveto
+68.5 19.5 lineto
+stroke
+2 setlinewidth
+120 193 moveto
+170 18 lineto
+stroke
+1 setlinewidth
+119.5 191.5 moveto
+117.5 184.5 lineto
+stroke
+116.5 179.5 moveto
+114.5 173.5 lineto
+stroke
+113.5 168.5 moveto
+111.5 161.5 lineto
+stroke
+109.5 157.5 moveto
+107.5 150.5 lineto
+stroke
+106.5 146.5 moveto
+104.5 139.5 lineto
+stroke
+103.5 135.5 moveto
+101.5 128.5 lineto
+stroke
+100.5 124.5 moveto
+98.5 117.5 lineto
+stroke
+97.5 113.5 moveto
+95.5 106.5 lineto
+stroke
+94.5 102.5 moveto
+92.5 95.5 lineto
+stroke
+90.5 91.5 moveto
+88.5 84.5 lineto
+stroke
+87.5 80.5 moveto
+85.5 73.5 lineto
+stroke
+84.5 69.5 moveto
+82.5 62.5 lineto
+stroke
+81.5 58.5 moveto
+79.5 51.5 lineto
+stroke
+78.5 47.5 moveto
+76.5 40.5 lineto
+stroke
+75.5 35.5 moveto
+73.5 29.5 lineto
+stroke
+71.5 24.5 moveto
+69.5 17.5 lineto
+stroke
+2 setlinewidth
+221 191 moveto
+171 17 lineto
+stroke
+120 191 moveto
+92 12 lineto
+stroke
+92 12 moveto
+82 111 lineto
+stroke
+82 112 moveto
+29 168 lineto
+stroke
+121 192 moveto
+151 192 lineto
+stroke
+221 192 moveto
+250 192 lineto
+stroke
+28 168 moveto
+49 191 lineto
+stroke
+1 setlinewidth
+13.5 193.5 moveto
+10.5 203.5 lineto
+stroke
+21.5 193.5 moveto
+17.5 203.5 lineto
+stroke
+28.5 193.5 moveto
+25.5 203.5 lineto
+stroke
+36.5 193.5 moveto
+32.5 203.5 lineto
+stroke
+43.5 193.5 moveto
+40.5 203.5 lineto
+stroke
+51.5 193.5 moveto
+47.5 203.5 lineto
+stroke
+58.5 193.5 moveto
+55.5 203.5 lineto
+stroke
+66.5 193.5 moveto
+62.5 203.5 lineto
+stroke
+73.5 193.5 moveto
+70.5 203.5 lineto
+stroke
+81.5 193.5 moveto
+77.5 203.5 lineto
+stroke
+88.5 193.5 moveto
+85.5 203.5 lineto
+stroke
+96.5 193.5 moveto
+92.5 203.5 lineto
+stroke
+103.5 193.5 moveto
+100.5 203.5 lineto
+stroke
+111.5 193.5 moveto
+107.5 203.5 lineto
+stroke
+118.5 193.5 moveto
+115.5 203.5 lineto
+stroke
+126.5 193.5 moveto
+122.5 203.5 lineto
+stroke
+133.5 193.5 moveto
+130.5 203.5 lineto
+stroke
+141.5 193.5 moveto
+137.5 203.5 lineto
+stroke
+148.5 193.5 moveto
+145.5 203.5 lineto
+stroke
+156.5 193.5 moveto
+152.5 203.5 lineto
+stroke
+163.5 193.5 moveto
+160.5 203.5 lineto
+stroke
+171.5 193.5 moveto
+167.5 203.5 lineto
+stroke
+178.5 193.5 moveto
+175.5 203.5 lineto
+stroke
+186.5 193.5 moveto
+182.5 203.5 lineto
+stroke
+193.5 193.5 moveto
+190.5 203.5 lineto
+stroke
+201.5 193.5 moveto
+197.5 203.5 lineto
+stroke
+208.5 193.5 moveto
+205.5 203.5 lineto
+stroke
+216.5 193.5 moveto
+212.5 203.5 lineto
+stroke
+223.5 193.5 moveto
+220.5 203.5 lineto
+stroke
+231.5 193.5 moveto
+227.5 203.5 lineto
+stroke
+238.5 193.5 moveto
+235.5 203.5 lineto
+stroke
+246.5 193.5 moveto
+242.5 203.5 lineto
+stroke
+253.5 193.5 moveto
+250.5 203.5 lineto
+stroke
+261.5 193.5 moveto
+257.5 203.5 lineto
+stroke
+/Courier-Bold findfont 12 scalefont setfont
+111 14 moveto (a) show
+/Courier-Bold findfont 12 scalefont setfont
+166 101 moveto (b) show
+/Courier-Bold findfont 12 scalefont setfont
+187 171 moveto (c) show
+1 setgray
+matrix currentmatrix
+196.5 113.5 translate
+3 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+fill
+0 setgray
+matrix currentmatrix
+196.5 113.5 translate
+3 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+stroke
+1 setgray
+matrix currentmatrix
+79.5 113.5 translate
+3 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+fill
+0 setgray
+matrix currentmatrix
+79.5 113.5 translate
+3 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+stroke
+/Courier-Bold findfont 9 scalefont setfont
+128 52 moveto (a[1]) show
+/Courier-Bold findfont 9 scalefont setfont
+100 31 moveto (a[2]) show
+/Courier-Bold findfont 9 scalefont setfont
+105 65 moveto (a[3]) show
+/Courier-Bold findfont 9 scalefont setfont
+235 57 moveto (b[1]) show
+/Courier-Bold findfont 9 scalefont setfont
+207 39 moveto (b[2]) show
+/Courier-Bold findfont 9 scalefont setfont
+217 72 moveto (b[3]) show
+231.5 127.5 moveto
+233.5 130.5 lineto
+231.5 131.5 lineto
+231.5 127.5 lineto
+fill
+232.5 130.5 moveto
+236.5 146.5 lineto
+stroke
+255.5 141.5 moveto
+252.5 143.5 lineto
+251.5 141.5 lineto
+255.5 141.5 lineto
+fill
+252.5 142.5 moveto
+236.5 146.5 lineto
+stroke
+/Courier-Bold findfont 9 scalefont setfont
+257 143 moveto (c[1]) show
+/Courier-Bold findfont 9 scalefont setfont
+229 126 moveto (c[2]) show
+/Courier-Bold findfont 9 scalefont setfont
+239 158 moveto (c[3]) show
+103.5 33.5 moveto
+105.5 36.5 lineto
+103.5 37.5 lineto
+103.5 33.5 lineto
+fill
+104.5 37.5 moveto
+106.5 52.5 lineto
+stroke
+126.5 49.5 moveto
+123.5 51.5 lineto
+122.5 48.5 lineto
+126.5 49.5 lineto
+fill
+123.5 50.5 moveto
+107.5 52.5 lineto
+stroke
+99.5 46.5 moveto
+102.5 39.5 lineto
+103.5 42.5 lineto
+105.5 42.5 lineto
+99.5 46.5 lineto
+fill
+matrix currentmatrix
+98.5 59.5 translate
+16 0 scale
+0.5 0.5 0.5 5.34255e-315 0 arc
+setmatrix
+stroke
+matrix currentmatrix
+227.5 154.5 translate
+17 0 scale
+0.5 0.5 0.5 5.34255e-315 0 arc
+setmatrix
+stroke
+209.5 40.5 moveto
+211.5 44.5 lineto
+209.5 44.5 lineto
+209.5 40.5 lineto
+fill
+210.5 44.5 moveto
+213.5 59.5 lineto
+stroke
+233.5 55.5 moveto
+230.5 57.5 lineto
+229.5 54.5 lineto
+233.5 55.5 lineto
+fill
+229.5 55.5 moveto
+214.5 59.5 lineto
+stroke
+206.5 55.5 moveto
+209.5 48.5 lineto
+210.5 50.5 lineto
+212.5 51.5 lineto
+206.5 54.5 lineto
+fill
+matrix currentmatrix
+205.5 67.5 translate
+17 0 scale
+0.5 0.5 0.5 5.34255e-315 0 arc
+setmatrix
+stroke
+1 setgray
+94.5 13.5 moveto
+97.5 10.5 lineto
+99.5 9.5 lineto
+100.5 10.5 lineto
+100.5 12.5 lineto
+101.5 14.5 lineto
+102.5 16.5 lineto
+104.5 15.5 lineto
+109.5 12.5 lineto
+fill
+0 setgray
+94.5 13.5 moveto
+97.5 10.5 lineto
+99.5 9.5 lineto
+100.5 10.5 lineto
+100.5 12.5 lineto
+101.5 14.5 lineto
+102.5 16.5 lineto
+104.5 15.5 lineto
+109.5 12.5 lineto
+stroke
+1 setgray
+188.5 94.5 moveto
+185.5 97.5 lineto
+183.5 98.5 lineto
+182.5 97.5 lineto
+182.5 94.5 lineto
+182.5 92.5 lineto
+181.5 91.5 lineto
+178.5 91.5 lineto
+173.5 94.5 lineto
+fill
+0 setgray
+188.5 94.5 moveto
+185.5 97.5 lineto
+183.5 98.5 lineto
+182.5 97.5 lineto
+182.5 94.5 lineto
+182.5 92.5 lineto
+181.5 91.5 lineto
+178.5 91.5 lineto
+173.5 94.5 lineto
+stroke
+1 setgray
+194.5 167.5 moveto
+197.5 164.5 lineto
+199.5 163.5 lineto
+200.5 164.5 lineto
+200.5 166.5 lineto
+201.5 169.5 lineto
+202.5 170.5 lineto
+204.5 169.5 lineto
+209.5 166.5 lineto
+fill
+0 setgray
+194.5 167.5 moveto
+197.5 164.5 lineto
+199.5 163.5 lineto
+200.5 164.5 lineto
+200.5 166.5 lineto
+201.5 169.5 lineto
+202.5 170.5 lineto
+204.5 169.5 lineto
+209.5 166.5 lineto
+stroke
+55.5 15.5 moveto
+55.5 21.5 lineto
+52.5 20.5 lineto
+55.5 15.5 lineto
+fill
+5.5 189.5 moveto
+5.5 183.5 lineto
+8.5 184.5 lineto
+5.5 189.5 lineto
+fill
+7.5 183.5 moveto
+53.5 20.5 lineto
+stroke
+165.5 14.5 moveto
+165.5 20.5 lineto
+162.5 19.5 lineto
+165.5 14.5 lineto
+fill
+140.5 101.5 moveto
+140.5 95.5 lineto
+143.5 96.5 lineto
+140.5 101.5 lineto
+fill
+142.5 95.5 moveto
+163.5 19.5 lineto
+stroke
+1 setgray
+matrix currentmatrix
+143.5 104.5 translate
+5 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+fill
+0 setgray
+matrix currentmatrix
+143.5 104.5 translate
+5 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+stroke
+matrix currentmatrix
+143.5 104.5 translate
+5 0 scale
+0.5 0.5 moveto
+0.5 0.5 0.5 5.33818e-315 0 arc
+setmatrix
+fill
+matrix currentmatrix
+143.5 104.5 translate
+5 0 scale
+0.5 0.5 moveto
+0.5 0.5 0.5 0 0 arc
+setmatrix
+fill
+1 setgray
+matrix currentmatrix
+182.5 68.5 translate
+5 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+fill
+0 setgray
+matrix currentmatrix
+182.5 68.5 translate
+5 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+stroke
+matrix currentmatrix
+182.5 68.5 translate
+5 0 scale
+0.5 0.5 moveto
+0.5 0.5 0.5 5.33818e-315 0 arc
+setmatrix
+fill
+matrix currentmatrix
+182.5 68.5 translate
+5 0 scale
+0.5 0.5 moveto
+0.5 0.5 0.5 0 0 arc
+setmatrix
+fill
+1 setgray
+matrix currentmatrix
+206.5 152.5 translate
+5 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+fill
+0 setgray
+matrix currentmatrix
+206.5 152.5 translate
+5 0 scale
+0.5 0.5 0.5 0 360 arc
+setmatrix
+stroke
+matrix currentmatrix
+206.5 152.5 translate
+5 0 scale
+0.5 0.5 moveto
+0.5 0.5 0.5 5.33818e-315 0 arc
+setmatrix
+fill
+matrix currentmatrix
+206.5 153.5 translate
+5 0 scale
+0.5 0.5 moveto
+0.5 0.5 0.5 0 0 arc
+setmatrix
+fill
+1 setgray
+25.5 110.5 moveto
+33.5 110.5 lineto
+33.5 97.5 lineto
+25.5 97.5 lineto
+closepath
+fill
+/Courier findfont 9 scalefont setfont
+24 106 moveto (l0) show
+144.5 68.5 moveto
+152.5 68.5 lineto
+152.5 55.5 lineto
+144.5 55.5 lineto
+closepath
+fill
+/Courier findfont 9 scalefont setfont
+141 66 moveto (lc0) show
+0 setgray
+191.5 65.5 moveto
+187.5 59.5 lineto
+191.5 59.5 lineto
+191.5 65.5 lineto
+fill
+176.5 14.5 moveto
+179.5 19.5 lineto
+176.5 19.5 lineto
+176.5 14.5 lineto
+fill
+178.5 19.5 moveto
+189.5 59.5 lineto
+stroke
+214.5 147.5 moveto
+211.5 141.5 lineto
+214.5 141.5 lineto
+214.5 147.5 lineto
+fill
+204.5 109.5 moveto
+207.5 114.5 lineto
+204.5 115.5 lineto
+204.5 109.5 lineto
+fill
+205.5 115.5 moveto
+212.5 141.5 lineto
+stroke
+214.5 107.5 moveto
+210.5 102.5 lineto
+214.5 101.5 lineto
+214.5 107.5 lineto
+fill
+187.5 11.5 moveto
+190.5 16.5 lineto
+187.5 17.5 lineto
+187.5 11.5 lineto
+fill
+188.5 16.5 moveto
+212.5 101.5 lineto
+stroke
+236.5 187.5 moveto
+233.5 182.5 lineto
+236.5 181.5 lineto
+236.5 187.5 lineto
+fill
+214.5 107.5 moveto
+217.5 112.5 lineto
+214.5 113.5 lineto
+214.5 107.5 lineto
+fill
+215.5 112.5 moveto
+234.5 181.5 lineto
+stroke
+1 setgray
+181.5 42.5 moveto
+189.5 42.5 lineto
+189.5 33.5 lineto
+181.5 33.5 lineto
+closepath
+fill
+/Courier findfont 9 scalefont setfont
+179 40 moveto (lc1) show
+198.5 68.5 moveto
+206.5 68.5 lineto
+206.5 59.5 lineto
+198.5 59.5 lineto
+closepath
+fill
+/Courier findfont 9 scalefont setfont
+197 66 moveto (l1) show
+223.5 160.5 moveto
+232.5 160.5 lineto
+232.5 150.5 lineto
+223.5 150.5 lineto
+closepath
+fill
+/Courier findfont 9 scalefont setfont
+221 158 moveto (l2) show
+207.5 132.5 moveto
+215.5 132.5 lineto
+215.5 123.5 lineto
+207.5 123.5 lineto
+closepath
+fill
+/Courier findfont 9 scalefont setfont
+205 130 moveto (lc2) show
+0 setlinewidth
+0 setgray
+4 4 moveto
+4 4 lineto
+stroke
+277 204 moveto
+277 204 lineto
+stroke
+%%Trailer
+%%EOF
+\
+\>"], "Graphics",
+ Evaluatable->False,
+ AspectRatioFixed->True,
+ ImageSize->{273, 200},
+ ImageMargins->{{0, 0}, {0, 0}},
+ ImageRegion->{{0, 1}, {0, 
+  1}},ImageCache->GraphicsData["CompressedBitmap", "\<\
+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
+fyKZTfwfLsj20g==\
+\>"]],
+
+Cell["\<\
+If you haven't already, be sure to load the Dynamics Workbench (but don't \
+execute this command if the Workbench is already loaded):\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<DynamicsWorkbench`\>\"", "]"}]], "Input",
+ AspectRatioFixed->True],
+
+Cell["Initialize variables by using this command:", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"NewModel", "[", "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "Add rigid bodies to the model by specifying a new body name, which is \
+connected to the specified inboard body. Here we are attaching body ",
+ StyleBox["a",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " to ",
+ StyleBox["ground",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " with a ",
+ StyleBox["Hinge",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " joint. The central moment of inertia is specified in dyadic form. Vectors \
+specify the location of the joint relative to the body's center of mass, and \
+relative to the inboard body's center of mass. The axis of the hinge joint is \
+also specified."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AddBody", "[", 
+  RowBox[{"a", ",", "ground", ",", "Hinge", ",", 
+   RowBox[{"Mass", "\[Rule]", "M0"}], ",", 
+   RowBox[{"Inertia", "\[Rule]", 
+    RowBox[{"I0", " ", 
+     RowBox[{
+      RowBox[{"a", "[", "3", "]"}], "**", 
+      RowBox[{"a", "[", "3", "]"}]}]}]}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"lc0", "-", "l0"}], ")"}], " ", 
+     RowBox[{"a", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"InbToJnt", "\[Rule]", "0"}], ",", 
+   RowBox[{"Axis", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "1"}], "}"}]}]}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", "1", "}"}], ",", 
+   RowBox[{"{", "1", "}"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "The output of ",
+ StyleBox["AddBody",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " includes the generalized coordinate and the generalized speed for the new \
+body."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell["Now we add second and third bodies:", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AddBody", "[", 
+  RowBox[{"b", ",", "a", ",", "Hinge", ",", 
+   RowBox[{"RelativeTo", "\[Rule]", "ground"}], ",", 
+   RowBox[{"Mass", "\[Rule]", "M1"}], ",", 
+   RowBox[{"Inertia", "\[Rule]", 
+    RowBox[{"I1", " ", 
+     RowBox[{
+      RowBox[{"b", "[", "3", "]"}], "**", 
+      RowBox[{"b", "[", "3", "]"}]}]}]}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{"lc1", " ", 
+     RowBox[{"b", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"InbToJnt", "\[Rule]", 
+    RowBox[{"lc0", " ", 
+     RowBox[{"a", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Axis", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "1"}], "}"}]}]}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", "2", "}"}], ",", 
+   RowBox[{"{", "2", "}"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AddBody", "[", 
+  RowBox[{"c", ",", "b", ",", "Hinge", ",", 
+   RowBox[{"RelativeTo", "\[Rule]", "ground"}], ",", 
+   RowBox[{"Mass", "\[Rule]", "M2"}], ",", 
+   RowBox[{"Inertia", "\[Rule]", 
+    RowBox[{"I2", " ", 
+     RowBox[{
+      RowBox[{"c", "[", "3", "]"}], "**", 
+      RowBox[{"c", "[", "3", "]"}]}]}]}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{"lc2", " ", 
+     RowBox[{"c", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"InbToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"lc1", "-", "l1"}], ")"}], " ", 
+     RowBox[{"b", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Axis", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "1"}], "}"}]}]}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", "3", "}"}], ",", 
+   RowBox[{"{", "3", "}"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Forces are applied using ",
+ StyleBox["AppFrc",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ", specifying the body, the force applied to the body, and the location of \
+the force relative to the center of mass. Other commands can apply torques to \
+bodies as well. Here we add gravitational forces."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"a", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "a", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData["1"], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "The output of ",
+ StyleBox["AppFrc",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is a count of the number of forces applied so far."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"b", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "b", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData["1"], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"c", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "c", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData["1"], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Make sure ",
+ StyleBox["g",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " is gravity, in the vertical direction."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"grav", "=", 
+   RowBox[{
+    RowBox[{"-", "g"}], " ", 
+    RowBox[{"ground", "[", "2", "]"}]}]}], ";"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "Equations of motion are generated by the command ",
+ StyleBox["EOM[]",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ ". "
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"eom", "=", 
+  RowBox[{"EOM", "[", "]"}]}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "g"}], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "l0"}], "+", "lc0"}], ")"}], " ", "M0", " ", 
+      RowBox[{"Sin", "[", 
+       SubscriptBox["q", "1"], "]"}]}], "+", 
+     RowBox[{"g", " ", "l0", " ", "M1", " ", 
+      RowBox[{"Sin", "[", 
+       SubscriptBox["q", "1"], "]"}]}], "+", 
+     RowBox[{"g", " ", "l0", " ", "M2", " ", 
+      RowBox[{"Sin", "[", 
+       SubscriptBox["q", "1"], "]"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"l0", " ", "lc1", " ", "M1"}], "+", 
+        RowBox[{"l0", " ", "lc1", " ", "M2"}], "-", 
+        RowBox[{"l0", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "l1"}], "+", "lc1"}], ")"}], " ", "M2"}]}], ")"}], 
+      " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "2"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "2", "2"]}], "+", 
+     RowBox[{"l0", " ", "lc2", " ", "M2", " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "3", "2"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "I0"}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"l0", "-", "lc0"}], ")"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "l0"}], "+", "lc0"}], ")"}], " ", "M0"}], "-", 
+        RowBox[{"l0", " ", 
+         RowBox[{"(", 
+          RowBox[{"l0", "-", "lc0"}], ")"}], " ", "M1"}], "-", 
+        RowBox[{"l0", " ", "lc0", " ", "M1"}], "-", 
+        RowBox[{"l0", " ", 
+         RowBox[{"(", 
+          RowBox[{"l0", "-", "lc0"}], ")"}], " ", "M2"}], "-", 
+        RowBox[{"l0", " ", "lc0", " ", "M2"}]}], ")"}], " ", 
+      SubsuperscriptBox["u", "1", "\[Prime]",
+       MultilineFunction->None]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"l0", " ", "lc1", " ", "M1"}], "+", 
+        RowBox[{"l0", " ", "lc1", " ", "M2"}], "-", 
+        RowBox[{"l0", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "l1"}], "+", "lc1"}], ")"}], " ", "M2"}]}], ")"}], 
+      " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "2"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "2", "\[Prime]",
+       MultilineFunction->None]}], "+", 
+     RowBox[{"l0", " ", "lc2", " ", "M2", " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "3", "\[Prime]",
+       MultilineFunction->None]}]}], "==", "0"}], ",", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "g"}], " ", "lc1", " ", "M1", " ", 
+      RowBox[{"Sin", "[", 
+       SubscriptBox["q", "2"], "]"}]}], "-", 
+     RowBox[{"g", " ", "l1", " ", "M2", " ", 
+      RowBox[{"Sin", "[", 
+       SubscriptBox["q", "2"], "]"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "lc0"}], " ", "lc1", " ", "M1"}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "l0"}], "+", "lc0"}], ")"}], " ", "lc1", " ", "M1"}], 
+        "-", 
+        RowBox[{"l1", " ", 
+         RowBox[{"(", 
+          RowBox[{"l0", "-", "lc0"}], ")"}], " ", "M2"}], "-", 
+        RowBox[{"l1", " ", "lc0", " ", "M2"}]}], ")"}], " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "2"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "1", "2"]}], "-", 
+     RowBox[{"l1", " ", "lc2", " ", "M2", " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        SubscriptBox["q", "2"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "3", "2"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"l0", "-", "lc0"}], ")"}], " ", "lc1", " ", "M1"}], "+", 
+        RowBox[{"lc0", " ", "lc1", " ", "M1"}], "+", 
+        RowBox[{"l1", " ", 
+         RowBox[{"(", 
+          RowBox[{"l0", "-", "lc0"}], ")"}], " ", "M2"}], "+", 
+        RowBox[{"l1", " ", "lc0", " ", "M2"}]}], ")"}], " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "2"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "1", "\[Prime]",
+       MultilineFunction->None]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "I1"}], "-", 
+        RowBox[{
+         SuperscriptBox["lc1", "2"], " ", "M1"}], "-", 
+        RowBox[{"l1", " ", "lc1", " ", "M2"}], "+", 
+        RowBox[{"l1", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "l1"}], "+", "lc1"}], ")"}], " ", "M2"}]}], ")"}], 
+      " ", 
+      SubsuperscriptBox["u", "2", "\[Prime]",
+       MultilineFunction->None]}], "-", 
+     RowBox[{"l1", " ", "lc2", " ", "M2", " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{
+        SubscriptBox["q", "2"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "3", "\[Prime]",
+       MultilineFunction->None]}]}], "==", "0"}], ",", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "g"}], " ", "lc2", " ", "M2", " ", 
+      RowBox[{"Sin", "[", 
+       SubscriptBox["q", "3"], "]"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "lc0"}], " ", "lc2", " ", "M2"}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "l0"}], "+", "lc0"}], ")"}], " ", "lc2", " ", 
+         "M2"}]}], ")"}], " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "1", "2"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"l1", "-", "lc1"}], ")"}], " ", "lc2", " ", "M2"}], "+", 
+        RowBox[{"lc1", " ", "lc2", " ", "M2"}]}], ")"}], " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{
+        SubscriptBox["q", "2"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "2", "2"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"l0", "-", "lc0"}], ")"}], " ", "lc2", " ", "M2"}], "+", 
+        RowBox[{"lc0", " ", "lc2", " ", "M2"}]}], ")"}], " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{
+        SubscriptBox["q", "1"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "1", "\[Prime]",
+       MultilineFunction->None]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "lc1"}], " ", "lc2", " ", "M2"}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "l1"}], "+", "lc1"}], ")"}], " ", "lc2", " ", 
+         "M2"}]}], ")"}], " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{
+        SubscriptBox["q", "2"], "-", 
+        SubscriptBox["q", "3"]}], "]"}], " ", 
+      SubsuperscriptBox["u", "2", "\[Prime]",
+       MultilineFunction->None]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "I2"}], "-", 
+        RowBox[{
+         SuperscriptBox["lc2", "2"], " ", "M2"}]}], ")"}], " ", 
+      SubsuperscriptBox["u", "3", "\[Prime]",
+       MultilineFunction->None]}]}], "==", "0"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[TextData[{
+ "Commands like ",
+ StyleBox["MassMatrix",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " manipulate the equations so you can look at select portions:"
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"MassMatrix", "[", "eom", "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"I0", "+", 
+        RowBox[{
+         SuperscriptBox["l0", "2"], " ", "M0"}], "-", 
+        RowBox[{"2", " ", "l0", " ", "lc0", " ", "M0"}], "+", 
+        RowBox[{
+         SuperscriptBox["lc0", "2"], " ", "M0"}], "+", 
+        RowBox[{
+         SuperscriptBox["l0", "2"], " ", "M1"}], "+", 
+        RowBox[{
+         SuperscriptBox["l0", "2"], " ", "M2"}]}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "l0"}], " ", "lc1", " ", "M1", " ", 
+         RowBox[{"Cos", "[", 
+          RowBox[{
+           SubscriptBox["q", "1"], "-", 
+           SubscriptBox["q", "2"]}], "]"}]}], "-", 
+        RowBox[{"l0", " ", "l1", " ", "M2", " ", 
+         RowBox[{"Cos", "[", 
+          RowBox[{
+           SubscriptBox["q", "1"], "-", 
+           SubscriptBox["q", "2"]}], "]"}]}]}], ",", 
+       RowBox[{
+        RowBox[{"-", "l0"}], " ", "lc2", " ", "M2", " ", 
+        RowBox[{"Cos", "[", 
+         RowBox[{
+          SubscriptBox["q", "1"], "-", 
+          SubscriptBox["q", "3"]}], "]"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "l0"}], " ", "lc1", " ", "M1", " ", 
+         RowBox[{"Cos", "[", 
+          RowBox[{
+           SubscriptBox["q", "1"], "-", 
+           SubscriptBox["q", "2"]}], "]"}]}], "-", 
+        RowBox[{"l0", " ", "l1", " ", "M2", " ", 
+         RowBox[{"Cos", "[", 
+          RowBox[{
+           SubscriptBox["q", "1"], "-", 
+           SubscriptBox["q", "2"]}], "]"}]}]}], ",", 
+       RowBox[{"I1", "+", 
+        RowBox[{
+         SuperscriptBox["lc1", "2"], " ", "M1"}], "+", 
+        RowBox[{
+         SuperscriptBox["l1", "2"], " ", "M2"}]}], ",", 
+       RowBox[{"l1", " ", "lc2", " ", "M2", " ", 
+        RowBox[{"Cos", "[", 
+         RowBox[{
+          SubscriptBox["q", "2"], "-", 
+          SubscriptBox["q", "3"]}], "]"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "l0"}], " ", "lc2", " ", "M2", " ", 
+        RowBox[{"Cos", "[", 
+         RowBox[{
+          SubscriptBox["q", "1"], "-", 
+          SubscriptBox["q", "3"]}], "]"}]}], ",", 
+       RowBox[{"l1", " ", "lc2", " ", "M2", " ", 
+        RowBox[{"Cos", "[", 
+         RowBox[{
+          SubscriptBox["q", "2"], "-", 
+          SubscriptBox["q", "3"]}], "]"}]}], ",", 
+       RowBox[{"I2", "+", 
+        RowBox[{
+         SuperscriptBox["lc2", "2"], " ", "M2"}]}]}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", "g"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"-", "l0"}], "+", "lc0"}], ")"}], " ", "M0", " ", 
+       RowBox[{"Sin", "[", 
+        SubscriptBox["q", "1"], "]"}]}], "+", 
+      RowBox[{"g", " ", "l0", " ", "M1", " ", 
+       RowBox[{"Sin", "[", 
+        SubscriptBox["q", "1"], "]"}]}], "+", 
+      RowBox[{"g", " ", "l0", " ", "M2", " ", 
+       RowBox[{"Sin", "[", 
+        SubscriptBox["q", "1"], "]"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"l0", " ", "lc1", " ", "M1"}], "+", 
+         RowBox[{"l0", " ", "lc1", " ", "M2"}], "-", 
+         RowBox[{"l0", " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "l1"}], "+", "lc1"}], ")"}], " ", "M2"}]}], ")"}], 
+       " ", 
+       RowBox[{"Sin", "[", 
+        RowBox[{
+         SubscriptBox["q", "1"], "-", 
+         SubscriptBox["q", "2"]}], "]"}], " ", 
+       SubsuperscriptBox["u", "2", "2"]}], "+", 
+      RowBox[{"l0", " ", "lc2", " ", "M2", " ", 
+       RowBox[{"Sin", "[", 
+        RowBox[{
+         SubscriptBox["q", "1"], "-", 
+         SubscriptBox["q", "3"]}], "]"}], " ", 
+       SubsuperscriptBox["u", "3", "2"]}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", "g"}], " ", "lc1", " ", "M1", " ", 
+       RowBox[{"Sin", "[", 
+        SubscriptBox["q", "2"], "]"}]}], "-", 
+      RowBox[{"g", " ", "l1", " ", "M2", " ", 
+       RowBox[{"Sin", "[", 
+        SubscriptBox["q", "2"], "]"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "lc0"}], " ", "lc1", " ", "M1"}], "+", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "l0"}], "+", "lc0"}], ")"}], " ", "lc1", " ", "M1"}],
+          "-", 
+         RowBox[{"l1", " ", 
+          RowBox[{"(", 
+           RowBox[{"l0", "-", "lc0"}], ")"}], " ", "M2"}], "-", 
+         RowBox[{"l1", " ", "lc0", " ", "M2"}]}], ")"}], " ", 
+       RowBox[{"Sin", "[", 
+        RowBox[{
+         SubscriptBox["q", "1"], "-", 
+         SubscriptBox["q", "2"]}], "]"}], " ", 
+       SubsuperscriptBox["u", "1", "2"]}], "-", 
+      RowBox[{"l1", " ", "lc2", " ", "M2", " ", 
+       RowBox[{"Sin", "[", 
+        RowBox[{
+         SubscriptBox["q", "2"], "-", 
+         SubscriptBox["q", "3"]}], "]"}], " ", 
+       SubsuperscriptBox["u", "3", "2"]}]}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", "g"}], " ", "lc2", " ", "M2", " ", 
+       RowBox[{"Sin", "[", 
+        SubscriptBox["q", "3"], "]"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "lc0"}], " ", "lc2", " ", "M2"}], "+", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "l0"}], "+", "lc0"}], ")"}], " ", "lc2", " ", 
+          "M2"}]}], ")"}], " ", 
+       RowBox[{"Sin", "[", 
+        RowBox[{
+         SubscriptBox["q", "1"], "-", 
+         SubscriptBox["q", "3"]}], "]"}], " ", 
+       SubsuperscriptBox["u", "1", "2"]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"l1", "-", "lc1"}], ")"}], " ", "lc2", " ", "M2"}], "+", 
+         RowBox[{"lc1", " ", "lc2", " ", "M2"}]}], ")"}], " ", 
+       RowBox[{"Sin", "[", 
+        RowBox[{
+         SubscriptBox["q", "2"], "-", 
+         SubscriptBox["q", "3"]}], "]"}], " ", 
+       SubsuperscriptBox["u", "2", "2"]}]}]}], "}"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell["Set the values for the constants:", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"constants", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"eta1", "\[Rule]", 
+      RowBox[{".54", " ", "l1"}]}], ",", 
+     RowBox[{"eta2", "\[Rule]", 
+      RowBox[{"0.735", " ", "l2"}]}], ",", 
+     RowBox[{"m1", "\[Rule]", "0.097"}], ",", 
+     RowBox[{"m2", "\[Rule]", "0.06"}], ",", 
+     RowBox[{"lc1", "\[Rule]", 
+      RowBox[{"0.433", " ", "l1"}]}], ",", 
+     RowBox[{"lc2", "\[Rule]", 
+      RowBox[{"0.437", " ", "l2"}]}], ",", 
+     RowBox[{"l1", "\[Rule]", "0.5"}], ",", 
+     RowBox[{"l2", "\[Rule]", "0.5"}], ",", 
+     RowBox[{"M1", "\[Rule]", 
+      RowBox[{"m1", " ", "65"}]}], ",", 
+     RowBox[{"M2", "\[Rule]", 
+      RowBox[{"m2", " ", "65"}]}], ",", 
+     RowBox[{"M0", "\[Rule]", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"m1", "+", "m2"}], ")"}], " ", "65"}]}], ",", 
+     RowBox[{"l0", "\[Rule]", 
+      RowBox[{"l1", "+", "l2"}]}], ",", 
+     RowBox[{"lc0", "\[Rule]", 
+      FractionBox[
+       RowBox[{
+        RowBox[{"m1", " ", "lc1"}], "+", 
+        RowBox[{"m2", " ", 
+         RowBox[{"(", 
+          RowBox[{"l1", "+", "lc2"}], ")"}]}]}], 
+       RowBox[{"m1", "+", "m2"}]]}], ",", 
+     RowBox[{"I1", "\[Rule]", 
+      RowBox[{
+       RowBox[{"M1", " ", 
+        SuperscriptBox["eta1", "2"]}], "-", 
+       RowBox[{"M1", " ", 
+        SuperscriptBox["lc1", "2"]}]}]}], ",", 
+     RowBox[{"I2", "\[Rule]", 
+      RowBox[{
+       RowBox[{"M2", " ", 
+        SuperscriptBox["eta2", "2"]}], "-", 
+       RowBox[{"m2", " ", 
+        SuperscriptBox["lc2", "2"]}]}]}], ",", 
+     RowBox[{"I0", "\[Rule]", 
+      RowBox[{
+       RowBox[{"M1", " ", 
+        SuperscriptBox["eta1", "2"]}], "+", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"M2", " ", 
+          SuperscriptBox["eta2", "2"]}], "+", 
+         RowBox[{"M2", " ", 
+          SuperscriptBox["l1", "2"]}]}], ")"}], "-", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"M1", "+", "M2"}], ")"}], " ", 
+        SuperscriptBox["lc0", "2"]}]}]}], ",", 
+     RowBox[{"g", "\[Rule]", "9.8"}]}], "}"}]}], ";"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Degrees", "=", 
+   RowBox[{"N", "[", 
+    FractionBox["\[Pi]", "180"], "]"}]}], ";"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "To set the initial conditions, write equations for each of the states (q's \
+and u's), and apply ",
+ StyleBox["AtT0",
+  FontFamily->"Courier",
+  FontSize->12,
+  FontWeight->"Bold"],
+ " to specify that the equations hold for time zero."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"initcond", "=", 
+   RowBox[{"AtT0", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"q", "[", "1", "]"}], "==", 
+       RowBox[{"14", " ", "Degrees"}]}], ",", 
+      RowBox[{
+       RowBox[{"u", "[", "1", "]"}], "==", 
+       RowBox[{
+        RowBox[{"-", "80"}], " ", "Degrees"}]}], ",", 
+      RowBox[{
+       RowBox[{"q", "[", "2", "]"}], "==", 
+       RowBox[{
+        RowBox[{"-", "14"}], " ", "Degrees"}]}], ",", 
+      RowBox[{
+       RowBox[{"u", "[", "2", "]"}], "\[Equal]", 
+       RowBox[{"90", " ", "Degrees"}]}], ",", 
+      RowBox[{
+       RowBox[{"q", "[", "3", "]"}], "==", 
+       RowBox[{
+        RowBox[{"-", "60"}], " ", "Degrees"}]}], ",", 
+      RowBox[{
+       RowBox[{"u", "[", "3", "]"}], "==", 
+       RowBox[{
+        RowBox[{"-", "10"}], " ", "Degrees"}]}]}], "}"}], "]"}]}], 
+  ";"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[TextData[{
+ "The trajectory can be generated by solving the set of differential \
+equations including the equations of motion, the kinematical differential \
+equations (which are generated automatically by the ",
+ StyleBox["Dynamics Workbench",
+  FontWeight->"Bold"],
+ "), subject to the initial conditions. Here we integrate from time 0 to 0.5 \
+seconds."
+}], "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trajectory", "=", 
+   RowBox[{"NDSolve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{"eom", ",", "Kinematics", ",", "initcond"}], "]"}], "//.", 
+      "constants"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"q", "[", "1", "]"}], ",", 
+       RowBox[{"u", "[", "1", "]"}], ",", 
+       RowBox[{"q", "[", "2", "]"}], ",", 
+       RowBox[{"u", "[", "2", "]"}], ",", 
+       RowBox[{"q", "[", "3", "]"}], ",", 
+       RowBox[{"u", "[", "3", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0.", ",", "0.5"}], "}"}]}], "]"}]}], ";"}]], "Input",\
+
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell["\<\
+This plot shows how knee velocity approaches zero just before stance and \
+swing legs reach the same angle for heel strike. The solid  line is the \
+stance leg angle, the dashed line is the swing leg thigh angle, and the \
+dotted line is the angle between the swing thigh and shank (also known as \
+knee angle).\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{
+   RowBox[{"Evaluate", "[", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"180.", " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"q", "[", "1", "]"}]}], ",", 
+         RowBox[{"q", "[", "2", "]"}], ",", 
+         RowBox[{
+          RowBox[{"q", "[", "2", "]"}], "-", 
+          RowBox[{"q", "[", "3", "]"}]}]}], "}"}]}], "\[Pi]"], "/.", 
+     "trajectory"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"t", ",", "0", ",", "0.5"}], "}"}], ",", 
+   RowBox[{"PlotStyle", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"Thickness", "[", "0.005", "]"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Thickness", "[", "0.005", "]"}], ",", 
+        RowBox[{"Dashing", "[", 
+         RowBox[{"{", 
+          RowBox[{"0.02", ",", "0.01"}], "}"}], "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Thickness", "[", "0.005", "]"}], ",", 
+        RowBox[{"Dashing", "[", 
+         RowBox[{"{", 
+          RowBox[{"0.003", ",", "0.008"}], "}"}], "]"}]}], "}"}]}], "}"}]}], 
+   ",", 
+   RowBox[{"AxesLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<time (s)\>\"", ",", "\"\<angle (deg)\>\""}], "}"}]}]}], 
+  "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: .61803 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% Graphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+0.0238095 1.90476 0.118229 0.00739386 [
+[.21429 .10573 -9 -9 ]
+[.21429 .10573 9 0 ]
+[.40476 .10573 -9 -9 ]
+[.40476 .10573 9 0 ]
+[.59524 .10573 -9 -9 ]
+[.59524 .10573 9 0 ]
+[.78571 .10573 -9 -9 ]
+[.78571 .10573 9 0 ]
+[.97619 .10573 -9 -9 ]
+[.97619 .10573 9 0 ]
+[1.025 .11823 0 -6.28125 ]
+[1.025 .11823 52 6.28125 ]
+[.01131 .26611 -12 -4.5 ]
+[.01131 .26611 0 4.5 ]
+[.01131 .41398 -12 -4.5 ]
+[.01131 .41398 0 4.5 ]
+[.01131 .56186 -12 -4.5 ]
+[.01131 .56186 0 4.5 ]
+[.02381 .64303 -35 0 ]
+[.02381 .64303 35 12.5625 ]
+[ 0 0 0 0 ]
+[ 1 .61803 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 g
+.25 Mabswid
+[ ] 0 setdash
+.21429 .11823 m
+.21429 .12448 L
+s
+[(0.1)] .21429 .10573 0 1 Mshowa
+.40476 .11823 m
+.40476 .12448 L
+s
+[(0.2)] .40476 .10573 0 1 Mshowa
+.59524 .11823 m
+.59524 .12448 L
+s
+[(0.3)] .59524 .10573 0 1 Mshowa
+.78571 .11823 m
+.78571 .12448 L
+s
+[(0.4)] .78571 .10573 0 1 Mshowa
+.97619 .11823 m
+.97619 .12448 L
+s
+[(0.5)] .97619 .10573 0 1 Mshowa
+.125 Mabswid
+.0619 .11823 m
+.0619 .12198 L
+s
+.1 .11823 m
+.1 .12198 L
+s
+.1381 .11823 m
+.1381 .12198 L
+s
+.17619 .11823 m
+.17619 .12198 L
+s
+.25238 .11823 m
+.25238 .12198 L
+s
+.29048 .11823 m
+.29048 .12198 L
+s
+.32857 .11823 m
+.32857 .12198 L
+s
+.36667 .11823 m
+.36667 .12198 L
+s
+.44286 .11823 m
+.44286 .12198 L
+s
+.48095 .11823 m
+.48095 .12198 L
+s
+.51905 .11823 m
+.51905 .12198 L
+s
+.55714 .11823 m
+.55714 .12198 L
+s
+.63333 .11823 m
+.63333 .12198 L
+s
+.67143 .11823 m
+.67143 .12198 L
+s
+.70952 .11823 m
+.70952 .12198 L
+s
+.74762 .11823 m
+.74762 .12198 L
+s
+.82381 .11823 m
+.82381 .12198 L
+s
+.8619 .11823 m
+.8619 .12198 L
+s
+.9 .11823 m
+.9 .12198 L
+s
+.9381 .11823 m
+.9381 .12198 L
+s
+.25 Mabswid
+0 .11823 m
+1 .11823 L
+s
+gsave
+1.025 .11823 -61 -10.2813 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+0 20.5625 translate 1 -1 scale
+/g { setgray} bind def
+/k { setcmykcolor} bind def
+/p { gsave} bind def
+/r { setrgbcolor} bind def
+/w { setlinewidth} bind def
+/C { curveto} bind def
+/F { fill} bind def
+/L { lineto} bind def
+/rL { rlineto} bind def
+/P { grestore} bind def
+/s { stroke} bind def
+/S { show} bind def
+/N {currentpoint 3 -1 roll show moveto} bind def
+/Msf { findfont exch scalefont [1 0 0 -1 0 0 ] makefont setfont} bind def
+/m { moveto} bind def
+/Mr { rmoveto} bind def
+/Mx {currentpoint exch pop moveto} bind def
+/My {currentpoint pop exch moveto} bind def
+/X {0 rmoveto} bind def
+/Y {0 exch rmoveto} bind def
+63.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(time) show
+%%IncludeResource: font Mathematica2Mono
+%%IncludeFont: Mathematica2Mono
+/Mathematica2Mono findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+93.000 12.813 moveto
+(H) show
+99.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(s) show
+%%IncludeResource: font Mathematica2Mono
+%%IncludeFont: Mathematica2Mono
+/Mathematica2Mono findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+105.000 12.813 moveto
+(L) show
+111.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+.02381 .26611 m
+.03006 .26611 L
+s
+[(20)] .01131 .26611 1 0 Mshowa
+.02381 .41398 m
+.03006 .41398 L
+s
+[(40)] .01131 .41398 1 0 Mshowa
+.02381 .56186 m
+.03006 .56186 L
+s
+[(60)] .01131 .56186 1 0 Mshowa
+.125 Mabswid
+.02381 .1552 m
+.02756 .1552 L
+s
+.02381 .19217 m
+.02756 .19217 L
+s
+.02381 .22914 m
+.02756 .22914 L
+s
+.02381 .30308 m
+.02756 .30308 L
+s
+.02381 .34005 m
+.02756 .34005 L
+s
+.02381 .37701 m
+.02756 .37701 L
+s
+.02381 .45095 m
+.02756 .45095 L
+s
+.02381 .48792 m
+.02756 .48792 L
+s
+.02381 .52489 m
+.02756 .52489 L
+s
+.02381 .08126 m
+.02756 .08126 L
+s
+.02381 .04429 m
+.02756 .04429 L
+s
+.02381 .00732 m
+.02756 .00732 L
+s
+.02381 .59883 m
+.02756 .59883 L
+s
+.25 Mabswid
+.02381 0 m
+.02381 .61803 L
+s
+gsave
+.02381 .64303 -96 -4 Mabsadd m
+1 1 Mabs scale
+currentpoint translate
+0 20.5625 translate 1 -1 scale
+/g { setgray} bind def
+/k { setcmykcolor} bind def
+/p { gsave} bind def
+/r { setrgbcolor} bind def
+/w { setlinewidth} bind def
+/C { curveto} bind def
+/F { fill} bind def
+/L { lineto} bind def
+/rL { rlineto} bind def
+/P { grestore} bind def
+/s { stroke} bind def
+/S { show} bind def
+/N {currentpoint 3 -1 roll show moveto} bind def
+/Msf { findfont exch scalefont [1 0 0 -1 0 0 ] makefont setfont} bind def
+/m { moveto} bind def
+/Mr { rmoveto} bind def
+/Mx {currentpoint exch pop moveto} bind def
+/My {currentpoint pop exch moveto} bind def
+/X {0 rmoveto} bind def
+/Y {0 exch rmoveto} bind def
+63.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+63.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(angle) show
+%%IncludeResource: font Mathematica2Mono
+%%IncludeFont: Mathematica2Mono
+/Mathematica2Mono findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+99.000 12.813 moveto
+(H) show
+105.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+(deg) show
+%%IncludeResource: font Mathematica2Mono
+%%IncludeFont: Mathematica2Mono
+/Mathematica2Mono findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+123.000 12.813 moveto
+(L) show
+129.000 12.813 moveto
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10.000 scalefont
+[1 0 0 -1 0 0 ] makefont setfont
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 rmoveto
+1.000 setlinewidth
+grestore
+0 0 m
+1 0 L
+1 .61803 L
+0 .61803 L
+closepath
+clip
+newpath
+.005 w
+.02381 .01472 m
+.06244 .02617 L
+.10458 .03747 L
+.14415 .04701 L
+.18221 .0553 L
+.22272 .06333 L
+.26171 .07045 L
+.30316 .07761 L
+.34309 .08434 L
+.3815 .09087 L
+.42237 .09807 L
+.46172 .10541 L
+.49955 .11293 L
+.53984 .12153 L
+.57861 .13045 L
+.61984 .14067 L
+.65954 .1513 L
+.69774 .16231 L
+.73838 .17493 L
+.77751 .18807 L
+.81909 .20318 L
+.85916 .219 L
+.89771 .23551 L
+.93871 .25459 L
+.97619 .2735 L
+s
+[ .02 .01 ] 0 setdash
+.02381 .01472 m
+.06244 .02952 L
+.10458 .04857 L
+.14415 .06899 L
+.18221 .0906 L
+.22272 .11524 L
+.26171 .13993 L
+.30316 .16641 L
+.34309 .19134 L
+.3815 .21408 L
+.42237 .23623 L
+.46172 .25505 L
+.49955 .27043 L
+.53984 .28355 L
+.57861 .2928 L
+.59975 .29639 L
+.60947 .29768 L
+.61984 .29882 L
+.63022 .2997 L
+.63964 .30027 L
+.64419 .30047 L
+.64658 .30056 L
+.64911 .30063 L
+.65132 .30068 L
+.6525 .30071 L
+.65375 .30073 L
+.65491 .30074 L
+.65596 .30075 L
+.65702 .30076 L
+.65803 .30077 L
+.65917 .30077 L
+.6604 .30077 L
+.66155 .30077 L
+.66262 .30076 L
+.6638 .30075 L
+.66508 .30074 L
+.66643 .30072 L
+.66768 .3007 L
+.67028 .30064 L
+.67264 .30057 L
+.67794 .30037 L
+.68248 .30015 L
+.68741 .29984 L
+.69636 .29914 L
+.70582 .29817 L
+.71623 .29686 L
+.73728 .29336 L
+.75672 .28915 L
+.77762 .28356 L
+.81889 .26928 L
+Mistroke
+.85865 .25152 L
+.8969 .2308 L
+.9376 .20507 L
+.97619 .17745 L
+Mfstroke
+[ .003 .008 ] 0 setdash
+.02381 .45835 m
+.06244 .4742 L
+.10458 .49313 L
+.14415 .51193 L
+.18221 .5303 L
+.22272 .54932 L
+.26171 .56621 L
+.30316 .58163 L
+.32392 .58806 L
+.34309 .5931 L
+.36292 .59733 L
+.3815 .60031 L
+.39052 .6014 L
+.40022 .60231 L
+.40575 .6027 L
+.411 .60298 L
+.41571 .60316 L
+.41837 .60323 L
+.41955 .60326 L
+.42085 .60328 L
+.42214 .6033 L
+.42284 .60331 L
+.42349 .60331 L
+.42467 .60332 L
+.42593 .60332 L
+.42663 .60332 L
+.4274 .60331 L
+.42813 .60331 L
+.4288 .6033 L
+.43007 .60329 L
+.43142 .60327 L
+.43386 .60322 L
+.43615 .60315 L
+.44137 .60293 L
+.44604 .60267 L
+.45033 .60236 L
+.45998 .60145 L
+.46978 .60022 L
+.4789 .59879 L
+.4996 .59454 L
+.52006 .58893 L
+.53865 .58263 L
+.57863 .56517 L
+.6171 .54335 L
+.65802 .51472 L
+.69742 .4819 L
+.73531 .44548 L
+.77565 .40148 L
+.81447 .35406 L
+.85575 .2983 L
+Mistroke
+.89551 .23958 L
+.93375 .17881 L
+.97445 .11014 L
+.97619 .10712 L
+Mfstroke
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True,
+ ImageSize->{439.75, 271.813},
+ ImageMargins->{{34, 0}, {0, 0}},
+ ImageRegion->{{0, 1}, {0, 
+  1}},ImageCache->GraphicsData["CompressedBitmap", "\<\
+eJzdXHuMnFUV/7qzO/um0JelFHer1FakSLvKG9uhpFWwlRawSLuhS3m0lLbQ
+Wd4tuFCli0hKHSmPRcQHaESiVqUhGTUSjBo1MfqHgWR9xcRoYgwmhGhw/O75
+7j333JnfuTPT3bbqJL17v3PO75xz3+e7935dNTS8+bptQ8NbNg31r9w5dPPm
+LZuK/St27ExJuSlJMuXF9N/U/sTkK0niEvodMol9+B/Lv5P+5CpclvSJ0v1N
+8FuY/ZmjqdU0gBfaJ4VapWrza2PCQ7oLOTabKrAW+J/5jerY9tDKJ3XJTm8l
+J62Istyno7sZTWBf0Ht0TC+gtYbou3T0CfXRt+noaexvR4jZKTDEn8m5rrAu
+t+naZzGmN8Rs1jGnhn5cq0vO0WrDozfq6JPCknnf1uuYkxkzO7SzTsf0MWZO
+aGetjlFL69GrdPQpbLEv9PJDOuZdjJkX2rlIxyxkDFnMM/MDOuZUQFtg0g4m
+namjN5i0nUnvFZLkx+kAMxBiFuraT2c9NFuko2h8rMATTGFsvMWCKpVypWjI
+hVKS0fKexv8KldJ45R1cM12HobNcDOa4JCmmUpUljWvKAdGkWB5oXENrjSiV
+a4I+pKKRTnIGN0QbPbdVSsWS41ZKBaqFbMIy2tNaSvXR07tNSh0+H0G2W2Sp
+wHWavC8in3ftMV6qFAqOb0oo6gJDO4GTMXlsyvDJ1AV6pS3hSgu6pNBRLpIO
+VG+LuN7somexiWtQi6WndqHAeFAsuzLVtVkuJo1C8pJdO7AWx9FdwO/z9co7
+s/kqIwfytsqsibB6Ul3lcsUL6/o7BcSy60HcFGVqtFiuONfqVKpEifkgMhZd
+zRia7YS2SajD+qGUPmYu2KHUWi1OM3za7cMRlHV7HhK1FpKwI9TwY1BXXIaO
+kYcDdSFhx1mqV89ZJs3ZXlAs+16Qd01qB4msGBrcCY8E6l1Uw4sjArXkAUzm
+zmTJxrIi6hQ33h3OMSnNMmtMzscWLTrmPMZcxpi3dHHqHRSAvKkLLQW0daz9
+BcBdLBrENlQwkzlam250GRdkPfv4lZipyjhN8uNytRK0iKkLAW2QjR5y3ssA
+wfW+rIkzbLr+FMdck2f9n5re0gwkbfvEve4kSfUsnw270pif36z+DJL3Zh03
+VV02blLR5ljXk2TIJN22hk0oYOdR6numi2YdqEfOsVahlXV0Yz9z3BjvcfWa
+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\
+\>"],ImageRangeCache->{{{0., 438.75}, {270.813, 0.}} -> {-0.0523039, \
+-22.2141, 0.00149433, 0.38496}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"\[SkeletonIndicator]", "Graphics", "\[SkeletonIndicator]"}],
+  False,
+  Editable->False]], "Output"]
+}, Open  ]],
+
+Cell["\<\
+Now let's calculate the total energy during the swing cycle, to verify that \
+the Dyamics Workbench model conserves energy. Looking at the axes on the \
+plot, it is evident that energy is conserved within machine precision\
+\>", "Text",
+ Evaluatable->False,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{
+   RowBox[{"Evaluate", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{"Mass", "[", "a", "]"}], " ", 
+        RowBox[{
+         RowBox[{"VelCOM", "[", "a", "]"}], ".", 
+         RowBox[{"VelCOM", "[", "a", "]"}]}]}], "+", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{"Mass", "[", "b", "]"}], " ", 
+        RowBox[{
+         RowBox[{"VelCOM", "[", "b", "]"}], ".", 
+         RowBox[{"VelCOM", "[", "b", "]"}]}]}], "+", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{"Mass", "[", "c", "]"}], " ", 
+        RowBox[{
+         RowBox[{"VelCOM", "[", "c", "]"}], ".", 
+         RowBox[{"VelCOM", "[", "c", "]"}]}]}], "+", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{
+         RowBox[{"Inertia", "[", "a", "]"}], ".", 
+         RowBox[{"AngVel", "[", "a", "]"}], ".", 
+         RowBox[{"AngVel", "[", "a", "]"}]}]}], "+", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{
+         RowBox[{"Inertia", "[", "b", "]"}], ".", 
+         RowBox[{"AngVel", "[", "b", "]"}], ".", 
+         RowBox[{"AngVel", "[", "b", "]"}]}]}], "+", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{
+         RowBox[{"Inertia", "[", "c", "]"}], ".", 
+         RowBox[{"AngVel", "[", "c", "]"}], ".", 
+         RowBox[{"AngVel", "[", "c", "]"}]}]}], "-", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Mass", "[", "a", "]"}], " ", 
+          RowBox[{
+           RowBox[{"PosCOM", "[", "a", "]"}], ".", "grav"}]}], "+", 
+         RowBox[{
+          RowBox[{"Mass", "[", "b", "]"}], " ", 
+          RowBox[{
+           RowBox[{"PosCOM", "[", "b", "]"}], ".", "grav"}]}], "+", 
+         RowBox[{
+          RowBox[{"Mass", "[", "c", "]"}], " ", 
+          RowBox[{
+           RowBox[{"PosCOM", "[", "c", "]"}], ".", "grav"}]}]}], ")"}]}], "//.",
+       "constants"}], "/.", "trajectory"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"t", ",", "0", ",", ".35"}], "}"}]}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: .61803 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% Graphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+0.0238095 2.72109 -4.43991e+006 31601.2 [
+[.15986 .04002 -12 -9 ]
+[.15986 .04002 12 0 ]
+[.29592 .04002 -9 -9 ]
+[.29592 .04002 9 0 ]
+[.43197 .04002 -12 -9 ]
+[.43197 .04002 12 0 ]
+[.56803 .04002 -9 -9 ]
+[.56803 .04002 9 0 ]
+[.70408 .04002 -12 -9 ]
+[.70408 .04002 12 0 ]
+[.84014 .04002 -9 -9 ]
+[.84014 .04002 9 0 ]
+[.97619 .04002 -12 -9 ]
+[.97619 .04002 12 0 ]
+[.01131 .13152 -42 -4.5 ]
+[.01131 .13152 0 4.5 ]
+[.01131 .21052 -42 -4.5 ]
+[.01131 .21052 0 4.5 ]
+[.01131 .28953 -42 -4.5 ]
+[.01131 .28953 0 4.5 ]
+[.01131 .36853 -42 -4.5 ]
+[.01131 .36853 0 4.5 ]
+[.01131 .44753 -42 -4.5 ]
+[.01131 .44753 0 4.5 ]
+[.01131 .52654 -42 -4.5 ]
+[.01131 .52654 0 4.5 ]
+[.01131 .60554 -42 -4.5 ]
+[.01131 .60554 0 4.5 ]
+[ 0 0 0 0 ]
+[ 1 .61803 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 g
+.25 Mabswid
+[ ] 0 setdash
+.15986 .05252 m
+.15986 .05877 L
+s
+[(0.05)] .15986 .04002 0 1 Mshowa
+.29592 .05252 m
+.29592 .05877 L
+s
+[(0.1)] .29592 .04002 0 1 Mshowa
+.43197 .05252 m
+.43197 .05877 L
+s
+[(0.15)] .43197 .04002 0 1 Mshowa
+.56803 .05252 m
+.56803 .05877 L
+s
+[(0.2)] .56803 .04002 0 1 Mshowa
+.70408 .05252 m
+.70408 .05877 L
+s
+[(0.25)] .70408 .04002 0 1 Mshowa
+.84014 .05252 m
+.84014 .05877 L
+s
+[(0.3)] .84014 .04002 0 1 Mshowa
+.97619 .05252 m
+.97619 .05877 L
+s
+[(0.35)] .97619 .04002 0 1 Mshowa
+.125 Mabswid
+.05102 .05252 m
+.05102 .05627 L
+s
+.07823 .05252 m
+.07823 .05627 L
+s
+.10544 .05252 m
+.10544 .05627 L
+s
+.13265 .05252 m
+.13265 .05627 L
+s
+.18707 .05252 m
+.18707 .05627 L
+s
+.21429 .05252 m
+.21429 .05627 L
+s
+.2415 .05252 m
+.2415 .05627 L
+s
+.26871 .05252 m
+.26871 .05627 L
+s
+.32313 .05252 m
+.32313 .05627 L
+s
+.35034 .05252 m
+.35034 .05627 L
+s
+.37755 .05252 m
+.37755 .05627 L
+s
+.40476 .05252 m
+.40476 .05627 L
+s
+.45918 .05252 m
+.45918 .05627 L
+s
+.48639 .05252 m
+.48639 .05627 L
+s
+.51361 .05252 m
+.51361 .05627 L
+s
+.54082 .05252 m
+.54082 .05627 L
+s
+.59524 .05252 m
+.59524 .05627 L
+s
+.62245 .05252 m
+.62245 .05627 L
+s
+.64966 .05252 m
+.64966 .05627 L
+s
+.67687 .05252 m
+.67687 .05627 L
+s
+.73129 .05252 m
+.73129 .05627 L
+s
+.7585 .05252 m
+.7585 .05627 L
+s
+.78571 .05252 m
+.78571 .05627 L
+s
+.81293 .05252 m
+.81293 .05627 L
+s
+.86735 .05252 m
+.86735 .05627 L
+s
+.89456 .05252 m
+.89456 .05627 L
+s
+.92177 .05252 m
+.92177 .05627 L
+s
+.94898 .05252 m
+.94898 .05627 L
+s
+.25 Mabswid
+0 .05252 m
+1 .05252 L
+s
+.02381 .13152 m
+.03006 .13152 L
+s
+[(140.498)] .01131 .13152 1 0 Mshowa
+.02381 .21052 m
+.03006 .21052 L
+s
+[(140.498)] .01131 .21052 1 0 Mshowa
+.02381 .28953 m
+.03006 .28953 L
+s
+[(140.498)] .01131 .28953 1 0 Mshowa
+.02381 .36853 m
+.03006 .36853 L
+s
+[(140.498)] .01131 .36853 1 0 Mshowa
+.02381 .44753 m
+.03006 .44753 L
+s
+[(140.498)] .01131 .44753 1 0 Mshowa
+.02381 .52654 m
+.03006 .52654 L
+s
+[(140.498)] .01131 .52654 1 0 Mshowa
+.02381 .60554 m
+.03006 .60554 L
+s
+[(140.498)] .01131 .60554 1 0 Mshowa
+.125 Mabswid
+.02381 .06832 m
+.02756 .06832 L
+s
+.02381 .08412 m
+.02756 .08412 L
+s
+.02381 .09992 m
+.02756 .09992 L
+s
+.02381 .11572 m
+.02756 .11572 L
+s
+.02381 .14732 m
+.02756 .14732 L
+s
+.02381 .16312 m
+.02756 .16312 L
+s
+.02381 .17892 m
+.02756 .17892 L
+s
+.02381 .19472 m
+.02756 .19472 L
+s
+.02381 .22632 m
+.02756 .22632 L
+s
+.02381 .24213 m
+.02756 .24213 L
+s
+.02381 .25793 m
+.02756 .25793 L
+s
+.02381 .27373 m
+.02756 .27373 L
+s
+.02381 .30533 m
+.02756 .30533 L
+s
+.02381 .32113 m
+.02756 .32113 L
+s
+.02381 .33693 m
+.02756 .33693 L
+s
+.02381 .35273 m
+.02756 .35273 L
+s
+.02381 .38433 m
+.02756 .38433 L
+s
+.02381 .40013 m
+.02756 .40013 L
+s
+.02381 .41593 m
+.02756 .41593 L
+s
+.02381 .43173 m
+.02756 .43173 L
+s
+.02381 .46333 m
+.02756 .46333 L
+s
+.02381 .47913 m
+.02756 .47913 L
+s
+.02381 .49493 m
+.02756 .49493 L
+s
+.02381 .51074 m
+.02756 .51074 L
+s
+.02381 .54234 m
+.02756 .54234 L
+s
+.02381 .55814 m
+.02756 .55814 L
+s
+.02381 .57394 m
+.02756 .57394 L
+s
+.02381 .58974 m
+.02756 .58974 L
+s
+.02381 .03672 m
+.02756 .03672 L
+s
+.02381 .02092 m
+.02756 .02092 L
+s
+.02381 .00512 m
+.02756 .00512 L
+s
+.25 Mabswid
+.02381 0 m
+.02381 .61803 L
+s
+0 0 m
+1 0 L
+1 .61803 L
+0 .61803 L
+closepath
+clip
+newpath
+.5 Mabswid
+.02381 .33633 m
+.02499 .16967 L
+.02605 .16596 L
+.02729 .15152 L
+.02846 .13263 L
+.02954 .11921 L
+.03053 .1159 L
+.03162 .11664 L
+.03279 .10639 L
+.03396 .08596 L
+.03506 .06915 L
+.03636 .06433 L
+.03756 .06222 L
+.0388 .04669 L
+.03945 .03576 L
+.04015 .02518 L
+.04143 .01472 L
+.04262 .01819 L
+.04327 .02529 L
+.04396 .03617 L
+.04519 .06226 L
+.04797 .13487 L
+.05058 .20095 L
+.05302 .25508 L
+.05413 .27665 L
+.05519 .29399 L
+.0564 .30816 L
+.05751 .31322 L
+.05874 .30784 L
+.05987 .29453 L
+.06053 .28553 L
+.06122 .27672 L
+.06244 .26665 L
+.0636 .26743 L
+.06486 .28084 L
+.06551 .29221 L
+.0662 .30677 L
+.06745 .33611 L
+.06872 .36468 L
+.06992 .38619 L
+.07099 .39927 L
+.07216 .40703 L
+.07345 .40968 L
+.07418 .40892 L
+.07486 .40688 L
+.07563 .40365 L
+.07636 .40046 L
+.07702 .39819 L
+.07773 .39701 L
+.07902 .39984 L
+Mistroke
+.08021 .40898 L
+.0815 .42512 L
+.08288 .44659 L
+.08425 .46843 L
+.0857 .48777 L
+.08645 .49544 L
+.08728 .50167 L
+.08804 .50542 L
+.08874 .50735 L
+.08946 .50783 L
+.09014 .50688 L
+.09141 .50263 L
+.09207 .50041 L
+.09278 .49907 L
+.09355 .4995 L
+.09427 .50208 L
+.09548 .5114 L
+.0968 .527 L
+.09917 .56025 L
+.10055 .57716 L
+.1013 .58478 L
+.10199 .59074 L
+.10323 .59867 L
+.10388 .60146 L
+.10458 .60332 L
+.10582 .60332 L
+.10652 .60116 L
+.10718 .59763 L
+.10787 .59244 L
+.1085 .58662 L
+.10993 .57146 L
+.11114 .55898 L
+.11245 .54888 L
+.1137 .54432 L
+.11485 .54449 L
+.11617 .54858 L
+.11741 .55413 L
+.11807 .55699 L
+.11877 .55954 L
+.11953 .5615 L
+.12024 .56242 L
+.12092 .56251 L
+.12165 .56183 L
+.12297 .5594 L
+.12378 .55776 L
+.12454 .55652 L
+.12522 .55588 L
+.12597 .5558 L
+.12722 .55742 L
+.12839 .56086 L
+Mistroke
+.12978 .56634 L
+.13106 .57087 L
+.1317 .57237 L
+.13239 .57312 L
+.13366 .57164 L
+.13436 .56917 L
+.13511 .56532 L
+.13645 .55597 L
+.13907 .53488 L
+.14035 .52618 L
+.14153 .52014 L
+.1426 .51628 L
+.14374 .51366 L
+.14488 .51219 L
+.14613 .51173 L
+.14743 .51265 L
+.14866 .51484 L
+.14993 .5181 L
+.15134 .52186 L
+.15203 .5234 L
+.15275 .52461 L
+.15355 .52533 L
+.15428 .52537 L
+.15558 .52404 L
+.15631 .52261 L
+.157 .52096 L
+.15823 .51764 L
+.15956 .51416 L
+.16082 .51153 L
+.16198 .5099 L
+.16262 .50931 L
+.16333 .50887 L
+.16407 .50859 L
+.16476 .50845 L
+.16598 .50836 L
+.16729 .50842 L
+.16857 .50867 L
+.16977 .50902 L
+.17049 .50926 L
+.17118 .50945 L
+.17246 .50965 L
+.17361 .50954 L
+.17484 .50906 L
+.17616 .50811 L
+.17737 .50696 L
+.18657 .50053 L
+.20672 .48915 L
+.2079 .4892 L
+.20915 .4897 L
+.2098 .49018 L
+Mistroke
+.21051 .49087 L
+.21178 .4925 L
+.21408 .4961 L
+.21537 .49781 L
+.21656 .49867 L
+.21769 .4986 L
+.21892 .49732 L
+.22009 .49494 L
+.22117 .49182 L
+.2255 .47517 L
+.22659 .47122 L
+.22777 .46749 L
+.22882 .46475 L
+.22992 .46241 L
+.2312 .46033 L
+.23238 .45892 L
+.23345 .458 L
+.23462 .45734 L
+.23589 .45706 L
+.23706 .45723 L
+.2377 .45753 L
+.2384 .45802 L
+.23967 .45938 L
+.24085 .46116 L
+.24211 .46348 L
+.24438 .46797 L
+.24557 .47005 L
+.24682 .47173 L
+.24747 .47235 L
+.24819 .47281 L
+.24945 .47307 L
+.25064 .47278 L
+.25191 .47207 L
+.25311 .47125 L
+.25421 .47054 L
+.25488 .47018 L
+.25561 .46989 L
+.25635 .46972 L
+.25713 .46968 L
+.25782 .46975 L
+.25856 .46993 L
+.25926 .47019 L
+.25989 .47047 L
+.26129 .47115 L
+.26261 .47176 L
+.26379 .47218 L
+.26506 .47243 L
+.26627 .47243 L
+.26755 .47213 L
+.26864 .47161 L
+Mistroke
+.26984 .47075 L
+.2723 .46837 L
+.27365 .46703 L
+.27493 .46603 L
+.27611 .46548 L
+.2774 .4654 L
+.27858 .46582 L
+.27966 .46659 L
+.28068 .46756 L
+.2818 .46882 L
+.28408 .47144 L
+.28539 .47272 L
+.28677 .47375 L
+.28794 .47438 L
+.28923 .47483 L
+.28996 .475 L
+.29062 .47513 L
+.29138 .47523 L
+.2921 .47531 L
+.29339 .47539 L
+.29411 .4754 L
+.29478 .47539 L
+.29598 .47529 L
+.2971 .47511 L
+.29833 .47479 L
+.29965 .47433 L
+.30104 .47379 L
+.30235 .47335 L
+.30353 .4731 L
+.30481 .4731 L
+.30602 .47342 L
+.30714 .47403 L
+.30836 .47501 L
+.30964 .47635 L
+.31419 .48195 L
+.31658 .48439 L
+.31789 .48544 L
+.31914 .48626 L
+.31984 .48664 L
+.3206 .487 L
+.32124 .48724 L
+.32194 .48746 L
+.3226 .48759 L
+.3233 .48766 L
+.32455 .48757 L
+.32522 .48738 L
+.32595 .48706 L
+.32664 .48664 L
+.32728 .48616 L
+.32978 .48365 L
+Mistroke
+.33045 .48294 L
+.33118 .48224 L
+.33249 .48134 L
+.33329 .48113 L
+.33402 .48121 L
+.33469 .48154 L
+.33539 .48216 L
+.3366 .48387 L
+.3379 .48651 L
+.34023 .49262 L
+.34281 .49959 L
+.34422 .50284 L
+.34555 .50538 L
+.34686 .50738 L
+.34806 .50883 L
+.3494 .51006 L
+.3501 .51055 L
+.35083 .51095 L
+.35205 .51131 L
+.35317 .51125 L
+.35441 .51068 L
+.35573 .50942 L
+.35647 .5084 L
+.35716 .5073 L
+.35871 .50445 L
+.36005 .50201 L
+.36076 .50091 L
+.36153 .5 L
+.36285 .49934 L
+.36408 .49998 L
+.36481 .50098 L
+.3655 .50233 L
+.36679 .50582 L
+.37146 .52301 L
+.3728 .5274 L
+.37406 .53082 L
+.37521 .53332 L
+.37642 .53539 L
+.37779 .53713 L
+.37904 .53827 L
+.37974 .53872 L
+.38039 .53901 L
+.3811 .53918 L
+.38187 .53916 L
+.38252 .53897 L
+.38323 .53856 L
+.38451 .53721 L
+.38576 .53518 L
+.38692 .5328 L
+.38806 .53022 L
+Mistroke
+.3893 .52755 L
+.39048 .52559 L
+.39157 .5246 L
+.39283 .52475 L
+.39354 .52549 L
+.39418 .52659 L
+.39541 .5297 L
+.39657 .53363 L
+.40097 .55103 L
+.40319 .55766 L
+.40445 .56034 L
+.40562 .56224 L
+.40693 .56379 L
+.40811 .56477 L
+.40877 .56516 L
+.40948 .56544 L
+.41078 .56555 L
+.41197 .56511 L
+.41324 .56398 L
+.41433 .56245 L
+.41553 .56023 L
+.41818 .55449 L
+.41891 .55313 L
+.41968 .55196 L
+.42033 .55126 L
+.42105 .55086 L
+.42235 .55122 L
+.42308 .55206 L
+.42374 .5532 L
+.42503 .55632 L
+.42624 .56009 L
+.42866 .56837 L
+.42999 .57255 L
+.43126 .57589 L
+.43243 .57835 L
+.43371 .58035 L
+.43487 .58167 L
+.43595 .58255 L
+.4372 .58324 L
+.43832 .58361 L
+.43962 .58369 L
+.44085 .58339 L
+.4415 .58304 L
+.4422 .58254 L
+.44344 .58126 L
+.44477 .57941 L
+.44624 .57706 L
+.44748 .57511 L
+.44865 .57357 L
+.4497 .57264 L
+Mistroke
+.45085 .57226 L
+.45209 .57266 L
+.45341 .57396 L
+.45454 .57566 L
+.45578 .57793 L
+.45799 .58215 L
+.45915 .58409 L
+.46037 .58574 L
+.46145 .58684 L
+.46262 .58768 L
+.46369 .58817 L
+.46468 .58847 L
+.46596 .58867 L
+.46661 .58873 L
+.46732 .58875 L
+.46857 .5887 L
+.46974 .58853 L
+.47045 .58837 L
+.47112 .58817 L
+.47239 .58767 L
+.47374 .58696 L
+.47522 .58604 L
+.47772 .58442 L
+.47909 .58365 L
+.48038 .58308 L
+.48159 .5827 L
+.48289 .58242 L
+.48408 .58225 L
+.48516 .58213 L
+.48624 .582 L
+.48738 .58181 L
+.48863 .58153 L
+.48978 .58118 L
+.49415 .57947 L
+.4953 .57908 L
+.49654 .57875 L
+.49725 .57862 L
+.4979 .57855 L
+.49918 .57856 L
+.5003 .57875 L
+.50153 .57916 L
+.50268 .57972 L
+.50376 .58031 L
+.50503 .58097 L
+.50624 .58137 L
+.50732 .58142 L
+.50849 .58101 L
+.50977 .57995 L
+.51041 .57916 L
+.51112 .57812 L
+Mistroke
+.51353 .57341 L
+.51598 .56787 L
+.5183 .56306 L
+.52038 .55962 L
+.52264 .55689 L
+.52394 .55575 L
+.5246 .5553 L
+.52532 .55491 L
+.5266 .55454 L
+.5278 .55461 L
+.52848 .55487 L
+.52919 .55532 L
+.53047 .5566 L
+.53118 .55755 L
+.53184 .55857 L
+.53334 .56108 L
+.53464 .56308 L
+.53587 .56436 L
+.53697 .56471 L
+.53817 .564 L
+.53947 .56182 L
+.54013 .5602 L
+.54085 .55805 L
+.54332 .54871 L
+.58366 .43805 L
+.58474 .43444 L
+.58589 .43142 L
+.58714 .42908 L
+.58829 .42795 L
+.58937 .42793 L
+.59037 .42892 L
+.59148 .43129 L
+.59265 .4354 L
+.59401 .44199 L
+.59528 .44961 L
+.59653 .45754 L
+.59768 .46445 L
+.59874 .46973 L
+.59986 .47346 L
+.60099 .47471 L
+.60223 .47273 L
+.6029 .47017 L
+.60359 .46639 L
+.60484 .45711 L
+.60765 .42801 L
+.61029 .39856 L
+.61157 .38597 L
+.61274 .37617 L
+.61499 .36185 L
+.61623 .35628 L
+Mistroke
+.61739 .35221 L
+.61866 .34886 L
+.61983 .34668 L
+.62112 .34533 L
+.62177 .34512 L
+.62248 .3453 L
+.62316 .3459 L
+.6239 .34707 L
+.62459 .34871 L
+.62524 .35069 L
+.62646 .35565 L
+.62776 .36239 L
+.62916 .37064 L
+.63068 .3793 L
+.63138 .38272 L
+.63211 .38569 L
+.63342 .38883 L
+.63462 .38873 L
+.63574 .38582 L
+.63697 .37956 L
+.63828 .36975 L
+.64365 .31611 L
+.64625 .29543 L
+.64771 .28708 L
+.64906 .28126 L
+.65024 .27739 L
+.65155 .27419 L
+.6522 .27296 L
+.6529 .27192 L
+.65418 .27082 L
+.6554 .27083 L
+.6561 .27138 L
+.65674 .27227 L
+.65792 .27494 L
+.65918 .27929 L
+.66041 .28492 L
+.66158 .29109 L
+.66375 .30284 L
+.66491 .30795 L
+.66616 .31154 L
+.66734 .31256 L
+.66841 .31122 L
+.66967 .30686 L
+.67038 .30315 L
+.67104 .29901 L
+.67352 .27911 L
+.67588 .25843 L
+.67843 .23974 L
+.67988 .23183 L
+.68122 .22634 L
+Mistroke
+.6825 .22242 L
+.68384 .21941 L
+.68491 .21765 L
+.68606 .21636 L
+.68714 .21571 L
+.68812 .21565 L
+.68928 .21635 L
+.69053 .21814 L
+.69171 .22092 L
+.6928 .22438 L
+.69535 .23476 L
+.69661 .24004 L
+.69777 .24425 L
+.69883 .24704 L
+.69995 .2486 L
+.70119 .24833 L
+.70232 .24617 L
+.70348 .24217 L
+.70473 .23613 L
+.70699 .22244 L
+.70944 .20732 L
+.71077 .20025 L
+.71202 .19479 L
+.7132 .19066 L
+.71427 .18774 L
+.71547 .18528 L
+.71675 .18336 L
+.71782 .1822 L
+.71898 .18134 L
+.72008 .18092 L
+.72109 .1809 L
+.72228 .18139 L
+.72355 .18263 L
+.72476 .18454 L
+.72586 .18689 L
+.72858 .19437 L
+.72991 .19808 L
+.73111 .20092 L
+.73237 .20296 L
+.73306 .20356 L
+.73371 .20375 L
+.73442 .20352 L
+.73508 .2029 L
+.7358 .20179 L
+.73656 .20016 L
+.73783 .19652 L
+.73902 .19239 L
+.74174 .18224 L
+.74299 .17797 L
+.74433 .17412 L
+Mistroke
+.74547 .1715 L
+.74674 .16929 L
+.74809 .16762 L
+.74885 .16693 L
+.74954 .16642 L
+.75083 .16574 L
+.75147 .16551 L
+.75218 .16532 L
+.75348 .16519 L
+.75466 .16533 L
+.75531 .16553 L
+.75602 .16585 L
+.7573 .16675 L
+.75851 .16796 L
+.75979 .16959 L
+.76207 .173 L
+.7632 .17465 L
+.76427 .176 L
+.76551 .17717 L
+.76664 .17776 L
+.7677 .17784 L
+.76868 .17751 L
+.76976 .17672 L
+.77091 .17548 L
+.77564 .16886 L
+.77678 .16754 L
+.77802 .16644 L
+.77872 .16595 L
+.77937 .1656 L
+.78063 .16512 L
+.78195 .16485 L
+.78269 .16478 L
+.78338 .16474 L
+.78465 .16473 L
+.78529 .16474 L
+.786 .16477 L
+.78722 .16485 L
+.78854 .16499 L
+.78979 .16518 L
+.79093 .16542 L
+.79352 .16616 L
+.79636 .16725 L
+.80207 .16957 L
+.80712 .17128 L
+.81252 .17325 L
+.81515 .17421 L
+.81643 .17462 L
+.81762 .17493 L
+.8187 .17514 L
+.81984 .17528 L
+Mistroke
+.82098 .1753 L
+.82224 .17519 L
+.82354 .17489 L
+.82474 .17447 L
+.82747 .17318 L
+.82871 .17264 L
+.82987 .17229 L
+.83108 .17218 L
+.83173 .17225 L
+.83242 .17245 L
+.83355 .17304 L
+.83478 .17406 L
+.83607 .17551 L
+.83727 .17713 L
+.84172 .1839 L
+.84444 .18735 L
+.84577 .18868 L
+.84701 .18971 L
+.8481 .19047 L
+.84931 .19116 L
+.85053 .19169 L
+.85182 .19207 L
+.85254 .19219 L
+.85322 .19223 L
+.8545 .19211 L
+.85522 .19191 L
+.85589 .19164 L
+.85662 .19123 L
+.85739 .19068 L
+.85881 .18937 L
+.86013 .18786 L
+.86133 .18639 L
+.86262 .18488 L
+.86388 .18365 L
+.86503 .18294 L
+.86618 .18278 L
+.86727 .18326 L
+.86855 .1847 L
+.86972 .18692 L
+.87101 .19036 L
+.87238 .19506 L
+.8777 .21964 L
+.88031 .23208 L
+.8827 .24201 L
+.88472 .24897 L
+.88693 .25505 L
+.88914 .25968 L
+.89035 .26158 L
+.89148 .26293 L
+.89274 .26391 L
+Mistroke
+.89394 .26425 L
+.89501 .264 L
+.89617 .26307 L
+.89743 .26121 L
+.89807 .25992 L
+.89877 .25824 L
+.90117 .25067 L
+.90367 .24132 L
+.90498 .23676 L
+.90571 .23462 L
+.90639 .23292 L
+.90703 .23165 L
+.90773 .23072 L
+.90896 .23032 L
+.9102 .23164 L
+.91134 .23444 L
+.91245 .23859 L
+.91349 .24359 L
+.91586 .25804 L
+.92062 .29096 L
+.92334 .30622 L
+.92467 .31212 L
+.9259 .31666 L
+.92821 .32309 L
+.92942 .3256 L
+.93071 .32772 L
+.93199 .3293 L
+.93271 .32996 L
+.93337 .3304 L
+.93458 .3308 L
+.93585 .33055 L
+.93653 .33011 L
+.93725 .32939 L
+.93856 .3274 L
+.93936 .32573 L
+.94011 .32385 L
+.94152 .31967 L
+.9437 .31207 L
+.94491 .30786 L
+.94605 .30425 L
+.94711 .30149 L
+.94827 .29941 L
+.94932 .29854 L
+.95029 .29871 L
+.95131 .29995 L
+.95243 .30259 L
+.95361 .30668 L
+.95471 .31162 L
+.95957 .34019 L
+.96346 .36133 L
+Mistroke
+.96542 .3691 L
+.96756 .37531 L
+.96869 .37776 L
+.96989 .37988 L
+.97101 .38146 L
+.97206 .38265 L
+.9731 .38353 L
+.97422 .38417 L
+.97525 .38442 L
+.97619 .38434 L
+Mfstroke
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True,
+ ImageSize->{281.813, 174.188},
+ ImageMargins->{{34, 0}, {0, 0}},
+ ImageRegion->{{0, 1}, {0, 
+  1}},ImageCache->GraphicsData["CompressedBitmap", "\<\
+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
+s+sFN0OCT8Izugjon0Jy51Hjf1VorQY=\
+\>"],ImageRangeCache->{{{0., 280.813}, {173.188, 0.}} -> {-0.0702578, \
+140.498, 0.00156339, 1.34619*^-7}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"\[SkeletonIndicator]", "Graphics", "\[SkeletonIndicator]"}],
+  False,
+  Editable->False]], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Sample low level operations", "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell["Cross products", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "[", "1", "]"}], "\[Cross]", 
+  RowBox[{"b", "[", "1", "]"}]}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"pkgV", "[", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"-", 
+     RowBox[{"Sin", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"qt", "[", "1", "]"}], "[", "t", "]"}], "-", 
+       RowBox[{
+        RowBox[{"qt", "[", "2", "]"}], "[", "t", "]"}]}], "]"}]}], ",", "b", 
+    ",", "3"}], "}"}], "]"}]], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["Dot products", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "[", "1", "]"}], ".", 
+  RowBox[{"c", "[", "2", "]"}]}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"Sin", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"qt", "[", "1", "]"}], "[", "t", "]"}], "-", 
+   RowBox[{
+    RowBox[{"qt", "[", "3", "]"}], "[", "t", "]"}]}], "]"}]], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["Here's a dyadic", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"r", "=", 
+  RowBox[{
+   RowBox[{"a", "[", "1", "]"}], "**", 
+   RowBox[{"a", "[", "2", "]"}]}]}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"PV", "[", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"PV", "[", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "a", ",", "1"}], "}"}], "]"}], ",", "a", ",", "2"}], 
+   "}"}], "]"}]], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["And you can use it like this:", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"r", ".", 
+  RowBox[{"b", "[", "1", "]"}]}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"PV", "[", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"Cos", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"qt", "[", "1", "]"}], "[", "t", "]"}], "-", 
+      RowBox[{
+       RowBox[{"qt", "[", "2", "]"}], "[", "t", "]"}]}], "]"}], ",", "a", ",",
+     "2"}], "}"}], "]"}]], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]],
+
+Cell["Time derivatives of vectors", "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic,
+ AspectRatioFixed->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Dt", "[", 
+  RowBox[{
+   RowBox[{"3", " ", 
+    RowBox[{
+     RowBox[{"a", "[", "1", "]"}], "\[Cross]", 
+     RowBox[{"b", "[", "1", "]"}]}]}], ",", "t"}], "]"}]], "Input",
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True],
+
+Cell[BoxData[
+ RowBox[{"PV", "[", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"-", "3"}], " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"qt", "[", "1", "]"}], "[", "t", "]"}], "-", 
+       RowBox[{
+        RowBox[{"qt", "[", "2", "]"}], "[", "t", "]"}]}], "]"}], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        SuperscriptBox[
+         RowBox[{"qt", "[", "1", "]"}], "\[Prime]",
+         MultilineFunction->None], "[", "t", "]"}], "-", 
+       RowBox[{
+        SuperscriptBox[
+         RowBox[{"qt", "[", "2", "]"}], "\[Prime]",
+         MultilineFunction->None], "[", "t", "]"}]}], ")"}]}], ",", "b", ",", 
+    "3"}], "}"}], "]"}]], "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ GroupPageBreakWithin->Automatic,
+ AspectRatioFixed->True]
+}, Open  ]]
+}, Closed]]
+},
+AutoGeneratedPackage->None,
+WindowToolbars->{"RulerBar", "EditBar"},
+CellGrouping->Manual,
+WindowSize->{611, 854},
+WindowMargins->{{51, Automatic}, {Automatic, 0}},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
+ShowCellLabel->True,
+ShowCellTags->False,
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+21, 2016)",
+StyleDefinitions->"Default.nb",
+PrivateNotebookOptions -> {"ColorPalette" -> {RGBColor, 128}},
+RenderingOptions -> {"ObjectDithering" -> True},
+RenderingOptions -> {"RasterDithering" -> False},
+CharacterEncoding -> "MacintoshAutomaticEncoding"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 260, 9, 134, "Title",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[843, 33, 799, 16, 182, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[1657, 52, 105, 3, 59, "Section",
+ Evaluatable->False],
+Cell[1765, 57, 407, 8, 103, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[2197, 69, 158, 5, 59, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[2358, 76, 141, 4, 30, "Text",
+ Evaluatable->False],
+Cell[2502, 82, 171, 4, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[2676, 88, 363, 9, 106, "Text",
+ Evaluatable->False],
+Cell[3042, 99, 175, 4, 54, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3254, 108, 157, 5, 59, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[3436, 117, 142, 4, 47, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[3581, 123, 2446, 95, 212, "Text",
+ Evaluatable->False],
+Cell[6030, 220, 15213, 600, 269, 9644, 503, "GraphicsData", "PostScript", \
+"Graphics",
+ Evaluatable->False,
+ PageBreakWithin->Automatic],
+Cell[21246, 822, 1908, 77, 172, "Text",
+ Evaluatable->False]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23203, 905, 152, 5, 45, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[23358, 912, 194, 5, 49, "Text",
+ Evaluatable->False],
+Cell[23555, 919, 159, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[23717, 925, 695, 30, 46, "Text",
+ Evaluatable->False],
+Cell[24415, 957, 152, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[24570, 963, 1233, 55, 103, "Text",
+ Evaluatable->False],
+Cell[25806, 1020, 132, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[25941, 1026, 296, 6, 65, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26274, 1037, 158, 5, 59, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[26457, 1046, 133, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[26593, 1052, 253, 9, 49, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[26871, 1065, 135, 4, 35, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[27009, 1071, 144, 4, 32, "Input",
+ PageBreakWithin->Automatic]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[27202, 1081, 132, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[27337, 1087, 1733, 71, 144, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[29095, 1162, 135, 4, 35, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[29233, 1168, 480, 15, 68, "Text",
+ Evaluatable->False],
+Cell[29716, 1185, 463, 14, 68, "Text",
+ Evaluatable->False],
+Cell[30182, 1201, 335, 13, 30, "Text",
+ Evaluatable->False],
+Cell[30520, 1216, 700, 21, 87, "Text",
+ Evaluatable->False],
+Cell[31223, 1239, 725, 25, 87, "Text",
+ Evaluatable->False],
+Cell[31951, 1266, 715, 25, 87, "Text",
+ Evaluatable->False],
+Cell[32669, 1293, 730, 25, 87, "Text",
+ Evaluatable->False],
+Cell[33402, 1320, 890, 28, 106, "Text",
+ Evaluatable->False],
+Cell[34295, 1350, 1309, 47, 125, "Text",
+ Evaluatable->False],
+Cell[35607, 1399, 447, 14, 49, "Text",
+ Evaluatable->False],
+Cell[36057, 1415, 709, 29, 68, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[36803, 1449, 139, 4, 35, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[36945, 1455, 821, 16, 163, "Text",
+ Evaluatable->False],
+Cell[37769, 1473, 630, 14, 106, "Text",
+ Evaluatable->False],
+Cell[38402, 1489, 901, 17, 163, "Text",
+ Evaluatable->False],
+Cell[39306, 1508, 650, 14, 125, "Text",
+ Evaluatable->False],
+Cell[39959, 1524, 872, 21, 144, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[40834, 1547, 920, 21, 163, "Text",
+ Evaluatable->False],
+Cell[41757, 1570, 872, 17, 163, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[42666, 1592, 135, 4, 35, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[42826, 1600, 190, 5, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[43019, 1607, 230, 8, 32, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]],
+Cell[43264, 1618, 264, 6, 49, "Text",
+ Evaluatable->False]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[43577, 1630, 131, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[43711, 1636, 1062, 47, 68, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[44810, 1688, 135, 4, 35, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[44970, 1696, 288, 9, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[45261, 1707, 137, 4, 32, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]],
+Cell[45413, 1714, 322, 7, 68, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[45772, 1726, 131, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[45906, 1732, 759, 34, 49, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[46702, 1771, 135, 4, 35, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[46862, 1779, 225, 7, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[47090, 1788, 137, 4, 32, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]],
+Cell[47242, 1795, 225, 6, 49, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[47504, 1806, 128, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[47635, 1812, 277, 10, 49, "Text",
+ Evaluatable->False],
+Cell[47915, 1824, 554, 22, 49, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[48506, 1851, 78, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[48587, 1855, 1116, 48, 68, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[49752, 1909, 171, 5, 45, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[49926, 1916, 267, 6, 68, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[50218, 1926, 133, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[50354, 1932, 594, 23, 68, "Text",
+ Evaluatable->False],
+Cell[50951, 1957, 789, 35, 68, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51777, 1997, 133, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[51913, 2003, 1191, 48, 106, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[53141, 2056, 136, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[53280, 2062, 860, 32, 87, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[54177, 2099, 128, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[54308, 2105, 392, 16, 30, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[54737, 2126, 133, 4, 44, "Subsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[54873, 2132, 433, 17, 49, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[55343, 2154, 78, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[55424, 2158, 615, 20, 87, "Text",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[56076, 2183, 72, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[56151, 2187, 533, 23, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[56721, 2215, 77, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[56801, 2219, 1881, 84, 87, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[58719, 2308, 74, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[58796, 2312, 468, 18, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[59301, 2335, 74, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[59378, 2339, 636, 26, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[60051, 2370, 72, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[60126, 2374, 599, 20, 87, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[60774, 2400, 164, 5, 59, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[60941, 2407, 413, 8, 106, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[61379, 2419, 81, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[61463, 2423, 445, 17, 49, "Text",
+ Evaluatable->False],
+Cell[61911, 2442, 474, 18, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[62388, 2462, 420, 17, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[62845, 2484, 78, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[62926, 2488, 416, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[63345, 2507, 468, 18, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[63816, 2527, 474, 18, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[64293, 2547, 519, 19, 68, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[64849, 2571, 83, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[64935, 2575, 236, 9, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[65174, 2586, 399, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[65576, 2605, 246, 9, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[65825, 2616, 406, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[66234, 2635, 387, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[66624, 2654, 433, 18, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[67060, 2674, 374, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[67437, 2693, 436, 18, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[67888, 2714, 401, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[68314, 2735, 81, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[68398, 2739, 1019, 47, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[69420, 2788, 407, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[69830, 2807, 419, 17, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[70252, 2826, 393, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[70648, 2845, 393, 17, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[71044, 2864, 1136, 45, 106, "Text",
+ Evaluatable->False],
+Cell[72183, 2911, 1169, 46, 106, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[73389, 2962, 107, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[73499, 2966, 611, 26, 68, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[74113, 2994, 570, 25, 30, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[74686, 3021, 599, 20, 87, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[75322, 3046, 85, 2, 44, "Subsection",
+ Evaluatable->False],
+Cell[75410, 3050, 983, 46, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[76396, 3098, 856, 40, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[77255, 3140, 652, 26, 68, "Text",
+ Evaluatable->False,
+ InitializationCell->True],
+Cell[77910, 3168, 616, 26, 49, "Text",
+ Evaluatable->False,
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[78575, 3200, 169, 5, 45, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[78747, 3207, 563, 10, 144, "Text",
+ Evaluatable->False],
+Cell[79313, 3219, 15591, 759, 208, 10866, 677, "GraphicsData", "PostScript", \
+"Graphics",
+ Evaluatable->False],
+Cell[94907, 3980, 203, 5, 49, "Text",
+ Evaluatable->False],
+Cell[95113, 3987, 108, 2, 32, "Input"],
+Cell[95224, 3991, 105, 2, 30, "Text",
+ Evaluatable->False],
+Cell[95332, 3995, 144, 4, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[95479, 4001, 741, 23, 125, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[96245, 4028, 708, 20, 54, "Input",
+ PageBreakWithin->Automatic],
+Cell[96956, 4050, 121, 4, 32, "Output"]
+}, Open  ]],
+Cell[97092, 4057, 263, 10, 49, "Text",
+ Evaluatable->False],
+Cell[97358, 4069, 97, 2, 30, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[97480, 4075, 761, 21, 75, "Input",
+ PageBreakWithin->Automatic],
+Cell[98244, 4098, 121, 4, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[98402, 4107, 815, 23, 75, "Input",
+ PageBreakWithin->Automatic],
+Cell[99220, 4132, 121, 4, 32, "Output"]
+}, Open  ]],
+Cell[99356, 4139, 396, 11, 87, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[99777, 4154, 243, 8, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[100023, 4164, 28, 0, 32, "Output"]
+}, Open  ]],
+Cell[100066, 4167, 206, 8, 30, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[100297, 4179, 243, 8, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[100543, 4189, 28, 0, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[100608, 4194, 243, 8, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[100854, 4204, 28, 0, 32, "Output"]
+}, Open  ]],
+Cell[100897, 4207, 210, 9, 30, "Text",
+ Evaluatable->False],
+Cell[101110, 4218, 237, 8, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[101350, 4228, 216, 9, 30, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[101591, 4241, 164, 5, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[101758, 4248, 7529, 223, 376, "Output"]
+}, Open  ]],
+Cell[109302, 4474, 245, 9, 49, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[109572, 4487, 153, 4, 32, "Input",
+ PageBreakWithin->Automatic],
+Cell[109728, 4493, 6025, 176, 300, "Output"]
+}, Open  ]],
+Cell[115768, 4672, 95, 2, 30, "Text",
+ Evaluatable->False],
+Cell[115866, 4676, 2158, 64, 171, "Input",
+ PageBreakWithin->Automatic],
+Cell[118027, 4742, 219, 7, 47, "Input",
+ PageBreakWithin->Automatic],
+Cell[118249, 4751, 311, 10, 49, "Text",
+ Evaluatable->False],
+Cell[118563, 4763, 966, 31, 96, "Input",
+ PageBreakWithin->Automatic],
+Cell[119532, 4796, 419, 10, 87, "Text",
+ Evaluatable->False],
+Cell[119954, 4808, 727, 22, 75, "Input",
+ PageBreakWithin->Automatic],
+Cell[120684, 4832, 381, 8, 87, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[121090, 4844, 1367, 42, 163, "Input",
+ PageBreakWithin->Automatic],
+Cell[122460, 4888, 13205, 555, 280, 8836, 479, "GraphicsData", "PostScript", \
+"Graphics",
+ Evaluatable->False,
+ PageBreakWithin->Automatic],
+Cell[135668, 5445, 134, 4, 32, "Output"]
+}, Open  ]],
+Cell[135817, 5452, 292, 6, 68, "Text",
+ Evaluatable->False],
+Cell[CellGroupData[{
+Cell[136134, 5462, 2200, 62, 338, "Input",
+ PageBreakWithin->Automatic],
+Cell[138337, 5526, 18874, 1092, 183, 15728, 1036, "GraphicsData", \
+"PostScript", "Graphics",
+ Evaluatable->False,
+ PageBreakWithin->Automatic],
+Cell[157214, 6620, 134, 4, 32, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[157397, 6630, 149, 4, 64, "Section",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[157549, 6636, 142, 4, 70, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[157716, 6644, 200, 6, 70, "Input",
+ PageBreakWithin->Automatic],
+Cell[157919, 6652, 445, 15, 70, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]],
+Cell[158379, 6670, 140, 4, 70, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[158544, 6678, 193, 6, 70, "Input",
+ PageBreakWithin->Automatic],
+Cell[158740, 6686, 309, 10, 70, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]],
+Cell[159064, 6699, 143, 4, 70, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[159232, 6707, 219, 7, 70, "Input",
+ PageBreakWithin->Automatic],
+Cell[159454, 6716, 320, 11, 70, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]],
+Cell[159789, 6730, 157, 4, 70, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[159971, 6738, 165, 5, 70, "Input",
+ PageBreakWithin->Automatic],
+Cell[160139, 6745, 417, 14, 70, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]],
+Cell[160571, 6762, 155, 4, 70, "Subsubsection",
+ Evaluatable->False,
+ PageBreakWithin->Automatic,
+ PageBreakBelow->Automatic],
+Cell[CellGroupData[{
+Cell[160751, 6770, 284, 9, 70, "Input",
+ PageBreakWithin->Automatic],
+Cell[161038, 6781, 812, 26, 70, "Output",
+ Evaluatable->False,
+ PageBreakWithin->Automatic]
+}, Open  ]]
+}, Closed]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
