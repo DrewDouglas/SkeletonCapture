@@ -1,0 +1,100 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      2553,         92]
+NotebookOptionsPosition[      2010,         68]
+NotebookOutlinePosition[      2372,         84]
+CellTagsIndexPosition[      2329,         81]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{"ClearAll", ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<DynamicsWorkbench`\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"NewModel", "[", "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.703820481526005*^9, 3.703820501767136*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AddBody", "[", 
+  RowBox[{"a", ",", "ground", ",", "Hinge", ",", " ", 
+   RowBox[{"Axis", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "1"}], "}"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7038205147927322`*^9, 3.703820569687117*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", "1", "}"}], ",", 
+   RowBox[{"{", "1", "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.703820560267905*^9, 3.7038205748016*^9}}]
+}, Open  ]],
+
+Cell["Correct Behavior ^", "Text",
+ CellChangeTimes->{{3.7038207216330338`*^9, 3.7038207322749643`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AddFrame", "[", 
+  RowBox[{"b", ",", "ground", ",", "Hinge", ",", 
+   RowBox[{"Axis", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "1"}], "}"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.703820601111418*^9, 3.703820622644504*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", "2", "}"}]], "Output",
+ CellChangeTimes->{3.703820623954232*^9}]
+}, Open  ]],
+
+Cell["I have no idea why this only has one variable?", "Text",
+ CellChangeTimes->{{3.7038207352219954`*^9, 3.703820750058537*^9}}]
+},
+WindowSize->{808, 755},
+WindowMargins->{{Automatic, -27}, {-132, Automatic}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 299, 7, 75, "Input"],
+Cell[CellGroupData[{
+Cell[882, 31, 279, 6, 32, "Input"],
+Cell[1164, 39, 185, 5, 32, "Output"]
+}, Open  ]],
+Cell[1364, 47, 104, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[1493, 52, 273, 6, 32, "Input"],
+Cell[1769, 60, 92, 2, 32, "Output"]
+}, Open  ]],
+Cell[1876, 65, 130, 1, 30, "Text"]
+}
+]
+*)
+
