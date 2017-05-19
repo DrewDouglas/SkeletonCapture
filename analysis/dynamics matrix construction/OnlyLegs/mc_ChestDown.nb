@@ -1,0 +1,802 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     32857,        794]
+NotebookOptionsPosition[     30637,        718]
+NotebookOutlinePosition[     30994,        734]
+CellTagsIndexPosition[     30951,        731]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"ClearAll", ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{3.703970131778808*^9}],
+
+Cell[BoxData[{
+ RowBox[{"Needs", "[", "\"\<DynamicsWorkbench`\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"NewModel", "[", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MoIECylinder", "[", 
+   RowBox[{"m_", ",", "a_", ",", "b_", ",", "l_", ",", "Coords_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"1", "/", "4"}], "*", "m", "*", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"a", "^", "2"}], "+", 
+        RowBox[{"b", "^", "2"}]}], ")"}]}], ")"}], "*", 
+    RowBox[{
+     RowBox[{"Coords", "[", "2", "]"}], "**", 
+     RowBox[{"Coords", "[", "2", "]"}]}]}], "+", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"1", "/", "4"}], "*", "m", "*", 
+       RowBox[{"b", "^", "2"}]}], "+", 
+      RowBox[{
+       RowBox[{"1", "/", "3"}], "*", "m", "*", 
+       RowBox[{"l", "^", "2"}]}]}], ")"}], "*", 
+    RowBox[{
+     RowBox[{"Coords", "[", "1", "]"}], "**", 
+     RowBox[{"Coords", "[", "1", "]"}]}]}], "+", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"1", "/", "4"}], "*", "m", "*", 
+       RowBox[{"a", "^", "2"}]}], "+", 
+      RowBox[{
+       RowBox[{"1", "/", "3"}], "*", "m", "*", 
+       RowBox[{"l", "^", "2"}]}]}], ")"}], "*", 
+    RowBox[{
+     RowBox[{"Coords", "[", "3", "]"}], "**", 
+     RowBox[{"Coords", "[", "3", "]"}]}]}]}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.70101254104242*^9, 3.701012545518149*^9}, {
+  3.703823018333703*^9, 3.703823037624872*^9}, {3.70385609751492*^9, 
+  3.70385609964192*^9}, {3.703856203091848*^9, 3.703856205195936*^9}, {
+  3.7039700780499077`*^9, 3.703970079184227*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.703970092925116*^9, 3.703970095991255*^9}}],
+
+Cell[TextData[{
+ "Shortcut for the moments of inertia of an Elliptical Cylinder, where the Z \
+axis (3) length is L, the Y axis (2) width is 2a, and the X axis (1) depth is \
+2b, and total mass is m. ",
+ StyleBox["NOTE:",
+  FontWeight->"Bold"],
+ " Our {X,Y,Z} are mapped to the Diagram\[CloseCurlyQuote]s {Y,Z,X] \
+respectively."
+}], "Text",
+ CellChangeTimes->{{3.70118213688454*^9, 3.701182180625668*^9}, {
+  3.701185254626802*^9, 3.7011852673147984`*^9}, {3.7011853077078733`*^9, 
+  3.701185407395033*^9}, {3.701867820910018*^9, 3.7018678464443693`*^9}, {
+  3.7018678870589113`*^9, 3.701867958490888*^9}, {3.701868039551652*^9, 
+  3.7018680441992493`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[RasterBox[CompressedData["
+1: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
+B4nbczU=
+    "], {{0, 311}, {291, 0}}, {0, 255},
+    ColorFunction->RGBColor],
+   BoxForm`ImageTag["Byte", ColorSpace -> "RGB", Interleaving -> True],
+   Selectable->False],
+  DefaultBaseStyle->"ImageGraphics",
+  ImageSizeRaw->{291, 311},
+  PlotRange->{{0, 291}, {0, 311}}]], "Input",
+ CellChangeTimes->{3.703856179894846*^9}],
+
+Cell[CellGroupData[{
+
+Cell["Defining A Human Body Model:", "Title",
+ CellChangeTimes->{{3.701011047411438*^9, 3.701011098626635*^9}, {
+  3.701011162609578*^9, 3.701011167757042*^9}, {3.701011224874578*^9, 
+  3.701011235873584*^9}, {3.701011439363029*^9, 3.7010114977489777`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Create Gravity", "Subchapter"]], "Chapter",
+ CellChangeTimes->{{3.701872240377158*^9, 3.701872253461996*^9}}],
+
+Cell["\<\
+Allowing user to specify units for g (9.81 m/s^2 or whatever it is for ft/s^2)\
+\>", "Text",
+ CellChangeTimes->{{3.701872300789524*^9, 3.701872362170167*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"grav", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"-", "1"}], "*", "g", "*", 
+    RowBox[{"ground", "[", "2", "]"}]}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.701872254859112*^9, 3.701872296330596*^9}, {
+  3.701872326699441*^9, 3.701872329723077*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Torso", "Chapter",
+ CellChangeTimes->{{3.703826017932025*^9, 3.703826021225765*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Chest", "Subchapter",
+ CellChangeTimes->{{3.703823751866809*^9, 3.7038237543555603`*^9}}],
+
+Cell["\<\
+Next  we need to build the BChest segment following a Ball-And-Socket joint \
+from the FSpineMid frame.\
+\>", "Text",
+ CellChangeTimes->{{3.7011789977063313`*^9, 3.7011790603213873`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BChest", ",", "ground", ",", "SixDOF", ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "BChestHeight"}], "/", "2"}], "*", 
+     RowBox[{"BChest", "[", "2", "]"}]}]}], ",", "\[IndentingNewLine]", 
+   RowBox[{"Mass", "\[Rule]", "BChestMass"}], ",", 
+   RowBox[{"Inertia", "\[Rule]", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BChestMass", ",", 
+      RowBox[{"BChestWidth", "/", "2"}], ",", 
+      RowBox[{"BChestDepth", "/", "2"}], ",", "BChestHeight", ",", "BChest"}],
+      "]"}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BChest", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BChest", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.7011790630856943`*^9, 3.701179087233705*^9}, {
+   3.70117918586905*^9, 3.701179287320593*^9}, {3.701179458123672*^9, 
+   3.7011795775780773`*^9}, {3.7011797219894323`*^9, 3.701179729235618*^9}, {
+   3.70118573572775*^9, 3.701185763621264*^9}, {3.701187140825856*^9, 
+   3.7011871416971407`*^9}, {3.7018713938866177`*^9, 3.701871401271628*^9}, 
+   3.701872563505783*^9, {3.703823386322825*^9, 3.703823396911894*^9}, {
+   3.70382342789644*^9, 3.703823455425209*^9}, {3.703823541479566*^9, 
+   3.703823611737108*^9}, 3.70382364837103*^9, 3.703823711430847*^9, {
+   3.703823823206794*^9, 3.703823836169818*^9}, {3.7038250847130938`*^9, 
+   3.703825100783943*^9}, {3.703856302258151*^9, 3.703856304721402*^9}, {
+   3.703871680700906*^9, 3.703871706964444*^9}, {3.7038717870909443`*^9, 
+   3.703871812535966*^9}, {3.703871877127613*^9, 3.703871879478755*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"offChestToShoulderL", "=", 
+   RowBox[{
+    RowBox[{"BChestHeight", "*", 
+     RowBox[{"1", "/", "2"}], "*", 
+     RowBox[{"BChest", "[", "2", "]"}]}], "+", 
+    RowBox[{"Dot", "[", 
+     RowBox[{"OffShoulderLeftFromSpineShoulder", ",", "BChest"}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"offChestToShoulderR", "=", 
+   RowBox[{
+    RowBox[{"BChestHeight", "*", 
+     RowBox[{"1", "/", "2"}], "*", 
+     RowBox[{"BChest", "[", "2", "]"}]}], "+", 
+    RowBox[{"Dot", "[", 
+     RowBox[{"OffShoulderRightFromSpineShoulder", ",", "BChest"}], "]"}]}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.703823459364182*^9, 3.703823478110409*^9}, {
+   3.7038235921782627`*^9, 3.703823616539055*^9}, {3.703823650984844*^9, 
+   3.7038237329567842`*^9}, {3.703824161418385*^9, 3.703824165089026*^9}, 
+   3.7038250794408197`*^9, {3.703825109903393*^9, 3.703825122388588*^9}, {
+   3.703871840230218*^9, 3.7038718410535192`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Abs:", "Subchapter",
+ CellChangeTimes->{{3.701011805764783*^9, 3.701011810691662*^9}, 
+   3.701011844376687*^9, {3.701871292394302*^9, 3.7018712937622643`*^9}, {
+   3.703826034947112*^9, 3.703826036155785*^9}, {3.703871638349491*^9, 
+   3.703871638820315*^9}}],
+
+Cell["\<\
+We have the BAbdomen segment coming up from the FSpineBase Frame which is \
+measured with free translation/rotation relative to Ground.\
+\>", "Text",
+ CellChangeTimes->{{3.7010117538158083`*^9, 3.701011788467412*^9}, {
+  3.701011850496481*^9, 3.7010118729126577`*^9}, {3.7011776213429537`*^9, 
+  3.7011776437734547`*^9}, {3.701872140183351*^9, 3.701872153037436*^9}, {
+  3.701872199656126*^9, 3.70187223232708*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BAbdomen", ",", "BChest", ",", "Ball", ",", " ", 
+   RowBox[{"Mass", "\[Rule]", "BAbdomenMass"}], ",", 
+   RowBox[{"InbToJnt", "->", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "BChestHeight"}], "/", "2"}], "*", 
+     RowBox[{"BChest", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Inertia", "\[Rule]", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BAbdomenMass", ",", 
+      RowBox[{"BAbdomenWidth", "/", "2"}], ",", 
+      RowBox[{"BAbdomenDepth", "/", "2"}], ",", "BAbdomenHeight", ",", 
+      "BAbdomen"}], "]"}]}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"1", "/", "2"}], "*", "BAbdomenHeight", "*", 
+     RowBox[{"BAbdomen", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Axis1", "\[Rule]", 
+    RowBox[{"-", 
+     RowBox[{"BChest", "[", "1", "]"}]}]}], ",", 
+   RowBox[{"Axis2", "\[Rule]", 
+    RowBox[{"-", 
+     RowBox[{"BChest", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Axis3", "\[Rule]", 
+    RowBox[{"-", 
+     RowBox[{"BChest", "[", "3", "]"}]}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BAbdomen", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BAbdomen", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.701179660648962*^9, 3.701179677596758*^9}, {
+   3.701187166285693*^9, 3.701187172615262*^9}, {3.701871360959629*^9, 
+   3.701871388317173*^9}, {3.701872125487122*^9, 3.701872127604082*^9}, 
+   3.701872565657198*^9, {3.703823061455868*^9, 3.7038231175017977`*^9}, 
+   3.703823230929612*^9, {3.703823343744872*^9, 3.7038233578008127`*^9}, {
+   3.703824215122094*^9, 3.703824229031419*^9}, 3.703825137752138*^9, {
+   3.703856292808041*^9, 3.703856296063506*^9}, {3.703871652918818*^9, 
+   3.703871674753907*^9}, {3.703871709955186*^9, 3.703871719698112*^9}, 
+   3.703871910846726*^9, {3.7038719657034817`*^9, 3.703871997318692*^9}, {
+   3.703872079782072*^9, 3.703872085973782*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"offAbToHipL", "=", 
+   RowBox[{
+    RowBox[{"Dot", "[", 
+     RowBox[{"OffHipLeftFromSpineMid", ",", "BAbdomen"}], "]"}], "+", 
+    RowBox[{
+     RowBox[{"1", "/", "2"}], "*", "BAbdomenHeight", "*", 
+     RowBox[{"BAbdomen", "[", "2", "]"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"offAbToHipR", "=", 
+   RowBox[{
+    RowBox[{"Dot", "[", 
+     RowBox[{"OffHipRightFromSpineMid", ",", "BAbdomen"}], "]"}], "+", 
+    RowBox[{
+     RowBox[{"1", "/", "2"}], "*", "BAbdomenHeight", "*", 
+     RowBox[{"BAbdomen", "[", "2", "]"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.703823191907784*^9, 3.703823365558187*^9}, {
+   3.70382348642603*^9, 3.7038235275814953`*^9}, {3.703823894420904*^9, 
+   3.703823894530682*^9}, {3.703824167858424*^9, 3.703824217144911*^9}, 
+   3.703825094280302*^9, {3.7038251292362347`*^9, 3.7038251402921886`*^9}, {
+   3.7038720205895967`*^9, 3.703872031653101*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Legs", "Chapter",
+ CellChangeTimes->{{3.703826281104659*^9, 3.703826282353991*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Thighs", "Subchapter",
+ CellChangeTimes->{{3.701871287946892*^9, 3.7018713001380377`*^9}, {
+  3.703824549854821*^9, 3.703824550661216*^9}}],
+
+Cell["\<\
+Now down the two Legs- Note the FHipLeftTh points *down* the thigh, not up it.\
+\>", "Text",
+ CellChangeTimes->{{3.701180868305497*^9, 3.7011809200915318`*^9}, {
+  3.701186064688808*^9, 3.7011860712169724`*^9}, {3.701187311312017*^9, 
+  3.701187313023888*^9}, {3.7038721471651983`*^9, 3.703872148043447*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BThighLeft", ",", "BAbdomen", ",", "Ball", ",", 
+   RowBox[{"InbToJnt", "\[Rule]", "offAbToHipL"}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "BThighLeftHeight"}], "/", "2"}], "*", 
+     RowBox[{"BThighLeft", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Mass", "\[Rule]", "BThighLeftMass"}], ",", 
+   RowBox[{"Inertia", "->", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BThighLeftMass", ",", 
+      RowBox[{"BThighLeftWidth", "/", "2"}], ",", 
+      RowBox[{"BThighLeftDepth", "/", "2"}], ",", "BThighLeftHeight", ",", 
+      "BThighLeft"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BThighLeft", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BChest", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.701180604450408*^9, 3.70118067755554*^9}, 
+   3.701180841332987*^9, {3.701180922715619*^9, 3.701181009612411*^9}, {
+   3.701181099333877*^9, 3.701181106663044*^9}, {3.701185987794578*^9, 
+   3.70118616294282*^9}, {3.7011861966576033`*^9, 3.701186217775762*^9}, {
+   3.7011876685015373`*^9, 3.701187709644783*^9}, {3.701866396458609*^9, 
+   3.7018664019034853`*^9}, {3.701866568126897*^9, 3.701866572936038*^9}, {
+   3.701870362670889*^9, 3.701870372573792*^9}, {3.7018714514705048`*^9, 
+   3.701871457285345*^9}, 3.701872557202119*^9, {3.703824407980115*^9, 
+   3.703824532966372*^9}, {3.703824701122098*^9, 3.703824701969431*^9}, 
+   3.703825042375944*^9, 3.703825425014147*^9, {3.70385637366394*^9, 
+   3.703856375967074*^9}, {3.703872122437621*^9, 3.703872123709189*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BThighRight", ",", "BAbdomen", ",", "Ball", ",", 
+   RowBox[{"InbToJnt", "\[Rule]", "offAbToHipR"}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "BThighRightHeight"}], "/", "2"}], "*", 
+     RowBox[{"BThighRight", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Mass", "\[Rule]", "BThighRightMass"}], ",", 
+   RowBox[{"Inertia", "->", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BThighRightMass", ",", 
+      RowBox[{"BThighRightWidth", "/", "2"}], ",", 
+      RowBox[{"BThighRightDepth", "/", "2"}], ",", "BThighRightHeight", ",", 
+      "BThighRight"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BThighRight", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BThighRight", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.701187229287917*^9, 3.7011873044485188`*^9}, {
+   3.7011877199503107`*^9, 3.701187736724965*^9}, {3.701866594166071*^9, 
+   3.701866599589779*^9}, {3.701870210627782*^9, 3.701870271936543*^9}, {
+   3.701870351622959*^9, 3.7018703517909403`*^9}, {3.701871460573998*^9, 
+   3.701871461230734*^9}, {3.701871491454001*^9, 3.701871502217795*^9}, 
+   3.701872554546321*^9, {3.7038246061975193`*^9, 3.703824693185769*^9}, 
+   3.703825021840425*^9, 3.7038254289491453`*^9, {3.703856381351573*^9, 
+   3.703856384238385*^9}, 3.7038721303816557`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Shins", "Subchapter",
+ CellChangeTimes->{{3.703824959704587*^9, 3.7038249610397*^9}}],
+
+Cell["\<\
+Down the Shins, using a ball joint for the knees (though a hinge joint would \
+also make sense).\
+\>", "Text",
+ CellChangeTimes->{{3.701186221731923*^9, 3.7011862752955027`*^9}, 
+   3.7011874119377117`*^9}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BShinLeft", ",", "BThighLeft", ",", "Hinge", ",", 
+   RowBox[{"InbToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"BThighLeftHeight", "/", "2"}], "*", 
+     RowBox[{"BThighLeft", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Axis", "\[Rule]", 
+    RowBox[{"BThighLeft", "[", "1", "]"}]}], ",", "\[IndentingNewLine]", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "BShinLeftHeight"}], "/", "2"}], "*", 
+     RowBox[{"BShinLeft", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Mass", "\[Rule]", "BShinLeftMass"}], ",", 
+   RowBox[{"Inertia", "->", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BShinLeftMass", ",", 
+      RowBox[{"BShinLeftWidth", "/", "2"}], ",", 
+      RowBox[{"BShinLeftDepth", "/", "2"}], ",", "BShinLeftHeight", ",", 
+      "BShinLeft"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BShinLeft", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BShinLeft", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.701186229859614*^9, 3.701186435639773*^9}, {
+   3.701186652998999*^9, 3.7011866531742687`*^9}, {3.701186946188476*^9, 
+   3.7011869660198717`*^9}, 3.7011871157455482`*^9, {3.701866614869355*^9, 
+   3.701866626764642*^9}, {3.7018715098918552`*^9, 3.701871518578545*^9}, 
+   3.701872804052155*^9, {3.7038249653626757`*^9, 3.703825011589188*^9}, {
+   3.703825174502076*^9, 3.7038252346507273`*^9}, 3.703825431261684*^9, 
+   3.703825467700664*^9, {3.7038256392390003`*^9, 3.70382563985524*^9}, {
+   3.7038257790926523`*^9, 3.7038257795493927`*^9}, {3.70385596021179*^9, 
+   3.703855966961772*^9}, {3.703856044639944*^9, 3.703856050262735*^9}, {
+   3.7038561565646257`*^9, 3.703856156764805*^9}, {3.703856392094754*^9, 
+   3.703856394662155*^9}, 3.7038624596641617`*^9}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BShinRight", ",", "BThighRight", ",", "Hinge", ",", 
+   RowBox[{"InbToJnt", "->", 
+    RowBox[{
+     RowBox[{"BThighRightHeight", "/", "2"}], "*", 
+     RowBox[{"BThighRight", "[", "2", "]"}]}]}], ",", " ", 
+   RowBox[{"Axis", "\[Rule]", 
+    RowBox[{"BThighRight", "[", "1", "]"}]}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"-", "BShinRightHeight"}], "*", 
+     RowBox[{"1", "/", "2"}], "*", 
+     RowBox[{"BShinRight", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Mass", "\[Rule]", "BShinRightMass"}], ",", 
+   RowBox[{"Inertia", "->", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BShinRightMass", ",", 
+      RowBox[{"BShinRightWidth", "/", "2"}], ",", 
+      RowBox[{"BShinRightDepth", "/", "2"}], ",", "BShinRightHeight", ",", 
+      "BShinRight"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BShinRight", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BShinRight", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.7011873369053583`*^9, 3.701187406618039*^9}, {
+   3.7018666425161533`*^9, 3.701866646299836*^9}, {3.701871521739428*^9, 
+   3.701871530432168*^9}, 3.701872816299608*^9, {3.70382543445398*^9, 
+   3.703825515898732*^9}, {3.70382557523377*^9, 3.703825585081559*^9}, 
+   3.703825735374592*^9, {3.7038257824683123`*^9, 3.703825782756836*^9}, {
+   3.7038524809967527`*^9, 3.703852481907077*^9}, {3.70385639923015*^9, 
+   3.7038564206348143`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Feet", "Subchapter",
+ CellChangeTimes->{{3.7038255250504427`*^9, 3.703825525665799*^9}}],
+
+Cell["And now the foots:", "Text",
+ CellChangeTimes->{{3.701186438107931*^9, 3.701186444639188*^9}, {
+   3.701187202320369*^9, 3.701187205399456*^9}, 3.7011874171618643`*^9}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BFootLeft", ",", "BShinLeft", ",", "Ball", ",", 
+   RowBox[{"Axis1", "\[Rule]", 
+    RowBox[{"BShinLeft", "[", "1", "]"}]}], ",", 
+   RowBox[{"Axis2", "\[Rule]", 
+    RowBox[{"BShinLeft", "[", "3", "]"}]}], ",", 
+   RowBox[{"Axis3", "\[Rule]", 
+    RowBox[{"BShinLeft", "[", "2", "]"}]}], ",", 
+   RowBox[{"InbToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"BShinLeftHeight", "/", "2"}], "*", 
+     RowBox[{"BShinLeft", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", "BFootLeftLength"}], "/", "2"}], "*", 
+     RowBox[{"BFootLeft", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Mass", "\[Rule]", "BFootLeftMass"}], ",", 
+   RowBox[{"Inertia", "\[Rule]", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BFootLeftMass", ",", 
+      RowBox[{"BFootLeftWidth", "/", "2"}], ",", 
+      RowBox[{"BFootLeftThickness", "/", "2"}], ",", "BFootLeftLength", ",", 
+      "BFootLeft"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BFootLeft", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BFootLeft", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.701186446027264*^9, 3.7011865033962603`*^9}, {
+   3.7011866398790503`*^9, 3.701186933232237*^9}, {3.701187061575824*^9, 
+   3.7011870758694477`*^9}, 3.7011871194482603`*^9, {3.70186666934975*^9, 
+   3.70186667377211*^9}, {3.7018703911519938`*^9, 3.701870433537245*^9}, 
+   3.701870465465124*^9, {3.7018715346685534`*^9, 3.7018715448422956`*^9}, 
+   3.7018725522901783`*^9, {3.7038256673877773`*^9, 3.703825844425881*^9}, 
+   3.703852501314608*^9, {3.703856451257719*^9, 3.703856462802636*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"AddBody", "[", 
+  RowBox[{"BFootRight", ",", "BShinRight", ",", "Ball", ",", 
+   RowBox[{"Axis1", "\[Rule]", 
+    RowBox[{"BShinRight", "[", "1", "]"}]}], ",", 
+   RowBox[{"Axis2", "\[Rule]", 
+    RowBox[{"BShinRight", "[", "3", "]"}]}], ",", 
+   RowBox[{"Axis3", "\[Rule]", 
+    RowBox[{"BShinRight", "[", "2", "]"}]}], ",", 
+   RowBox[{"InbToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"BShinRightHeight", "/", "2"}], "*", 
+     RowBox[{"BShinRight", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"BodyToJnt", "\[Rule]", 
+    RowBox[{
+     RowBox[{"-", "BFootRightLength"}], "*", 
+     RowBox[{"1", "/", "2"}], "*", 
+     RowBox[{"BFootRight", "[", "2", "]"}]}]}], ",", 
+   RowBox[{"Mass", "\[Rule]", "BFootRightMass"}], ",", 
+   RowBox[{"Inertia", "\[Rule]", 
+    RowBox[{"MoIECylinder", "[", 
+     RowBox[{"BFootRightMass", ",", 
+      RowBox[{"BFootRightWidth", "/", "2"}], ",", 
+      RowBox[{"BFootRightThickness", "/", "2"}], ",", "BFootRightLength", ",",
+       "BFootRight"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"AppFrc", "[", 
+  RowBox[{"BFootRight", ",", 
+   RowBox[{
+    RowBox[{"Mass", "[", "BFootRight", "]"}], " ", "grav"}], ",", "0"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.7011874242972918`*^9, 3.701187477914603*^9}, {
+   3.701866681027997*^9, 3.701866684499527*^9}, {3.701870476824918*^9, 
+   3.7018704894624977`*^9}, {3.701871547868277*^9, 3.701871556560878*^9}, 
+   3.701872550362255*^9, {3.703825763959527*^9, 3.703825769428849*^9}, {
+   3.703825861993894*^9, 3.703825950454994*^9}, {3.70385649457198*^9, 
+   3.70385649733871*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"PosCOM", "[", "BFootLeft", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"PosCOM", "[", "BFootRight", "]"}]}], "Input",
+ CellChangeTimes->{{3.7038259522384*^9, 3.703825966807188*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Acquire EOM", "Title",
+ CellChangeTimes->{{3.701871836082923*^9, 3.701871838362789*^9}}],
+
+Cell["At the end: need to use CollectE on EOM of model", "Text",
+ CellChangeTimes->{{3.701174588794088*^9, 3.701174605755694*^9}}],
+
+Cell[BoxData[
+ RowBox[{"eom", " ", "=", 
+  RowBox[{"EOM", "[", "]"}]}]], "Input",
+ CellChangeTimes->{{3.7018738071780663`*^9, 3.70187385996705*^9}, {
+  3.703892989408636*^9, 3.703892991287322*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\</EOM.txt\>\""}], ",",
+     "eom"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.7039975900055437`*^9, 3.703997601699835*^9}}],
+
+Cell[BoxData[
+ RowBox[{"mm", "=", 
+  RowBox[{"MassMatrix", "[", "eom", "]"}]}]], "Input",
+ CellChangeTimes->{{3.7038930291263323`*^9, 3.703893051437196*^9}}],
+
+Cell["", "Text"],
+
+Cell[BoxData[
+ RowBox[{"bd", "=", "Bodies"}]], "Input",
+ CellChangeTimes->{{3.7038930531816263`*^9, 3.703893059548994*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\</MassMatrixExpression.txt\>\""}], ",", 
+    RowBox[{"mm", "[", 
+     RowBox[{"[", "1", "]"}], "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\</LHSExpression.txt\>\""}], ",", 
+    RowBox[{"mm", "[", 
+     RowBox[{"[", "2", "]"}], "]"}]}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.703968595479424*^9, 3.703968613345316*^9}, {
+  3.703968666284383*^9, 3.7039686668736353`*^9}, {3.7039687391613083`*^9, 
+  3.703968867874202*^9}, {3.703968903734426*^9, 3.703968974583136*^9}, {
+  3.70396955703627*^9, 3.7039695707136707`*^9}, {3.7039696212963257`*^9, 
+  3.703969693125325*^9}, {3.703969725709752*^9, 3.70396972590809*^9}, {
+  3.7039697983850718`*^9, 3.703969830280217*^9}}]
+}, Open  ]]
+},
+WindowSize->{955, 855},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 120, 3, 48, "Input",
+ InitializationCell->True],
+Cell[681, 25, 1663, 47, 133, "Input",
+ InitializationCell->True],
+Cell[2347, 74, 92, 1, 32, "Input"],
+Cell[2442, 77, 658, 13, 49, "Text"],
+Cell[3103, 92, 6736, 115, 326, "Input"],
+Cell[CellGroupData[{
+Cell[9864, 211, 257, 3, 92, "Title"],
+Cell[CellGroupData[{
+Cell[10146, 218, 133, 1, 58, "Chapter"],
+Cell[10282, 221, 168, 3, 30, "Text"],
+Cell[10453, 226, 311, 8, 48, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10801, 239, 90, 1, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[10916, 244, 95, 1, 63, "Subchapter"],
+Cell[11014, 247, 197, 4, 30, "Text"],
+Cell[11214, 253, 1643, 31, 75, "Input"],
+Cell[12860, 286, 974, 23, 54, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13871, 314, 266, 4, 63, "Subchapter"],
+Cell[14140, 320, 425, 7, 49, "Text"],
+Cell[14568, 329, 1922, 42, 96, "Input"],
+Cell[16493, 373, 972, 23, 75, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17514, 402, 89, 1, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[17628, 407, 145, 2, 63, "Subchapter"],
+Cell[17776, 411, 318, 5, 30, "Text"],
+Cell[18097, 418, 1634, 31, 117, "Input"],
+Cell[19734, 451, 1414, 28, 117, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21185, 484, 91, 1, 63, "Subchapter"],
+Cell[21279, 487, 216, 5, 30, "Text"],
+Cell[21498, 494, 1822, 36, 96, "Input"],
+Cell[23323, 532, 1498, 32, 117, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24858, 569, 94, 1, 63, "Subchapter"],
+Cell[24955, 572, 174, 2, 30, "Text"],
+Cell[25132, 576, 1696, 36, 138, "Input"],
+Cell[26831, 614, 1592, 35, 138, "Input"],
+Cell[28426, 651, 202, 3, 54, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[28689, 661, 94, 1, 92, "Title"],
+Cell[28786, 664, 130, 1, 30, "Text"],
+Cell[28919, 667, 197, 4, 32, "Input"],
+Cell[29119, 673, 259, 7, 32, "Input"],
+Cell[29381, 682, 157, 3, 32, "Input"],
+Cell[29541, 687, 16, 0, 30, "Text"],
+Cell[29560, 689, 123, 2, 32, "Input"],
+Cell[29686, 693, 935, 22, 54, "Input"]
+}, Open  ]]
+}
+]
+*)
+
