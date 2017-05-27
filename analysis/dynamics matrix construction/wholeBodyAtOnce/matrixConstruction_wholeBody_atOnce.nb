@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     57196,       1385]
-NotebookOptionsPosition[     53385,       1260]
-NotebookOutlinePosition[     53742,       1276]
-CellTagsIndexPosition[     53699,       1273]
+NotebookDataLength[     49469,       1197]
+NotebookOptionsPosition[     46141,       1086]
+NotebookOutlinePosition[     46498,       1102]
+CellTagsIndexPosition[     46455,       1099]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1001,180 +1001,6 @@ Cell[BoxData[{
    3.703857465010284*^9, 3.703857558373467*^9}, {3.703857887002533*^9, 
    3.7038579097562313`*^9}, {3.703858402200132*^9, 3.703858402575501*^9}, 
    3.7049021953046093`*^9}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell["Thumbs", "Subchapter",
- CellChangeTimes->{{3.703857568427394*^9, 3.703857570535666*^9}}],
-
-Cell["Now thumbs", "Text",
- CellChangeTimes->{{3.701187551566908*^9, 3.7011875539274187`*^9}}],
-
-Cell[BoxData[{
- RowBox[{"AddBody", "[", 
-  RowBox[{"BThumbLeft", ",", "BHandLeft", ",", "Gimbal", ",", 
-   RowBox[{"Axis1", "\[Rule]", 
-    RowBox[{"BHandLeft", "[", "2", "]"}]}], ",", 
-   RowBox[{"Axis2", "\[Rule]", 
-    RowBox[{"BHandLeft", "[", "1", "]"}]}], ",", 
-   RowBox[{"Axis3", "\[Rule]", 
-    RowBox[{"BHandLeft", "[", "3", "]"}]}], ",", 
-   RowBox[{"InbToJnt", "->", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"BHandLeftWidth", "/", "2"}], "*", 
-      RowBox[{"BHandLeft", "[", "1", "]"}]}], "-", 
-     RowBox[{
-      RowBox[{"BHandLeftLength", "/", "2"}], "*", 
-      RowBox[{"BHandLeft", "[", "2", "]"}]}]}]}], ",", "\[IndentingNewLine]", 
-   
-   RowBox[{"BodyToJnt", "\[Rule]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"-", "BThumbLeftLength"}], "/", "2"}], "*", 
-     RowBox[{"BThumbLeft", "[", "2", "]"}]}]}], ",", 
-   RowBox[{"Mass", "\[Rule]", "BThumbLeftMass"}], ",", 
-   RowBox[{"Inertia", "->", 
-    RowBox[{"MoIECylinder", "[", 
-     RowBox[{"BThumbLeftMass", ",", 
-      RowBox[{"BThumbLeftWidth", "/", "2"}], ",", 
-      RowBox[{"BThumbLeftDepth", "/", "2"}], ",", "BThumbLeftLength", ",", 
-      "BThumbLeft"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
- RowBox[{"AppFrc", "[", 
-  RowBox[{"BThumbLeft", ",", 
-   RowBox[{
-    RowBox[{"Mass", "[", "BThumbLeft", "]"}], " ", "grav"}], ",", "0"}], 
-  "]"}]}], "Input",
- CellChangeTimes->{{3.7018684209926357`*^9, 3.701868435559918*^9}, {
-   3.701868612394335*^9, 3.701868613714129*^9}, {3.701868675538571*^9, 
-   3.701868693961916*^9}, {3.701868762088492*^9, 3.7018688048336573`*^9}, {
-   3.701868867741994*^9, 3.7018688780137377`*^9}, {3.701869496537677*^9, 
-   3.701869497073542*^9}, {3.701869529367674*^9, 3.701869592357383*^9}, {
-   3.701871638520492*^9, 3.7018716813965816`*^9}, 3.703857576972353*^9, {
-   3.7038576774697027`*^9, 3.7038578039239798`*^9}, 3.703857914950341*^9, {
-   3.703858060639152*^9, 3.7038580628868103`*^9}, 3.7038709756715508`*^9, {
-   3.703893700992701*^9, 3.7038937135038643`*^9}, 3.7049021953119583`*^9}],
-
-Cell[BoxData[{
- RowBox[{"AddBody", "[", 
-  RowBox[{"BThumbRight", ",", "BHandRight", ",", "Gimbal", ",", 
-   RowBox[{"Axis1", "\[Rule]", 
-    RowBox[{"BHandRight", "[", "2", "]"}]}], ",", 
-   RowBox[{"Axis2", "\[Rule]", 
-    RowBox[{"BHandRight", "[", "1", "]"}]}], ",", 
-   RowBox[{"Axis3", "\[Rule]", 
-    RowBox[{"BHandRight", "[", "3", "]"}]}], ",", 
-   RowBox[{"InbToJnt", "->", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"BHandRightWidth", "/", "2"}], "*", 
-      RowBox[{"BHandRight", "[", "1", "]"}]}], "-", 
-     RowBox[{
-      RowBox[{"BHandRightLength", "/", "2"}], "*", 
-      RowBox[{"BHandRight", "[", "2", "]"}]}]}]}], ",", 
-   RowBox[{"BodyToJnt", "\[Rule]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"-", "BThumbRightLength"}], "/", "2"}], "*", 
-     RowBox[{"BThumbRight", "[", "2", "]"}]}]}], ",", 
-   RowBox[{"Mass", "\[Rule]", "BThumbRightMass"}], ",", 
-   RowBox[{"Inertia", "->", 
-    RowBox[{"MoIECylinder", "[", 
-     RowBox[{"BThumbRightMass", ",", 
-      RowBox[{"BThumbRightWidth", "/", "2"}], ",", 
-      RowBox[{"BThumbRightDepth", "/", "2"}], ",", "BThumbRightLength", ",", 
-      "BHandRight"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
- RowBox[{"AppFrc", "[", 
-  RowBox[{"BThumbRight", ",", 
-   RowBox[{
-    RowBox[{"Mass", "[", "BThumbRight", "]"}], " ", "grav"}], ",", "0"}], 
-  "]"}]}], "Input",
- CellChangeTimes->{{3.701869117538163*^9, 3.701869200129407*^9}, 
-   3.70186950704858*^9, {3.70186960625524*^9, 3.701869637523849*^9}, {
-   3.701869755403201*^9, 3.7018697907451963`*^9}, {3.7018716834963627`*^9, 
-   3.701871695426902*^9}, 3.7018725356667747`*^9, {3.703857812999243*^9, 
-   3.703857852059832*^9}, {3.70385790210913*^9, 3.703857996823785*^9}, {
-   3.70385804513669*^9, 3.70385806795864*^9}, {3.7038937192338963`*^9, 
-   3.7038937312707853`*^9}, {3.703893784919194*^9, 3.703893785709401*^9}, 
-   3.704902195321211*^9}],
-
-Cell[BoxData[{
- RowBox[{"PosCOM", "[", "BThumbLeft", "]"}], "\[IndentingNewLine]", 
- RowBox[{"PosCOM", "[", "BThumbRight", "]"}]}], "Input",
- CellChangeTimes->{{3.7038584693217382`*^9, 3.703858482462376*^9}}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell["Fingers", "Subchapter",
- CellChangeTimes->{{3.703857925816327*^9, 3.703857928370908*^9}}],
-
-Cell["And Finally the HandTips", "Text",
- CellChangeTimes->{{3.7018717068175983`*^9, 3.7018717160825872`*^9}}],
-
-Cell[BoxData[{
- RowBox[{"AddBody", "[", 
-  RowBox[{"BFingersLeft", ",", "BHandLeft", ",", "Gimbal", ",", 
-   RowBox[{"InbToJnt", "\[Rule]", 
-    RowBox[{
-     RowBox[{"BHandLeftLength", "/", "2"}], "*", 
-     RowBox[{"BHandLeft", "[", "2", "]"}]}]}], ",", 
-   RowBox[{"BodyToJnt", "\[Rule]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"-", "BFingersLeftLength"}], "/", "2"}], "*", 
-     RowBox[{"BHandLeft", "[", "2", "]"}]}]}], ",", 
-   RowBox[{"Mass", "\[Rule]", "BFingersLeftMass"}], ",", 
-   RowBox[{"Inertia", "->", 
-    RowBox[{"MoIECylinder", "[", 
-     RowBox[{"BFingersLeftMass", ",", 
-      RowBox[{"BFingersLeftWidth", "/", "2"}], ",", 
-      RowBox[{"BFingersLeftDepth", "/", "2"}], ",", "BFingersLeftLength", ",",
-       "BFingersLeft"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
- RowBox[{"AppFrc", "[", 
-  RowBox[{"BFingersLeft", ",", 
-   RowBox[{
-    RowBox[{"Mass", "[", "BFingersLeft", "]"}], " ", "grav"}], ",", "0"}], 
-  "]"}]}], "Input",
- CellChangeTimes->{{3.701869834663396*^9, 3.701869909195475*^9}, {
-   3.701869987196954*^9, 3.701869991212624*^9}, {3.701871802213937*^9, 
-   3.7018718118021927`*^9}, 3.701872533835211*^9, {3.703858075382099*^9, 
-   3.703858106493252*^9}, {3.703858294117251*^9, 3.703858332363467*^9}, 
-   3.704902195331068*^9}],
-
-Cell[BoxData[{
- RowBox[{"AddBody", "[", 
-  RowBox[{"BFingersRight", ",", "BHandRight", ",", "Gimbal", ",", 
-   RowBox[{"InbToJnt", "\[Rule]", 
-    RowBox[{
-     RowBox[{"BHandRightLength", "/", "2"}], "*", 
-     RowBox[{"BHandRight", "[", "2", "]"}]}]}], ",", 
-   RowBox[{"BodyToJnt", "\[Rule]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"-", "BFingersRightLength"}], "/", "2"}], "*", 
-     RowBox[{"BFingersRight", "[", "2", "]"}]}]}], ",", 
-   RowBox[{"Mass", "\[Rule]", "BFingersRightMass"}], ",", 
-   RowBox[{"Inertia", "->", 
-    RowBox[{"MoIECylinder", "[", 
-     RowBox[{"BFingersRightMass", ",", 
-      RowBox[{"BFingersRightWidth", "/", "2"}], ",", 
-      RowBox[{"BFingersRightDepth", "/", "2"}], ",", "BFingersRightLength", 
-      ",", "BFingersRight"}], "]"}]}]}], "]"}], "\[IndentingNewLine]", 
- RowBox[{"AppFrc", "[", 
-  RowBox[{"BFingersRight", ",", 
-   RowBox[{
-    RowBox[{"Mass", "[", "BFingersRight", "]"}], " ", "grav"}], ",", "0"}], 
-  "]"}]}], "Input",
- CellChangeTimes->{{3.7018700038455057`*^9, 3.701870055738927*^9}, {
-   3.701871814052843*^9, 3.7018718267707577`*^9}, 3.7018725161251173`*^9, {
-   3.7038583355779123`*^9, 3.703858394713829*^9}, 3.704902195340535*^9}],
-
-Cell[BoxData[{
- RowBox[{"PosCOM", "[", "BFingersLeft", "]"}], "\[IndentingNewLine]", 
- RowBox[{"PosCOM", "[", "BFingersRight", "]"}]}], "Input",
- CellChangeTimes->{{3.7038584298009663`*^9, 3.7038584600071783`*^9}}]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -1356,35 +1182,21 @@ Cell[40453, 933, 165, 2, 63, "Subchapter"],
 Cell[40621, 937, 94, 1, 30, "Text"],
 Cell[40718, 940, 1603, 32, 117, "Input"],
 Cell[42324, 974, 1273, 28, 117, "Input"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[43634, 1007, 94, 1, 63, "Subchapter"],
-Cell[43731, 1010, 94, 1, 30, "Text"],
-Cell[43828, 1013, 2006, 43, 138, "Input"],
-Cell[45837, 1058, 1864, 41, 138, "Input"],
-Cell[47704, 1101, 208, 3, 54, "Input"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[47949, 1109, 95, 1, 63, "Subchapter"],
-Cell[48047, 1112, 110, 1, 30, "Text"],
-Cell[48160, 1115, 1269, 28, 117, "Input"],
-Cell[49432, 1145, 1192, 26, 117, "Input"],
-Cell[50627, 1173, 214, 3, 54, "Input"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[50902, 1183, 94, 1, 92, "Title"],
-Cell[50999, 1186, 130, 1, 30, "Text"],
-Cell[51132, 1189, 239, 5, 32, "Input"],
-Cell[51374, 1196, 259, 7, 32, "Input"],
-Cell[51636, 1205, 157, 3, 32, "Input"],
-Cell[51796, 1210, 935, 22, 54, "Input"],
+Cell[43658, 1009, 94, 1, 92, "Title"],
+Cell[43755, 1012, 130, 1, 30, "Text"],
+Cell[43888, 1015, 239, 5, 32, "Input"],
+Cell[44130, 1022, 259, 7, 32, "Input"],
+Cell[44392, 1031, 157, 3, 32, "Input"],
+Cell[44552, 1036, 935, 22, 54, "Input"],
 Cell[CellGroupData[{
-Cell[52756, 1236, 97, 1, 64, "Section"],
-Cell[52856, 1239, 123, 2, 32, "Input"],
-Cell[52982, 1243, 193, 6, 32, "Input"],
-Cell[53178, 1251, 179, 5, 30, "Text"]
+Cell[45512, 1062, 97, 1, 64, "Section"],
+Cell[45612, 1065, 123, 2, 32, "Input"],
+Cell[45738, 1069, 193, 6, 32, "Input"],
+Cell[45934, 1077, 179, 5, 30, "Text"]
 }, Open  ]]
 }, Open  ]]
 }
