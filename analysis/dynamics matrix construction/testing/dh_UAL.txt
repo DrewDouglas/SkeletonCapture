@@ -1,0 +1,44 @@
+DOF = 8
+Just the Upper Left Arm
+joint0 = prismatic
+a0 = OSLx
+alpha0 = 0
+d0 = 0
+theta0 = 0
+joint1 = prismatic
+a1 = OSLy
+alpha1 = -Pi/2
+d1 = OSLz
+theta1 = Pi/2
+joint2 = revolute
+a2 =  0
+alpha2 = Pi/2
+d2 = 0
+theta2 = q31
+joint3 = revolute
+a3 = 0
+alpha3 = Pi/2
+d3 = 0
+theta3 = q32+Pi/2
+joint4 = revolute
+a4 = 0
+alpha4 = Pi/2
+d4 = LUAl
+theta4 = q33
+jointEl0 = revolute
+aEl0 = 0
+alphaEl0 = -Pi/2
+dEl0 = 0
+thetaEl0 = q37
+jointEl1 = prismatic
+aEl1 = 0
+alphaEl1 = -Pi/2
+dEl1 = LSHl
+thetaEl1 = 0
+jointEl2 = prismatic
+aEl2 = 0
+alphaEl2 = 0
+dEl2 = 0
+thetaEl0 = -Pi/2
+
+
