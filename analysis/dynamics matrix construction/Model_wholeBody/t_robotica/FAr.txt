@@ -1,0 +1,4 @@
+{Cos[q35]*Cos[q36]*Cos[q38] - Sin[q35]*Sin[q38], -(Cos[q35]*Sin[q36]), Cos[q38]*Sin[q35] + Cos[q35]*Cos[q36]*Sin[q38], OSLx + LUAl*Sin[q35]}
+{-(Cos[q38]*Sin[q34]*Sin[q36]) + Cos[q34]*(Cos[q36]*Cos[q38]*Sin[q35] + Cos[q35]*Sin[q38]), -(Cos[q36]*Sin[q34]) - Cos[q34]*Sin[q35]*Sin[q36], -(Sin[q34]*Sin[q36]*Sin[q38]) + Cos[q34]*(-(Cos[q35]*Cos[q38]) + Cos[q36]*Sin[q35]*Sin[q38]), OSLy - LUAl*Cos[q34]*Cos[q35]}
+{Cos[q36]*Cos[q38]*Sin[q34]*Sin[q35] + Cos[q34]*Cos[q38]*Sin[q36] + Cos[q35]*Sin[q34]*Sin[q38], Cos[q34]*Cos[q36] - Sin[q34]*Sin[q35]*Sin[q36], -(Cos[q35]*Cos[q38]*Sin[q34]) + (Cos[q36]*Sin[q34]*Sin[q35] + Cos[q34]*Sin[q36])*Sin[q38], OSLz - LUAl*Cos[q35]*Sin[q34]}
+{0, 0, 0, 1}
