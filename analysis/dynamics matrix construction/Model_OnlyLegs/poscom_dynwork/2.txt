@@ -1,0 +1,1 @@
+PV[{OffHipLeftFromSpineMid3 + (BThighLeftHeight*Cos[qt[2][t]])/2, ground, 3}, {OffHipLeftFromSpineMid1 + (BThighLeftHeight*Cos[qt[1][t]]*Sin[qt[2][t]])/2, ground, 1}, {OffHipLeftFromSpineMid2 + (BThighLeftHeight*Sin[qt[1][t]]*Sin[qt[2][t]])/2, ground, 2}]

@@ -1,0 +1,7 @@
+BAbdomen
+BThighLeft
+BThighRight
+BShinLeft
+BShinRight
+BFootLeft
+BFootRight
