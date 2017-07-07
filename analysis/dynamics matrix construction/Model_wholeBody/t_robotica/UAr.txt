@@ -1,4 +1,0 @@
-{Cos[q35]*Cos[q36], -(Cos[q35]*Sin[q36]), Sin[q35], OSLx}
-{Cos[q34]*Cos[q36]*Sin[q35] - Sin[q34]*Sin[q36], -(Cos[q36]*Sin[q34]) - Cos[q34]*Sin[q35]*Sin[q36], -(Cos[q34]*Cos[q35]), OSLy}
-{Cos[q36]*Sin[q34]*Sin[q35] + Cos[q34]*Sin[q36], Cos[q34]*Cos[q36] - Sin[q34]*Sin[q35]*Sin[q36], -(Cos[q35]*Sin[q34]), OSLz}
-{0, 0, 0, 1}

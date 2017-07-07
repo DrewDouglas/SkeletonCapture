@@ -1,6 +1,0 @@
-{0, 0, 0, LUAl*Cos[q35], 0, Sin[q35], 0}
-{0, 0, LUAl*Cos[q35]*Sin[q34], LUAl*Cos[q34]*Sin[q35], 0, -(Cos[q34]*Cos[q35]), 0}
-{1, 1, -(LUAl*Cos[q34]*Cos[q35]), LUAl*Sin[q34]*Sin[q35], 0, -(Cos[q35]*Sin[q34]), 0}
-{0, 0, 1, 0, Sin[q35], 0, -(Cos[q35]*Sin[q36])}
-{0, 0, 0, -Sin[q34], -(Cos[q34]*Cos[q35]), 0, -(Cos[q36]*Sin[q34]) - Cos[q34]*Sin[q35]*Sin[q36]}
-{0, 0, 0, Cos[q34], -(Cos[q35]*Sin[q34]), 0, Cos[q34]*Cos[q36] - Sin[q34]*Sin[q35]*Sin[q36]}

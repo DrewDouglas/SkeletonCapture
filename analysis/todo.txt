@@ -1,0 +1,15 @@
+todo:
+polish script
+DWB rejiggering the root 6dof joint to be not dumb
+dh params of 6dof
+insert 6dof dhparams for all branches
+finish other branches
+verify solver
+insert contact forces & optimization component
+
+
+Drew:
+send recording setup documentation & chopping setup stuff
+document timing syncronization
+dh parameterization of legs relative to butt frame
+
