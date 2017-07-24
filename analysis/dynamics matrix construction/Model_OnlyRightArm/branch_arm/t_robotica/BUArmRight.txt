@@ -1,4 +1,0 @@
-{Cos[q8]*Cos[q9], -(Cos[q8]*Sin[q9]), Sin[q8], OffShoulderLeftFromSpineShoulder1}
-{Cos[q7]*Cos[q9]*Sin[q8] - Sin[q7]*Sin[q9], -(Cos[q9]*Sin[q7]) - Cos[q7]*Sin[q8]*Sin[q9], -(Cos[q7]*Cos[q8]), OffShoulderLeftFromSpineShoulder2}
-{Cos[q9]*Sin[q7]*Sin[q8] + Cos[q7]*Sin[q9], Cos[q7]*Cos[q9] - Sin[q7]*Sin[q8]*Sin[q9], -(Cos[q8]*Sin[q7]), OffShoulderLeftFromSpineShoulder3}
-{0, 0, 0, 1}

@@ -1,0 +1,114 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      2882,        106]
+NotebookOptionsPosition[      2374,         83]
+NotebookOutlinePosition[      2733,         99]
+CellTagsIndexPosition[      2690,         96]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"ClearAll", ";"}]], "Input",
+ CellChangeTimes->{{3.709152010148745*^9, 3.709152011855723*^9}, {
+  3.7091523178474283`*^9, 3.709152320509077*^9}, {3.709181172499661*^9, 
+  3.709181174327715*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.7091834314583073`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"4", ",", "5", ",", "6"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", "5", ",", "6"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.70918343146728*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.709181076068708*^9, 3.709181118587852*^9}, {
+  3.709182972702366*^9, 3.7091829890467043`*^9}, {3.709183019878459*^9, 
+  3.709183028204481*^9}, {3.7091830634418488`*^9, 3.709183112596902*^9}, {
+  3.709183172248514*^9, 3.709183178478869*^9}, {3.709183252449254*^9, 
+  3.709183312432384*^9}, {3.709183384159038*^9, 3.709183452870891*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"validator", "[", 
+  RowBox[{
+   RowBox[{"-", "1"}], ",", 
+   RowBox[{"-", "3"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7091790381801558`*^9, 3.7091790612056513`*^9}, {
+  3.709183443772395*^9, 3.709183444330192*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  TagBox[
+   FractionBox[
+    SubscriptBox[
+     UnderscriptBox["ground", "_"], "2"], "2"],
+   HoldForm], "+", 
+  TagBox[
+   RowBox[{
+    FractionBox["1", "2"], " ", 
+    RowBox[{"(", 
+     RowBox[{"-", 
+      SqrtBox["3"]}], ")"}], " ", 
+    SubscriptBox[
+     UnderscriptBox["ground", "_"], "1"]}],
+   HoldForm]}]], "Output",
+ CellChangeTimes->{{3.709183431708291*^9, 3.7091834451334963`*^9}}]
+}, Open  ]]
+},
+WindowSize->{808, 755},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 217, 4, 32, "Input"],
+Cell[800, 28, 235, 7, 32, "Output"],
+Cell[1038, 37, 232, 7, 32, "Output"]
+}, Open  ]],
+Cell[1285, 47, 384, 5, 32, "Input"],
+Cell[CellGroupData[{
+Cell[1694, 56, 242, 6, 32, "Input"],
+Cell[1939, 64, 419, 16, 49, "Output"]
+}, Open  ]]
+}
+]
+*)
+

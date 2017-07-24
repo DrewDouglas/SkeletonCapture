@@ -1,4 +1,0 @@
-{Cos[q5]*Cos[q6], -(Cos[q5]*Sin[q6]), Sin[q5], q1}
-{Cos[q6]*Sin[q4]*Sin[q5] + Cos[q4]*Sin[q6], Cos[q4]*Cos[q6] - Sin[q4]*Sin[q5]*Sin[q6], -(Cos[q5]*Sin[q4]), q2}
-{-(Cos[q4]*Cos[q6]*Sin[q5]) + Sin[q4]*Sin[q6], Cos[q6]*Sin[q4] + Cos[q4]*Sin[q5]*Sin[q6], Cos[q4]*Cos[q5], q3}
-{0, 0, 0, 1}

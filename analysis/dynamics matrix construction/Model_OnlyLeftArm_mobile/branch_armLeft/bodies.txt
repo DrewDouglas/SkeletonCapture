@@ -1,1 +1,0 @@
-<|"Ground" -> 0, "BChest" -> 7, "BUArmRight" -> 12, "BForeArmRight" -> 14, "BHandRight" -> 18|>

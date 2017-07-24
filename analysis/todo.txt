@@ -1,15 +1,31 @@
 todo:
+split into sub-projects
+
+NOTES:
+
+
 polish script
-DWB rejiggering the root 6dof joint to be not dumb
-dh params of 6dof
-insert 6dof dhparams for all branches
 finish other branches
+ - leg left  
+ - leg right
+finish & test solver
 verify solver
 insert contact forces & optimization component
+Broadcast/find somebody interested in picking up he torch for force sensors & data gathereing/execution for Fall/spring 2017-2018
+
 
 
 Drew:
 send recording setup documentation & chopping setup stuff
 document timing syncronization
 dh parameterization of legs relative to butt frame
+PUsh his damn code
 
+
+
+
+
+DONE:
+DWB rejiggering the root 6dof joint to be not dumb
+dh params of 6dof
+insert 6dof dhparams for all branches
