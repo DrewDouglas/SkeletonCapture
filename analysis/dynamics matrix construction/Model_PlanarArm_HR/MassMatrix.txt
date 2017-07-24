@@ -1,0 +1,2 @@
+{Ie + Is + Lme^2*Me + Ls^2*Me + Lms^2*Ms + 2*Lme*Ls*Me*Cos[qt[2][t]], Ie + Lme^2*Me + Lme*Ls*Me*Cos[qt[2][t]]}
+{Ie + Lme^2*Me + Lme*Ls*Me*Cos[qt[2][t]], Ie + Lme^2*Me}

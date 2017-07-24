@@ -1,0 +1,6 @@
+{-(Ls*Sin[qs]) - Le*Sin[qe + qs], 0, -(Le*Sin[qe + qs]), 0}
+{Ls*Cos[qs] + Le*Cos[qe + qs], 0, Le*Cos[qe + qs], 0}
+{0, 1, 0, 1}
+{0, 0, 0, 0}
+{0, 0, 0, 0}
+{1, 0, 1, 0}

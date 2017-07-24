@@ -1,0 +1,2 @@
+Sin[qt[2][t]]*(2*Lme*Ls*Me*ut[1][t]*ut[2][t] + Lme*Ls*Me*ut[2][t]^2)
+-(Lme*Ls*Me*Sin[qt[2][t]]*ut[1][t]^2)

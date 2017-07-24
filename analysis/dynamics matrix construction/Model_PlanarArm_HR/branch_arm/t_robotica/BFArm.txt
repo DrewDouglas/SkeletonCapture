@@ -1,0 +1,4 @@
+{Cos[qe + qs], -Sin[qe + qs], 0, Ls*Cos[qs]}
+{Sin[qe + qs], Cos[qe + qs], 0, Ls*Sin[qs]}
+{0, 0, 1, 0}
+{0, 0, 0, 1}

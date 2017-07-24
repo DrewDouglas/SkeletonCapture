@@ -1,0 +1,1 @@
+<|"Ground" -> 0, "BUArm" -> 1, "BFArm" -> 3, "FHand" -> 4|>

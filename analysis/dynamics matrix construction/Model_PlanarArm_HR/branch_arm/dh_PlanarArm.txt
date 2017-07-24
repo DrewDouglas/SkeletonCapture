@@ -1,0 +1,22 @@
+DOF	= 4
+Planar Arm model from Human Robotics
+ShouldR_joint	= revolute
+ShouldR_a		= 0
+ShouldR_alpha	= 0
+ShouldR_d		= 0
+ShouldR_theta	= qs
+FUA_joint		= prismatic
+FUA_a 			= Ls
+FUA_alpha		= 0
+FUA_d			= 0
+FUA_theta		= 0
+ElbowR_joint	= revolute
+ElbowR_a		= 0
+ElbowR_alpha	= 0
+ElbowR_d		= 0
+ElbowR_theta	= qe
+FFA_joint		= prismatic
+FFA_a 			= Le
+FFA_alpha		= 0
+FFA_d			= 0
+FFA_theta		= 0
